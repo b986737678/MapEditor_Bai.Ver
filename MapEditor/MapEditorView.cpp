@@ -17,12 +17,13 @@
 #include"Paint.h"
 #include"WriteOrRead.h"
 #include"Calculate.h"
+#include"PointParameterDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
-///-------------------------点数据相关的全局控制变量-------------------------///
+///-------------------------点数据相关的全局控制变量------------------------///
 bool	GPntFCreated = false;						//临时文件是否创建
 CString GPntFName;									//永久文件名（含路径）
 CString GPntTmpFName = CString("tempPntF.dat");		//临时文件名（含路径）
@@ -31,7 +32,7 @@ int		GPntNum = 0;								//物理数
 int		GPntLNum = 0;								//逻辑树
 CFile	*GPntTmpF = new CFile();					//读取临时文件的指针对象
 
-///-------------------------线数据相关的全局控制变量-------------------------///
+///-------------------------线数据相关的全局控制变量------------------------///
 bool	GLinFCreated = false;						//临时文件是否创建
 CString	GLinFName;									//永久文件名（含路径）
 CString	GLinTmpNdxFName = CString("tempLinF.ndx");	//临时索引文件名（含路径）
@@ -42,7 +43,7 @@ int		GLinLNum = 0;								//逻辑数
 CFile	*GLinTmpDatF = new CFile();					//读取临时数据文件的指针对象
 CFile	*GLinTmpNdxF = new CFile();					//读取临时索引文件的指针对象
 
-///-------------------------区数据相关的全局控制变量-------------------------///
+///-------------------------区数据相关的全局控制变量------------------------///
 bool	GRegFCreated = false;						//临时文件是否创建
 CString	GRegFName;									//永久文件名（含路径）
 CString	GRegTmpNdxFName = CString("tempRegF.ndx");	//临时索引文件名（含路径）
@@ -53,7 +54,7 @@ int		GRegLNum = 0;								//逻辑数
 CFile	*GRegTmpDatF = new CFile();					//读取临时数据文件的指针对象
 CFile	*GRegTmpNdxF = new CFile();					//读取临时索引文件的指针对象
 
-///-------------------------------与操作相关---------------------------------///
+///-------------------------------与操作相关--------------------------------///
 enum Action
 {
 	Noaction,
@@ -81,14 +82,14 @@ enum Action
 };//枚举操作状态
 Action GCurOperState;//操作参数
 
-///-------------------------默认点结构与临时点结构---------------------------///
+///-------------------------默认点结构与临时点结构--------------------------///
 PNT_STRU GPnt = {	
 	GPnt.isDel = 0,
 	GPnt.color = RGB(0,0,0),
 	GPnt.pattern = 0 
 };													//默认点参数
 
-///-------------------------文件版本信息的全局变量---------------------------///
+///-------------------------文件版本信息的全局变量--------------------------///
 VERSION GPntVer = {
 	GPntVer.flag[0] = 'P',
 	GPntVer.flag[1] = 'N',
@@ -112,7 +113,7 @@ LIN_NDX_STRU GLin = { 								//默认线结构
 LIN_NDX_STRU GTLin;									//线
 POINT GLPnt = { GLPnt.x = -1,GLPnt.y = -1 };		//记录线段的起点
 CPoint GMPnt(-1, -1);								//记录鼠标上一个状态的点
-///---------------------线文件的版本信息，以及其初始化---------------------///
+///---------------------线文件的版本信息，以及其初始化----------------------///
 VERSION GLinVer =
 {
 	GLinVer.flag[0] = 'L',
@@ -120,17 +121,17 @@ VERSION GLinVer =
 	GLinVer.flag[2] = 'N',
 	GLinVer.version = 10							//默认版本号
 };
-///-------------------------找到线位于文件中的位置-------------------------///
+///-------------------------找到线位于文件中的位置--------------------------///
 int GLinNdx = -1;
 
-///---------------------------移动线相关全局变量---------------------------///
+///---------------------------移动线相关全局变量----------------------------///
 CPoint			GLinLBDPnt(-1, -1);					// 记录鼠标左键按下的位置，用来计算偏移量
 CPoint			GLinMMPnt(-1, -1);					// 记录鼠标移动的上一个状态，用来擦除移动时的前一条线
 long			GLinMMOffestX = 0;					// 记录鼠标移动时候的X轴的偏移量
 long			GLinMMOffestY = 0;					// 记录鼠标移动时候的Y轴的偏移量
 LIN_NDX_STRU	GLinMMTmpNdx;						// 记录鼠标选中的线的索引
 
-///-------------------------关于放大缩小的全局变量-------------------------///
+///-------------------------关于放大缩小的全局变量--------------------------///
 CPoint GZoomLBDPnt(-1, -1);							//放大时鼠标左键抬起的点
 CPoint GZoomMMPnt(-1, -1);							//放大时鼠标移动前一状态
 
@@ -139,12 +140,59 @@ double	GZoomOffset_y = 0;
 double	GZoom = 1.0;								//缩放系数
 int		GZoomStyle = 0;								//放大方式
 
-///---------------------------连接线相关全局变量---------------------------///
+///---------------------------连接线相关全局变量----------------------------///
 LIN_NDX_STRU	GStartLin = GLin;					// 选中的第一条线
 int				GnStart = -1;
 LIN_NDX_STRU	GEndLin = GLin;						// 选中的第二条线
 int				GnEnd = -1;
 int				GnLine = 0;
+
+///---------------------------造区过程相关点数据----------------------------///
+CPoint			GRegCreateMMPnt(-1, -1);
+CPoint			GRegCreateStartPnt(-1, -1);
+
+///-------------------默认区索引结构、临时索引结构及其相关------------------///
+REG_NDX_STRU	GReg = {
+	GReg.isDel = 0,
+	GReg.color = RGB(0,0,0),
+	GReg.pattern = 0,
+	GReg.dotNum = 0,
+	GReg.datOff = 0
+};
+REG_NDX_STRU	GTReg;
+
+int GRegNdx = -1;									//找到的区位于文件中的位置
+
+///---------------------------移动区相关全局变量----------------------------///
+REG_NDX_STRU	GRegMMTmpNdx;						// 记录鼠标选中区的索引
+CPoint			GRegLBDPnt(-1, -1);					// 记录鼠标左键按下的位置，用来计算偏移量
+CPoint			GRegMMPnt(-1, -1);					// 记录鼠标移动时上一状态，擦除移动时前一个区
+long			GRegMMOffsetX = 0;					// 记录鼠标移动时的X轴偏移量
+long			GRegMMOffsetY = 0;					// 记录鼠标移动时的Y轴偏移量
+
+///--------------------------移动窗口相关全局变量---------------------------///
+CPoint			GWinMoveLBDPnt(-1, -1);				//移动窗口时左键按下点
+CPoint			GWinMoveMMPnt(-1, -1);				//移动窗口时鼠标移动前状态点位置
+
+///---------------------------外包矩形的顶点坐标----------------------------///
+double			GMaxX = 0;
+double			GMaxY = 0;
+double			GMinX = 0;
+double			GMinY = 0;
+
+///--------------------------显示状态相关全局变量---------------------------///
+enum State
+{
+	SHOWSTATE_UNDEL, 
+	SHOWSTATE_DEL
+};													//枚举显示类型
+
+State			GCurShowState = SHOWSTATE_UNDEL;	//显示状态，默认显示非删除状态
+bool			GShowPnt = true;					//当前显示的结构是否是点
+bool			GShowLin = true;					//当前显示的结构是否是线
+bool			GShowReg = true;					//当前显示的结构是否是区
+
+
 
 // CMapEditorView
 
@@ -199,6 +247,10 @@ BEGIN_MESSAGE_MAP(CMapEditorView, CView)
 	ON_WM_LBUTTONUP()
 	ON_WM_DESTROY()
 	ON_WM_MOUSEMOVE()
+	ON_UPDATE_COMMAND_UI(ID_WINDOW_SHOW_POINT, &CMapEditorView::OnUpdateWindowShowPoint)
+	ON_UPDATE_COMMAND_UI(ID_WINDOW_SHOW_LINE, &CMapEditorView::OnUpdateWindowShowLine)
+	ON_UPDATE_COMMAND_UI(ID_WINDOW_SHOW_REGION, &CMapEditorView::OnUpdateWindowShowRegion)
+	ON_UPDATE_COMMAND_UI(ID_POINT_SHOW_DELETED, &CMapEditorView::OnUpdatePointShowDeleted)
 END_MESSAGE_MAP()
 
 // CMapEditorView 构造/析构
@@ -230,20 +282,19 @@ void CMapEditorView::OnDraw(CDC* /*pDC*/)
 	if (!pDoc)
 		return;
 
-	// TODO: 在此处为本机数据添加绘制代码
+
 	CRect mrect;
-	GetClientRect(&mrect);				//获取窗口客户区的坐标
+	GetClientRect(&mrect);										//获取窗口客户区的坐标
 	CClientDC dc(this);
 	dc.FillSolidRect(0, 0, mrect.Width(), mrect.Height(), dc.GetBkColor());//用一个单色填充一个矩形
-	dc.SetROP2(R2_NOTXORPEN);			//设置绘图模式
-	//ShowAllPnt(&dc, GPntTmpF, GPntNum);	//绘制显示所有点
-	//ShowAllLin(&dc, GLinTmpNdxF, GLinTmpDatF, GLinNum);//绘制显示所有线
-	//绘制显示所有点
-	ShowAllPnt(&dc, GPntTmpF, GPntNum, GZoomOffset_x, GZoomOffset_y, GZoom, 0);
-	//绘制显示所有线
-	ShowAllLin(&dc, GLinTmpNdxF, GLinTmpDatF, GLinNum, GZoomOffset_x, GZoomOffset_y, GZoom, 0);
-
-	ReleaseDC(&dc);						//释放dc
+	dc.SetROP2(R2_NOTXORPEN);									//设置绘图模式
+	if (GShowPnt)												//绘制显示所有点
+		ShowAllPnt(&dc, GPntTmpF, GPntNum, GZoomOffset_x, GZoomOffset_y, GZoom, GCurShowState);
+	if (GShowLin)												//绘制显示所有线
+		ShowAllLin(&dc, GLinTmpNdxF, GLinTmpDatF, GLinNum, GZoomOffset_x, GZoomOffset_y, GZoom, 0);
+	if (GShowReg)												//绘制显示所有区
+		ShowAllReg(&dc, GRegTmpNdxF, GRegTmpDatF, GRegNum, GZoomOffset_x, GZoomOffset_y, GZoom, 0);
+	ReleaseDC(&dc);												//释放dc
 }
 
 void CMapEditorView::OnRButtonUp(UINT /* nFlags */, CPoint point)
@@ -276,6 +327,63 @@ void CMapEditorView::OnRButtonUp(UINT /* nFlags */, CPoint point)
 				GMPnt.SetPoint(-1, -1);
 				GLPnt.x = -1;
 				GLPnt.y = -1;
+			}
+			break;
+		default:
+			break;
+		}
+	}
+	if (GRegFCreated)
+	{
+		switch (GCurOperState)
+		{
+
+		case OPERSTATE_INPUT_REG:								//当前为造区操作状态
+			if (GTReg.dotNum > 2)
+			{
+				WriteRegNdxToFile(GRegTmpNdxF, GRegNum, GTReg);
+				++GRegNum;
+				++GRegLNum;
+				POINT * pt = new POINT[3];
+				D_DOT dot;
+				ReadTempFileToRegDat(GRegTmpDatF, GTReg.datOff, 0, dot);
+				PntDPtoVP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);
+				DotToPnt(pt[0], dot);
+				ReadTempFileToRegDat(GRegTmpDatF, GTReg.datOff, GTReg.dotNum - 1, dot);
+				PntDPtoVP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);
+				DotToPnt(pt[1], dot);
+				pt[2] = point;
+				DrawReg(&dc, GTReg, pt, 3);
+				delete[] pt;
+				GReg.datOff += (GTReg.dotNum * sizeof(D_DOT));
+				memset(&GTReg, 0, sizeof(REG_NDX_STRU));
+				GRegCreateMMPnt = CPoint(-1, -1);
+				GRegCreateStartPnt = CPoint(-1, -1);
+			}
+			else if (GTReg.dotNum == 2)
+			{
+				POINT * pt = new POINT[3];
+				D_DOT dot;
+				ReadTempFileToRegDat(GRegTmpDatF, GTReg.datOff, 0, dot);
+				PntDPtoVP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);
+				DotToPnt(pt[0], dot);
+				ReadTempFileToRegDat(GRegTmpDatF, GTReg.datOff, GTReg.dotNum - 1, dot);
+				PntDPtoVP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);
+				DotToPnt(pt[1], dot);
+				pt[2] = point;
+				DrawReg(&dc, GTReg, pt, 3);
+				delete[] pt;
+				memset(&GTReg, 0, sizeof(REG_NDX_STRU));
+				GRegCreateMMPnt = CPoint(-1, -1);;
+				GRegCreateStartPnt = CPoint(-1, -1);
+			}
+			else if (GTReg.dotNum == 1)
+			{
+				LIN_NDX_STRU tln = { tln.pattern = GTReg.pattern, tln.color = GTReg.color };
+				DrawSeg(&dc, tln, GRegCreateStartPnt, GRegCreateMMPnt);
+				memset(&GTReg, 0, sizeof(REG_NDX_STRU));
+				GRegCreateMMPnt = CPoint(-1, -1);
+				GRegCreateStartPnt = CPoint(-1, -1);
 			}
 			break;
 		default:
@@ -711,19 +819,231 @@ void CMapEditorView::OnWindowZoomOut()
 
 void CMapEditorView::OnWindowMove()
 {
-	// TODO: 在此添加命令处理程序代码
+	if (GPntFCreated || GLinFCreated || GRegFCreated)
+	{
+		GCurOperState = OPERSTATE_WINDOW_MOVE;				//设置为窗口移动操作状态
+	}
+	else
+	{
+		MessageBox(L"TempFile have not been created.", L"Message", MB_OK);
+	}
 }
 
 
 void CMapEditorView::OnWindowReset()
 {
-	// TODO: 在此添加命令处理程序代码
+	GCurShowState = SHOWSTATE_UNDEL;		//设置当前为显示未删除状态
+	this->Invalidate();
+	GShowPnt = true;
+	GShowLin = true;
+	GShowReg = true;
+	//重置偏移量和放大倍数
+	GZoomOffset_x = 0;										// 偏移向量x
+	GZoomOffset_y = 0;										// 偏移向量y
+	GZoom = 1.0;											// 放大系数
+	// 遍历点、线、区的点数据，计算外包络矩形
+	D_DOT tempPt;
+	PNT_STRU tempPnt;
+	LIN_NDX_STRU tempLin;
+	REG_NDX_STRU tempReg;
+	bool isInit = false;
+	// 没有图形
+	if (GPntLNum == 0 && GLinLNum == 0 && GRegLNum == 0)
+		return;
+	// 初始化外包矩形
+	if (isInit == false && GPntLNum > 0)					// 初始化点的外包矩形
+	{
+		for (int i = 0; i < GPntNum; ++i)
+		{
+			ReadTempFileToPnt(GPntTmpF, i, tempPnt);		// 从临时文件中读取点
+			if (tempPnt.isDel)
+				continue;
+			else
+			{
+				GMaxX = tempPnt.x;
+				GMinX = tempPnt.x;
+				GMaxY = tempPnt.y;
+				GMinY = tempPnt.y;
+				isInit = true;
+				break;
+			}
+		}
+	}
+	if (isInit == false && GLinLNum > 0)					//初始化线的外包络矩形
+	{
+		for (int i = 0; i < GLinNum; ++i)
+		{
+			ReadTempFileToLinNdx(GLinTmpNdxF, i, tempLin);	// 从临时文件读取线索引
+			if (tempLin.isDel)
+				continue;
+			else
+			{
+				for (int j = 0; j < tempLin.dotNum; ++j)
+				{
+					ReadTempFileToLinDat(GLinTmpDatF, tempLin.datOff, j, tempPt);
+					GMaxX = tempPt.x;
+					GMinX = tempPt.x;
+					GMaxY = tempPt.y;
+					GMinY = tempPt.y;
+					isInit = true;
+					break;
+				}
+			}
+		}
+	}
+	if (isInit == false & &GRegLNum > 0)					//初始化区的外包络矩形
+	{
+		for (int i = 0; i < GRegNum; ++i)
+		{
+			ReadTempFileToRegNdx(GRegTmpNdxF, i, tempReg);	//从临时文件读区索引
+			if (tempReg.isDel)
+				continue;
+			else
+			{
+				for (int j = 0; j < tempReg.dotNum; ++j)
+				{
+					ReadTempFileToRegDat(GRegTmpDatF, tempReg.datOff, j, tempPt);
+					GMaxX = tempPt.x;
+					GMinX = tempPt.x;
+					GMaxY = tempPt.y;
+					GMinY = tempPt.y;
+					isInit = true;
+					break;
+				}
+			}
+		}
+	}
+	// 未能初始化成功
+	if (isInit == false)
+	{
+		this->Invalidate();
+		return;
+	}
+	// 遍历所有的点
+	if (GPntFCreated)
+	{
+		for (int i = 0; i < GPntNum; i++)
+		{
+			ReadTempFileToPnt(GLinTmpNdxF, i, tempPnt);
+			if (tempPnt.isDel)
+				continue;
+			else
+			{
+				if (tempPnt.x > GMaxX)
+					GMaxX = tempPnt.x;
+				if (tempPnt.y > GMaxY)
+					GMaxY = tempPnt.y;
+				if (tempPnt.x < GMinX)
+					GMinX = tempPnt.x;
+				if (tempPnt.y < GMinY)
+					GMinY = tempPnt.y;
+			}
+		}
+	}
+	// 遍历所有的线
+	if (GLinFCreated)
+	{
+		for (int i = 0; i < GLinNum; i++)
+		{
+			ReadTempFileToLinNdx(GLinTmpNdxF, i, tempLin);
+			if (tempLin.isDel)
+				continue;
+			else
+			{
+				for (int j = 0; j < tempLin.dotNum; j++)
+				{
+					ReadTempFileToLinDat(GLinTmpDatF, tempLin.datOff, j, tempPt);
+					if (tempPt.x > GMaxX)
+						GMaxX = tempPt.x;
+					if (tempPt.y > GMaxY)
+						GMaxY = tempPt.y;
+					if (tempPt.x < GMinX)
+						GMinX = tempPt.x;
+					if (tempPt.y < GMinY)
+						GMinY = tempPt.y;
+				}
+			}
+		}
+	}
+	// 遍历所有的区
+	if (GRegFCreated)
+	{
+		for (int i = 0; i < GRegLNum; i++)
+		{
+			ReadTempFileToRegNdx(GRegTmpNdxF, i, tempReg);
+			if (tempReg.isDel)
+				continue;
+			else
+			{
+				for (int j = 0; j < tempReg.dotNum; j++)
+				{
+					ReadTempFileToRegDat(GRegTmpDatF, tempReg.datOff, j, tempPt);
+					if (tempPt.x > GMaxX)
+						GMaxX = tempPt.x;
+					if (tempPt.y > GMaxY)
+						GMaxY = tempPt.y;
+					if (tempPt.x < GMinX)
+						GMinX = tempPt.x;
+					if (tempPt.y < GMinY)
+						GMinY = tempPt.y;
+				}
+			}
+		}
+	}
+	GMaxX += 20;
+	GMinX -= 20;
+	GMaxY += 20;
+	GMinY -= 20;
+
+	RECT rect, client;
+	double zoom;
+
+	GetClientRect(&client);
+	rect.right = (long)GMaxX;
+	rect.left = (long)GMinX;
+	rect.bottom = (long)GMaxY;
+	rect.top = (long)GMinY;
+	modulusZoom(client, rect, zoom);
+	GMaxX += 20 / zoom;
+	GMinX -= 20 / zoom;
+	GMaxY += 20 / zoom;
+	GMinY -= 20 / zoom;
+	rect.right = (long)GMaxX;
+	rect.left = (long)GMinX;
+	rect.bottom = (long)GMaxY;
+	rect.top = (long)GMinY;
+	// 根据外包络矩形计算偏移量和放大倍数，并重绘客户区
+	modulusZoom(client, rect, zoom);
+	double x0 = GetCenter(rect).x - (client.right / 2.0) + (client.right*(zoom - 1) / (2.0* zoom));
+	double y0 = GetCenter(rect).y - (client.bottom / 2.0) + (client.bottom*(zoom - 1) / (2.0* zoom));
+	GZoomOffset_x += (x0 / GZoom);
+	GZoomOffset_y += (y0 / GZoom);
+	GZoom *= zoom;
+	GCurOperState = Noaction;
+	this->Invalidate();
 }
 
 
 void CMapEditorView::OnWindowShowPoint()
 {
-	// TODO: 在此添加命令处理程序代码
+	//若当前显示状态是显示删除状态，则先把所有显示开关都关闭
+	if (GCurShowState == SHOWSTATE_DEL)
+	{
+		GShowPnt = false;
+		GShowLin = false;
+		GShowReg = false;
+	}
+	GCurShowState = SHOWSTATE_UNDEL;//将显示状态更改为显示未删除状态
+	//若当前已经“显示点”，则将关闭开关，不再“显示点”
+	if (GShowPnt == true)
+	{
+		GShowPnt = false;
+	}
+	else
+	{
+		GShowPnt = true;
+	}
+	this->InvalidateRect(NULL);		//刷新窗口
 }
 
 
@@ -744,7 +1064,12 @@ void CMapEditorView::OnPointCreate()
 	// TODO: 在此添加命令处理程序代码
 	if (GPntFCreated)
 	{
-		GCurOperState = OPERSTATE_INPUT_PNT;				//设置为“造点”状态
+		GCurOperState = OPERSTATE_INPUT_PNT;		// 设置为“造点”状态
+		GCurShowState = SHOWSTATE_UNDEL;			//设置当前为显示未删除状态
+		this->Invalidate();
+		GShowPnt = true;
+		GShowLin = true;
+		GShowReg = true;
 	}
 	else
 	{
@@ -758,7 +1083,12 @@ void CMapEditorView::OnPointMove()
 	// TODO: 在此添加命令处理程序代码
 	if (GPntFCreated)
 	{
-		GCurOperState = OPERSTATE_MOVE_PNT;					//设置操作状态（移动点）
+		GCurOperState = OPERSTATE_MOVE_PNT;			//设置操作状态（移动点）
+		GCurShowState = SHOWSTATE_UNDEL;			//设置当前为显示未删除状态
+		this->Invalidate();
+		GShowPnt = true;
+		GShowLin = true;
+		GShowReg = true;
 	}
 	else
 	{
@@ -772,7 +1102,12 @@ void CMapEditorView::OnPointDelete()
 	// TODO: 在此添加命令处理程序代码
 	if (GPntFCreated)
 	{
-		GCurOperState = OPERSTATE_DELETE_PNT;				//设置操作状态
+		GCurOperState = OPERSTATE_DELETE_PNT;		// 设置操作状态(删除点)
+		GCurShowState = SHOWSTATE_UNDEL;			//设置当前为显示未删除状态
+		this->Invalidate();
+		GShowPnt = true;
+		GShowLin = true;
+		GShowReg = true;
 	}
 	else
 	{
@@ -783,25 +1118,82 @@ void CMapEditorView::OnPointDelete()
 
 void CMapEditorView::OnPointSetDefparameter()
 {
-	// TODO: 在此添加命令处理程序代码
+	CPointParameterDlg dlg;					//点参数设置的对话框
+	dlg.m_Pattern = GPnt.pattern;			//点型
+	dlg.m_ColorButton.SetColor(GPnt.color);	//颜色
+	if (IDOK == dlg.DoModal())
+	{
+		GPnt.pattern = dlg.m_Pattern;
+		COLORREF tempColor = dlg.m_ColorButton.GetColor();
+		memcpy_s(&GPnt.color, sizeof(COLORREF), &tempColor, sizeof(COLORREF));
+	}
 }
 
 
 void CMapEditorView::OnPointShowDeleted()
 {
-	// TODO: 在此添加命令处理程序代码
+	//若当前显示状态不是显示删除状态，则切换为显示删除状态并显示点
+	if (GCurShowState != SHOWSTATE_DEL)
+	{
+		GCurShowState = SHOWSTATE_DEL;					//设置为显示删除状态
+		GShowPnt = true;
+		GShowLin = false;
+		GShowReg = false;
+	}
+	//若当前状态是显示删除状态，但当前显示的不是点，则将显示点的开关打开
+	else if (GCurShowState == SHOWSTATE_DEL && GShowPnt != true)
+	{
+		GShowPnt = true;
+		GShowLin = false;
+		GShowReg = false;
+	}
+	//其他情况下则将显示状态设置为显示未删除的状态，并打开所有的显示的开关
+	else
+	{
+		GCurShowState = SHOWSTATE_UNDEL;				//设置为显示未删除状态
+		GShowPnt = true;
+		GShowLin = true;
+		GShowReg = true;
+	}
+	this->InvalidateRect(NULL);							//刷新窗口
 }
 
 
 void CMapEditorView::OnPointUndelete()
 {
-	// TODO: 在此添加命令处理程序代码
+	if (GPntFCreated)
+	{
+		GCurOperState = OPERSTATE_UNDELETE_PNT;			//当前操作状态（恢复点）
+		GCurShowState = SHOWSTATE_DEL;					//当前显示状态（删除点）
+		this->Invalidate();
+		GShowPnt = true;								//打开显示点
+		GShowLin = false;								//关闭显示线
+		GShowReg = false;								//关闭显示区
+	}
+	else
+	{
+		MessageBox(L"File have not been created.", L"Message", MB_OK);
+	}
 }
 
 
 void CMapEditorView::OnPointModifyParameter()
 {
-	// TODO: 在此添加命令处理程序代码
+	if (GPntFCreated)
+	{
+		GCurOperState = OPERSTATE_MODIFY_POINT_PARAMETER;//当前操作状态（恢复点）
+		GCurShowState = SHOWSTATE_UNDEL;				//当前显示状态（不删除点）
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		GShowPnt = true;								//打开显示点					 ????????????????????????????????????????
+		GShowLin = true;								//关闭显示线             存在疑问????????????????????????????????????????
+		GShowReg = true;								//关闭显示区				     ????????????????????????????????????????
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		this->Invalidate();
+	}
+	else
+	{
+		MessageBox(L"File have not been created.", L"Message", MB_OK);
+	}
 }
 
 
@@ -810,7 +1202,12 @@ void CMapEditorView::OnLineCreate()
 	// TODO: 在此添加命令处理程序代码
 	if (GLinFCreated)
 	{
-		GCurOperState = OPERSTATE_INPUT_LIN;				//当前为造线状态
+		GCurOperState = OPERSTATE_INPUT_LIN;
+		GCurShowState = SHOWSTATE_UNDEL;			//设置当前为显示未删除状态
+		this->Invalidate();
+		GShowPnt = true;
+		GShowLin = true;
+		GShowReg = true;
 	}
 	else
 	{
@@ -823,7 +1220,12 @@ void CMapEditorView::OnLineMove()
 {
 	if (GLinFCreated)
 	{
-		GCurOperState = OPERSTATE_MOVE_LIN;					//当前为移动线操作状态
+		GCurOperState = OPERSTATE_MOVE_LIN;			// 当前为移动线操作状态
+		GCurShowState = SHOWSTATE_UNDEL;			//设置当前为显示未删除状态
+		this->Invalidate();
+		GShowPnt = true;
+		GShowLin = true;
+		GShowReg = true;
 	}
 	else
 	{
@@ -836,8 +1238,12 @@ void CMapEditorView::OnLineDelete()
 {
 	if (GLinFCreated)
 	{
-		GCurOperState = OPERSTATE_DELETE_LIN;				//当前状态为删除线
-
+		GCurOperState = OPERSTATE_DELETE_LIN;
+		GCurShowState = SHOWSTATE_UNDEL;			//设置当前为显示未删除状态
+		this->Invalidate();
+		GShowPnt = true;
+		GShowLin = true;
+		GShowReg = true;
 	}
 	else
 	{
@@ -897,19 +1303,40 @@ void CMapEditorView::OnLineSetDefparameter()
 
 void CMapEditorView::OnRegionCreate()
 {
-	// TODO: 在此添加命令处理程序代码
+	if (GRegFCreated)
+	{
+		GCurOperState = OPERSTATE_INPUT_REG;				//当前设置为造区操作状态
+	}
+	else
+	{
+		MessageBox(L"TempFile have not been created.", L"Message", MB_OK);
+	}
 }
 
 
 void CMapEditorView::OnRegionMove()
 {
-	// TODO: 在此添加命令处理程序代码
+	if (GRegFCreated)
+	{
+		GCurOperState = OPERSTATE_MOVE_REG;					//当前设置为移动区操作状态
+	}
+	else
+	{
+		MessageBox(L"TempFile have not been created.", L"Message", MB_OK);
+	}
 }
 
 
 void CMapEditorView::OnRegionDelete()
 {
-	// TODO: 在此添加命令处理程序代码
+	if (GRegFCreated)
+	{
+		GCurOperState = OPERSTATE_DELETE_REG;				//设置当前为删除区操作状态
+	}
+	else
+	{
+		MessageBox(L"TempFile have not been created.", L"Message", MB_OK);
+	}
 }
 
 
@@ -984,6 +1411,25 @@ void CMapEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 			break;
 		}
 	}
+	if (GRegFCreated)
+	{
+		switch (GCurOperState)
+		{
+		case OPERSTATE_MOVE_REG:							//当前为移动区操作状态
+			GRegLBDPnt = point;
+			GRegMMPnt = point;
+			D_DOT dot;
+			PntToDot(dot, point);
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);// 窗口转数据
+			DotToPnt(point, dot);
+			GRegMMTmpNdx = FindReg(GRegTmpNdxF, GRegTmpDatF, point, GRegNum, GRegNdx);// 查找最近区，集点选中的区
+			GRegMMOffsetX = 0;
+			GRegMMOffsetY = 0;
+			break;
+		default:
+			break;
+		}
+	}
 	if (GPntFCreated || GLinFCreated || GRegFCreated)
 	{
 		switch (GCurOperState)
@@ -991,6 +1437,10 @@ void CMapEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 		case OPERSTATE_ZOOM_IN:								//当前为放大操作状态
 			GZoomLBDPnt = point;
 			GZoomMMPnt = point;
+			break;
+		case OPERSTATE_WINDOW_MOVE:							//当前为窗口移动状态
+			GWinMoveLBDPnt = point;
+			GWinMoveMMPnt = point;
 			break;
 		default:
 			break;
@@ -1062,6 +1512,54 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 				GPntChanged = true;							//数据发生变更
 			}
 			break;
+		case OPERSTATE_UNDELETE_PNT:						//当前状态（恢复点）
+			PntToDot(dot, point);
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//窗口转数据坐标
+			DotToPnt(point, dot);
+			FindDeletePnt(point, GPntNum, GPntTmpF, GPntNdx);//查找最近的删除点
+			if (GPntNdx != -1)
+			{
+				PNT_STRU pnt;
+				ReadTempFileToPnt(GPntTmpF, GPntNdx, pnt);	//从临时文件中读点
+				pnt.isDel = 0;								//设置删除标记为0，即不删除
+				UpdatePnt(GPntTmpF, GPntNdx, pnt);			//更新点
+				dot.x = pnt.x;
+				dot.y = pnt.y;
+				PntDPtoVP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//数据转窗口
+				pnt.x = dot.x;
+				pnt.y = dot.y;
+				DrawPnt(&dc, pnt);							//在当前视图中用异或模式擦除恢复的点
+				GPntChanged = true;
+				GPntNdx = -1;
+			}
+			break;
+		case OPERSTATE_MODIFY_POINT_PARAMETER:				//当前为修改点参数操作状态
+			PntToDot(dot, point);
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//窗口转数据坐标系
+			DotToPnt(point, dot);
+			PNT_STRU tempPoint;
+			memcpy_s(&tempPoint, sizeof(PNT_STRU), 
+				&FindPnt(point, GPntNum, GPntTmpF, GPntNdx), sizeof(PNT_STRU));
+															//查找最近点
+			if (GPntNdx != -1)
+			{
+				CPointParameterDlg dlg;						//点参数设置对话框
+				dlg.m_ColorButton.SetColor(tempPoint.color);
+				dlg.m_Pattern = tempPoint.pattern;
+				if (IDOK == dlg.DoModal())
+				{
+					COLORREF tempColor = dlg.m_ColorButton.GetColor();
+					memcpy_s(&tempPoint.color, sizeof(COLORREF), &tempColor,
+						sizeof(COLORREF));
+					tempPoint.pattern = dlg.m_Pattern;
+					GPntTmpF->Seek(GPntNdx * sizeof(PNT_STRU), CFile::begin);
+					GPntTmpF->Write(&tempPoint, sizeof(PNT_STRU));//写入点数据
+				}
+				this->Invalidate();
+				GPntChanged = true;
+				GPntNdx = -1;
+			}
+			break;
 		default:
 			break;
 		}
@@ -1078,7 +1576,7 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 			PntToDot(dot, point);
 			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);// 坐标系转换
 			WriteLinDatToFile(GLinTmpDatF, GLin.datOff, GTLin.dotNum, dot);
-															//将线的点数据写入临时文件中
+			//将线的点数据写入临时文件中
 			GTLin.dotNum++;									//线节点处加1
 			PntDPtoVP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);// 坐标系转换
 			GLPnt.x = (long)dot.x;							//设置线段的起点(x)
@@ -1097,16 +1595,16 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 				LIN_NDX_STRU TmpLinNdx;
 				D_DOT dot1, dot2;
 				POINT pnt1, pnt2;
-															//从临时线索引文件中读取线索引
+				//从临时线索引文件中读取线索引
 				ReadTempFileToLinNdx(GLinTmpNdxF, GLinNdx, TmpLinNdx);
 				TmpLinNdx.isDel = 1;						//设置删除标志
 				UpdateLin(GLinTmpNdxF, GLinNdx, TmpLinNdx);	//更新线数据
 				for (int i = 0; i < TmpLinNdx.dotNum - 1; ++i)
 				{
-															//从临时线的点数据文件中读取点
+					//从临时线的点数据文件中读取点
 					ReadTempFileToLinDat(GLinTmpDatF, TmpLinNdx.datOff, i, dot1);
 					ReadTempFileToLinDat(GLinTmpDatF, TmpLinNdx.datOff, i + 1, dot2);
-															//坐标系转换（数据转窗口坐标系）
+					//坐标系转换（数据转窗口坐标系）
 					PntDPtoVP(dot1, GZoom, GZoomOffset_x, GZoomOffset_y);
 					PntDPtoVP(dot2, GZoom, GZoomOffset_x, GZoomOffset_y);
 					DotToPnt(pnt1, dot1);
@@ -1144,7 +1642,7 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 				PntToDot(dot, point);
 				PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);// 坐标系转换
 				DotToPnt(point, dot);
-															// 查找鼠标点位置最近的线
+				// 查找鼠标点位置最近的线
 				line = FindLin(GLinTmpNdxF, GLinTmpDatF, point, GLinNum, GLinNdx);
 				if (GLinNdx != -1)
 				{
@@ -1172,18 +1670,18 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 					D_DOT pt;
 					if (GnLine == 1)						// 选中第一条线，其端点画圆标记
 					{
-															// 从临时文件中读取线的起点并将其转为窗口坐标，画圆
+						// 从临时文件中读取线的起点并将其转为窗口坐标，画圆
 						ReadTempFileToLinDat(GLinTmpDatF, GStartLin.datOff, 0, pt);
 						PntDPtoVP(pt, GZoom, GZoomOffset_x, GZoomOffset_y);
 						dc.Ellipse((long)pt.x - 2, (long)pt.y - 2, (long)pt.x + 2, (long)pt.y + 2);
-															// 从临时文件中读取线的终点并将其转为窗口坐标，画圆
+						// 从临时文件中读取线的终点并将其转为窗口坐标，画圆
 						ReadTempFileToLinDat(GLinTmpDatF, GStartLin.datOff, GStartLin.dotNum - 1, pt);
 						PntDPtoVP(pt, GZoom, GZoomOffset_x, GZoomOffset_y);
 						dc.Ellipse((long)pt.x - 2, (long)pt.y - 2, (long)pt.x + 2, (long)pt.y + 2);
 					}
 					else									//选中第二条线，连接线
 					{
-															// 改变线的点数据，即将连接线的点数据写入文件中
+						// 改变线的点数据，即将连接线的点数据写入文件中
 						AlterLindot(GLinTmpDatF, GStartLin, GEndLin, GnStart, GnEnd, GLin.datOff);
 						AlterStartLin(GLinTmpNdxF, GLin.datOff, GnStart, GStartLin.dotNum + GEndLin.dotNum);// 修改第一条线索引
 						AlterEndLin(GLinTmpNdxF, GnEnd);	// 修改第二条线索引
@@ -1196,6 +1694,87 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 						GLinNdx = -1;
 						this->Invalidate();
 					}
+				}
+			}
+			break;
+		default:
+			break;
+		}
+	}
+	if (GRegFCreated)
+	{
+		D_DOT dot;
+		switch (GCurOperState)
+		{
+		case OPERSTATE_INPUT_REG:							//当前为造区操作状态
+			if (GTReg.dotNum == 0)
+			{
+				memcpy_s(&GTReg, sizeof(REG_NDX_STRU), &GReg, sizeof(REG_NDX_STRU));
+			}
+			if (GRegCreateStartPnt.x == -1 && GRegCreateStartPnt.y == -1)
+			{
+				GRegCreateStartPnt = point;
+			}
+			if (GRegCreateMMPnt.x == -1 && GRegCreateMMPnt.y == -1)
+			{
+				GRegCreateMMPnt = point;
+			}
+			PntToDot(dot, point);
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//窗口转数据
+			WriteRegDatToFile(GRegTmpDatF, GReg.datOff, GTReg.dotNum, dot);
+																//将区的点数据写入文件
+			GTReg.dotNum++;										//区节点数加一
+			if (GTReg.dotNum == 2)
+			{
+				this->Invalidate();								//区节点数少于3个则取消操作
+			}
+			GRegChanged = true;
+			break;
+		case OPERSTATE_DELETE_REG:								//当前为删除区操作状态
+			PntToDot(dot, point);
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//窗口转数据坐标
+			DotToPnt(point,dot);
+			FindReg(GRegTmpNdxF, GRegTmpDatF, point, GRegNum, GRegNdx);//查找区
+			if (GRegNdx != -1) {
+				GRegLNum--;
+				GRegChanged = true;
+				REG_NDX_STRU TmpRegNdx;
+				ReadTempFileToRegNdx(GRegTmpNdxF, GRegNdx, TmpRegNdx);//从临时文件中读取删除区的索引
+				TmpRegNdx.isDel = 1;							//设置删除标记
+				UpdateReg(GRegTmpNdxF, GRegNdx, TmpRegNdx);		//更新区数据
+				D_DOT* dot = new D_DOT[TmpRegNdx.dotNum];
+				GRegTmpDatF->Seek(TmpRegNdx.datOff, CFile::begin);
+				GRegTmpDatF->Read(dot, TmpRegNdx.dotNum * sizeof(D_DOT));
+				for (int i = 0; i < TmpRegNdx.dotNum; ++i)
+				{
+																// 将删除区的点数据坐标转为窗口坐标
+					PntDPtoVP(dot[i], GZoom, GZoomOffset_x, GZoomOffset_y);
+				}
+				POINT * pnt = new POINT[TmpRegNdx.dotNum];
+				DotToPnt(pnt, dot, TmpRegNdx.dotNum);
+				DrawReg(&dc, TmpRegNdx, pnt, TmpRegNdx.dotNum);	//重绘(擦除区)
+				delete[] pnt;
+				delete[] dot;
+				GRegNdx = -1;
+			}
+			break;
+		case OPERSTATE_MOVE_REG:								//当前为移动区操作状态
+			if (GRegNdx != -1)
+			{
+				if (GRegLBDPnt.x != -1 && GRegLBDPnt.y != -1)
+				{
+					D_DOT dot1, dot2;
+					PntToDot(dot1, point);
+					PntVPtoDP(dot1, GZoom, GZoomOffset_x, GZoomOffset_y);
+					PntToDot(dot2, GRegLBDPnt);
+					PntVPtoDP(dot2, GZoom, GZoomOffset_x, GZoomOffset_y);
+					double offset_x = dot1.x - dot2.x;
+					double offset_y = dot1.y - dot2.y;
+					UpdateReg(GRegTmpNdxF, GRegTmpDatF, GRegNdx, offset_x, offset_y);// 更新区数据
+					GRegNdx = -1;
+					GRegMMOffsetX = 0;
+					GRegMMOffsetY = 0;
+					GRegChanged = true;
 				}
 			}
 			break;
@@ -1259,6 +1838,10 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 				GZoom *= 3 / 4.0;							//缩放系数为3/4
 				this->Invalidate();
 			}
+			break;
+		case OPERSTATE_WINDOW_MOVE:							//当前为窗口移动操作状态
+			GWinMoveLBDPnt = CPoint(-1, 1);					//复位移动窗口时左键按下点
+			GWinMoveMMPnt = CPoint(-1, -1);					//复位移动窗口移动前状态点位置
 			break;
 		default:
 			break;
@@ -1407,6 +1990,83 @@ void CMapEditorView::OnMouseMove(UINT nFlags, CPoint point)
 			break;
 		}
 	}
+	if (GRegFCreated)
+	{
+		switch (GCurOperState)
+		{
+		case OPERSTATE_INPUT_REG:								//当前为造区操作状态
+			if (GRegCreateMMPnt.x != -1 && GRegCreateMMPnt.y != -1)
+			{
+				CClientDC dc(this);
+				dc.SetROP2(R2_NOTXORPEN);
+				LIN_NDX_STRU tln = { tln.pattern = GTReg.pattern, tln.color = GTReg.color };
+				//设置区参数
+				if (GTReg.dotNum == 1)
+				{
+					DrawSeg(&dc, tln, GRegCreateStartPnt, GRegCreateMMPnt);
+					DrawSeg(&dc, tln, GRegCreateStartPnt, point);
+				}
+				else
+				{
+					D_DOT* dot = new D_DOT[GTReg.dotNum];
+					for (int i = 0; i < GTReg.dotNum; ++i)
+					{
+						ReadTempFileToRegDat(GRegTmpDatF, GTReg.datOff, i, dot[i]);
+						//从临时文件中读取区的点数据
+						PntDPtoVP(dot[i], GZoom, GZoomOffset_x, GZoomOffset_y);
+						//将区的点数据坐标转换为窗口坐标
+					}
+					POINT* pnt = new POINT[GTReg.dotNum + 1];
+					DotToPnt(pnt, dot, GTReg.dotNum);
+					pnt[GTReg.dotNum] = GRegCreateMMPnt;
+					DrawReg(&dc, GTReg, pnt, GTReg.dotNum + 1);
+					pnt[GTReg.dotNum] = point;
+					DrawReg(&dc, GTReg, pnt, GTReg.dotNum + 1);
+					delete[] dot;
+					delete[] pnt;
+				}
+				GRegCreateMMPnt = point;
+			}
+			break;
+		case OPERSTATE_MOVE_REG:
+			if (GRegNdx != -1)
+			{
+				CClientDC dc(this);
+				dc.SetROP2(R2_NOTXORPEN);							// 设置异或操作
+				D_DOT * dot = new D_DOT[GRegMMTmpNdx.dotNum];
+																	// 擦除原来的区
+				for (int i = 0; i < GRegMMTmpNdx.dotNum; i++)
+				{
+					ReadTempFileToRegDat(GRegTmpDatF, GRegMMTmpNdx.datOff, i, dot[i]);
+					PntDPtoVP(dot[i], GZoom, GZoomOffset_x, GZoomOffset_y);
+					dot[i].x += GRegMMOffsetX;
+					dot[i].y += GRegMMOffsetY;
+				}
+				POINT* pnt = new POINT[GRegMMTmpNdx.dotNum];
+				DotToPnt(pnt, dot, GRegMMTmpNdx.dotNum);
+				DrawReg(&dc, GRegMMTmpNdx, pnt, GRegMMTmpNdx.dotNum);
+																	// 计算偏移量
+				GRegMMOffsetX = GRegMMOffsetX + point.x - GRegMMPnt.x;
+				GRegMMOffsetY = GRegMMOffsetY + point.y - GRegMMPnt.y;
+																	// 在新的位置绘制一个区
+				for (int i = 0; i < GRegMMTmpNdx.dotNum; i++)
+				{
+					ReadTempFileToRegDat(GRegTmpDatF, GRegMMTmpNdx.datOff, i, dot[i]);
+					PntDPtoVP(dot[i], GZoom, GZoomOffset_x, GZoomOffset_y);
+					dot[i].x += GRegMMOffsetX;
+					dot[i].y += GRegMMOffsetY;
+				}
+				DotToPnt(pnt, dot, GRegMMTmpNdx.dotNum);
+				DrawReg(&dc, GRegMMTmpNdx, pnt, GRegMMTmpNdx.dotNum);
+				delete[] dot;
+				delete[] pnt;
+				GRegMMPnt = point;
+			}
+			break;
+		default:
+			break;
+		}
+	}
 	if (GPntFCreated || GLinFCreated || GRegFCreated)
 	{
 		CClientDC dc(this);								//获得本窗口或当前活动视图
@@ -1424,9 +2084,77 @@ void CMapEditorView::OnMouseMove(UINT nFlags, CPoint point)
 				dc.SelectObject(oldPen);
 			}
 			break;
+		case OPERSTATE_WINDOW_MOVE:						//当前为窗口移动操作状态
+			if (GWinMoveMMPnt.x != -1 && GWinMoveMMPnt.y != -1)
+			{
+				CPoint offset(0, 0);					//鼠标移动偏移量
+				offset.x = point.x - GWinMoveLBDPnt.x;
+				offset.y = point.y - GWinMoveLBDPnt.y;
+				GZoomOffset_x -= offset.x / GZoom;		//变换放大与缩小时的偏移量
+				GZoomOffset_y -= offset.y / GZoom;
+				GWinMoveLBDPnt = point;
+				this->Invalidate();
+			}
+			break;
 		default:
 			break;
 		}
 	}
 	CView::OnMouseMove(nFlags, point);
+}
+
+
+void CMapEditorView::OnUpdateWindowShowPoint(CCmdUI *pCmdUI)
+{
+	//显示状态是显示未删除状态并且显示点则将菜单标记选中
+	if (GCurShowState == SHOWSTATE_UNDEL && GShowPnt == true)
+	{
+		pCmdUI->SetCheck(1);//菜单选中标记
+	}
+	else
+	{
+		pCmdUI->SetCheck(0);
+	}
+}
+
+
+void CMapEditorView::OnUpdateWindowShowLine(CCmdUI *pCmdUI)
+{
+	//显示状态是显示未删除状态并且显示点则将菜单标记选中
+	if (GCurShowState == SHOWSTATE_UNDEL && GShowLin == true)
+	{
+		pCmdUI->SetCheck(1);//菜单选中标记
+	}
+	else
+	{
+		pCmdUI->SetCheck(0);
+	}
+}
+
+
+void CMapEditorView::OnUpdateWindowShowRegion(CCmdUI *pCmdUI)
+{
+	//显示状态是显示未删除状态并且显示点则将菜单标记选中
+	if (GCurShowState == SHOWSTATE_UNDEL && GShowReg == true)
+	{
+		pCmdUI->SetCheck(1);//菜单选中标记
+	}
+	else
+	{
+		pCmdUI->SetCheck(0);
+	}
+}
+
+
+void CMapEditorView::OnUpdatePointShowDeleted(CCmdUI *pCmdUI)
+{
+	//若当前显示状态是显示删除状态且显示点，菜单标记选中；否则取消
+	if (GCurShowState == SHOWSTATE_DEL && GShowPnt == true)
+	{
+		pCmdUI->SetCheck(1);
+	}
+	else
+	{
+		pCmdUI->SetCheck(0);
+	}
 }

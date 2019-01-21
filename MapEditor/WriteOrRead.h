@@ -40,8 +40,30 @@ void UpdateLin(CFile * LinTmpNdxF, CFile * LinTmpDatF, int LinNdx,
 
 //修改第一条线索引的函数声明
 void AlterStartLin(CFile * LinTmpNdxF, long subdatOff, int nLine, int subNum);
+
 // 修改第二条线索引的函数声明
 void AlterEndLin(CFile * LinTmpNdxF, int nLine);
+
+//将区数据写入到临时索引文件的函数声明
+void WriteRegNdxToFile(CFile * RegTmpNdxF, int i, REG_NDX_STRU Region);
+
+//将区边界节点数据写入到线临时数据文件的函数声明
+void WriteRegDatToFile(CFile * RegTmpDatF, long datOff, int i, D_DOT point);
+
+//从临时区索引文件中读区索引的函数声明
+void ReadTempFileToRegNdx(CFile * RegTmpNdxF, int i, REG_NDX_STRU &RegNdx);
+
+//从临时区数据文件中读取区的边界点数据的函数声明
+void ReadTempFileToRegDat(CFile * RegTempDatF, long datOff, int i, D_DOT &pnt);
+
+//临时索引文件更新区数据的函数声明
+void UpdateReg(CFile* RegTmpNdxF, int nReg, REG_NDX_STRU Region);
+
+//更新区的函数声明
+void UpdateReg(CFile* RegTmpNdxF, CFile* RegTmpDatF, int RegNdx, double offset_x, double offset_y);
+
+
+
 
 #endif // !WRITEORREAD_H
 

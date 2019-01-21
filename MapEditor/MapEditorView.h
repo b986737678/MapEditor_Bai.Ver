@@ -87,6 +87,10 @@ public:
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnDestroy();
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnUpdateWindowShowPoint(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateWindowShowLine(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateWindowShowRegion(CCmdUI *pCmdUI);
+	afx_msg void OnUpdatePointShowDeleted(CCmdUI *pCmdUI);
 };
 
 #ifndef _DEBUG  // MapEditorView.cpp 中的调试版本

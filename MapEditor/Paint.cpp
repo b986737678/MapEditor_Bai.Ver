@@ -172,3 +172,58 @@ void ShowAllLin(CClientDC * dc, CFile * LinTmpNdxF, CFile * LinTmpDatF,
 		}
 	}
 }
+
+/*绘制区*/
+void DrawReg(CClientDC * dc, REG_NDX_STRU Region, POINT * pt, long nPnt)
+{
+	CBrush brush(Region.color);
+	CPen pen(PS_SOLID, 1, Region.color);
+	CObject * oldObject;
+	oldObject = dc->SelectObject(&pen);
+	switch (Region.pattern)
+	{
+	case 0:																	//实心
+	{
+		oldObject = dc->SelectObject(&brush);
+		break;
+	}
+	case 1:																	//空心
+	{
+		dc->SelectStockObject(NULL_BRUSH);
+		break;
+	}
+	default:
+		break;
+	}
+	dc->Polygon(pt, nPnt);
+	dc->SelectObject(&oldObject);
+}
+
+/*显示所有区*/
+void ShowAllReg(CClientDC * dc, CFile * RegTmpNdxF, CFile * RegTmpDatF, int RegNum, 
+	double zoomOffset_x, double zoomOffset_y, double zoom, char isDel)
+{
+	REG_NDX_STRU Region;
+	D_DOT pt;
+	for (int i = 0; i < RegNum; i++)
+	{
+		ReadTempFileToRegNdx(RegTmpNdxF, i, Region);						//从临时文件读取区索引
+		D_DOT * dot;
+		dot = (D_DOT *)malloc(Region.dotNum * sizeof(D_DOT));
+		ZeroMemory(dot, Region.dotNum * sizeof(D_DOT));
+		for (int j = 0; j < Region.dotNum; j++)
+		{//依次从临时文件中读取区的节点文件并将其转为窗口坐标
+			ReadTempFileToRegDat(RegTmpDatF, Region.datOff, j, pt);
+			PntDPtoVP(pt, zoom, zoomOffset_x, zoomOffset_y);
+			dot[j] = pt;
+		}
+		if (Region.isDel == isDel)
+		{
+			POINT * point = new POINT[Region.dotNum];
+			DotToPnt(point, dot, Region.dotNum);
+			DrawReg(dc, Region, point, Region.dotNum);						//绘制区
+			delete[] point;
+		}
+		free(dot);
+	}
+}

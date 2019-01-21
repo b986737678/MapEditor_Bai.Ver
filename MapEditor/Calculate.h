@@ -42,5 +42,15 @@ void PntVPtoDP(D_DOT&pt, double zoom, double offset_x, double offset_y);
 // 改变线的点数据的函数声明
 void AlterLindot(CFile * LinTmpDatF, LIN_NDX_STRU startLine, LIN_NDX_STRU endLine, int start, int end, long allDatOff);
 
+//判断单击位置是否在区内的函数声明
+BOOL PtInPolygon(CPoint p, D_DOT * ptPolygon, int nCount);
+
+//查找离鼠标点最近的区的函数声明
+REG_NDX_STRU FindReg(CFile *  RegTmpNdxF, CFile * RegTmpDatF, CPoint mousePoint, int RegNum, int &nRegNdx);
+
+//查找最近删除点的函数声明
+PNT_STRU FindDeletePnt(CPoint mousePoint, int PntNum, CFile*PntTmpF, int &nPnt);
+
+
 
 #endif // !CALCULATE_H

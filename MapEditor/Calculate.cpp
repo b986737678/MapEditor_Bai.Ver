@@ -280,3 +280,90 @@ void AlterLindot(CFile * LinTmpDatF, LIN_NDX_STRU startLine, LIN_NDX_STRU endLin
 	}
 	ndot = 0;
 }
+
+/*判断点击位置是否在区内*/
+BOOL PtInPolygon(CPoint p, D_DOT * ptPolygon, int nCount)
+{
+	int nCross = 0;
+	for (int i = 0; i < nCount; i++)
+	{
+		D_DOT p1 = ptPolygon[i];
+		D_DOT p2 = ptPolygon[(i + 1) % nCount];
+		// 求解y=p.y与p1p2的交点
+		if (p1.y == p2.y)								//p1p2与y=p0.y 平行
+			continue;
+		if (p.y < min(p1.y, p2.y))						//交点在p1p2延长线上
+			continue;
+		if (p.y >= max(p1.y, p2.y))						//交点在p1p2延长线上
+			continue;
+		//求交点的x坐标
+		double x = (double)(p.y - p1.y)* (double)(p2.x - p1.x) / (double)(p2.y - p1.y) + p1.x;
+		if (x > p.x)
+			nCross++;									//只统计单边交点
+	}
+	//单边交点为偶数，点在多边形之外
+	return (nCross % 2 == 1);
+}
+
+/*查找里鼠标点最近的区*/
+REG_NDX_STRU FindReg(CFile * RegTmpNdxF, CFile * RegTmpDatF, CPoint mousePoint, int RegNum, int & nRegNdx)
+{
+	REG_NDX_STRU RegNdx;
+	REG_NDX_STRU tRegNdx = { tRegNdx.isDel = 0,
+							 tRegNdx.color = RGB(0,0,0),
+							 tRegNdx.pattern = 0,
+							 tRegNdx.dotNum = 0,
+							 tRegNdx.datOff = 0 };
+	for (int i = 0; i < RegNum; i++)
+	{
+		ReadTempFileToRegNdx(RegTmpNdxF, i, RegNdx);	//从临时文件读区索引
+		if (RegNdx.isDel == 0)
+		{
+			D_DOT *pt = new D_DOT[RegNdx.dotNum];
+			for (int j = 0; j < RegNdx.dotNum; j++)
+			{
+				// 从临时文件中读取区的点数据
+				ReadTempFileToRegDat(RegTmpDatF, RegNdx.datOff, j, pt[j]);
+			}
+			if (PtInPolygon(mousePoint, pt, RegNdx.dotNum))// 点在区内
+			{
+				tRegNdx = RegNdx;
+				nRegNdx = i;
+				delete[] pt;
+				break;
+			}
+			else
+			{
+				delete[] pt;
+			}
+		}
+	}
+	return tRegNdx;
+}
+
+/*查找最近删除点*/
+PNT_STRU FindDeletePnt(CPoint mousePoint, int PntNum, CFile * PntTmpF, int & nPnt)
+{
+	PNT_STRU point;
+	PNT_STRU tPnt = { tPnt.x = 0,tPnt.y = 0,
+		tPnt.color = RGB(0,0,0),
+		tPnt.pattern = 0,tPnt.isDel = 0 };
+	double min = 10;									//在十个像素范围内寻找
+	for (int i = 0; i < PntNum; ++i)
+	{
+		ReadTempFileToPnt(PntTmpF, i, point);			//从临时文件中读点
+		if (!point.isDel)
+		{
+			continue;									//标记为删除点进行查找
+		}
+		double dist = Distance(mousePoint.x, mousePoint.y,
+			point.x, point.y);
+		if (isSmall(min, dist))
+		{
+			min = dist;
+			tPnt = point;
+			nPnt = i;
+		}
+	}
+	return tPnt;
+}

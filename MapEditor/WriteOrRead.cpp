@@ -166,5 +166,57 @@ void AlterEndLin(CFile * LinTmpNdxF, int nLine)
 	LinTmpNdxF->Write(&LinNdx, sizeof(LIN_NDX_STRU));
 }
 
+/*向临时文件中写入区索引*/
+void WriteRegNdxToFile(CFile * RegTmpNdxF, int i, REG_NDX_STRU Region)
+{
+	RegTmpNdxF->Seek(i * sizeof(REG_NDX_STRU), CFile::begin);
+	RegTmpNdxF->Write(&Region, sizeof(REG_NDX_STRU));
+}
+
+/*向临时文件中写入区的节点数据*/
+void WriteRegDatToFile(CFile * RegTmpDatF, long datOff, int i, D_DOT point)
+{
+	RegTmpDatF->Seek(datOff + i * sizeof(D_DOT), CFile::begin);
+	RegTmpDatF->Write(&point, sizeof(D_DOT));
+}
+
+/*从临时文件中读取区的节点数据*/
+void ReadTempFileToRegNdx(CFile * RegTmpNdxF, int i, REG_NDX_STRU & RegNdx)
+{
+	RegTmpNdxF->Seek(i * sizeof(REG_NDX_STRU), CFile::begin);
+	RegTmpNdxF->Read(&RegNdx, sizeof(REG_NDX_STRU));
+}
+
+/*从临时文件中读取区索引*/
+void ReadTempFileToRegDat(CFile * RegTempDatF, long datOff, int i, D_DOT & pnt)
+{
+	RegTempDatF->Seek(datOff + i * sizeof(D_DOT), CFile::begin);
+	RegTempDatF->Read(&pnt, sizeof(D_DOT));
+}
+
+/*临时索引文件更新区数据*/
+void UpdateReg(CFile * RegTmpNdxF, int nReg, REG_NDX_STRU Region)
+{
+	WriteRegNdxToFile(RegTmpNdxF, nReg, Region);
+}
+
+void UpdateReg(CFile * RegTmpNdxF, CFile * RegTmpDatF, int RegNdx, double offset_x, double offset_y)
+{
+	REG_NDX_STRU tReg;
+	D_DOT pt;
+	ReadTempFileToRegNdx(RegTmpNdxF, RegNdx, tReg);
+	for (int i = 0; i < tReg.dotNum; ++i)
+	{
+		RegTmpDatF->Seek(tReg.datOff + i * sizeof(D_DOT), CFile::begin);
+		RegTmpDatF->Read(&pt, sizeof(D_DOT));
+		pt.x = pt.x + offset_x;
+		pt.y = pt.y + offset_y;
+		RegTmpDatF->Seek(tReg.datOff + i * sizeof(D_DOT), CFile::begin);
+		RegTmpDatF->Write(&pt, sizeof(D_DOT));
+	}
+}
+
+
+
 
 

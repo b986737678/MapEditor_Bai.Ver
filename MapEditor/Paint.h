@@ -24,5 +24,12 @@ void ShowAllPnt(CClientDC * dc, CFile * PntTmpF, int PntNum,
 void ShowAllLin(CClientDC * dc, CFile * LinTmpNdxF, CFile * LinTmpDatF, int LinNum, 
 	double zoomOffset_x, double zoomOffset_y, double zoom, char isDel);
 
+//绘制区（造区）的函数声明
+void DrawReg(CClientDC * dc, REG_NDX_STRU Region, POINT * pt, long nPnt);
+
+//显示所有区的函数声明
+void ShowAllReg(CClientDC * dc, CFile * RegTmpNdxF, CFile * RegTmpDatF, int RegNum, 
+	double zoomOffset_x, double zoomOffset_y, double zoom, char isDel);
+
 
 #endif // !PAINT_H
