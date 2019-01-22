@@ -81,8 +81,8 @@ enum Action
 	OPERSTATE_UNDELETE_PNT,
 	OPERSTATE_UNDELETE_LIN,
 	OPERSTATE_UNDELETE_REG
-};//枚举操作状态
-Action GCurOperState;//操作参数
+};													//枚举操作状态
+Action GCurOperState;								//操作参数
 
 ///-------------------------默认点结构与临时点结构--------------------------///
 PNT_STRU GPnt = {	
@@ -112,9 +112,13 @@ LIN_NDX_STRU GLin = { 								//默认线结构
 	GLin.dotNum = 0,
 	GLin.datOff = 0 
 };
-LIN_NDX_STRU GTLin;									//线
-POINT GLPnt = { GLPnt.x = -1,GLPnt.y = -1 };		//记录线段的起点
-CPoint GMPnt(-1, -1);								//记录鼠标上一个状态的点
+LIN_NDX_STRU	GTLin;								//线
+POINT GLPnt = 
+{ 
+	GLPnt.x = -1,
+	GLPnt.y = -1 
+};													//记录线段的起点
+CPoint			GMPnt(-1, -1);						//记录鼠标上一个状态的点
 ///---------------------线文件的版本信息，以及其初始化----------------------///
 VERSION GLinVer =
 {
@@ -134,13 +138,13 @@ long			GLinMMOffestY = 0;					// 记录鼠标移动时候的Y轴的偏移量
 LIN_NDX_STRU	GLinMMTmpNdx;						// 记录鼠标选中的线的索引
 
 ///-------------------------关于放大缩小的全局变量--------------------------///
-CPoint GZoomLBDPnt(-1, -1);							//放大时鼠标左键抬起的点
-CPoint GZoomMMPnt(-1, -1);							//放大时鼠标移动前一状态
+CPoint			GZoomLBDPnt(-1, -1);				//放大时鼠标左键抬起的点
+CPoint			GZoomMMPnt(-1, -1);					//放大时鼠标移动前一状态
 
-double	GZoomOffset_x = 0;							//偏移向量
-double	GZoomOffset_y = 0;
-double	GZoom = 1.0;								//缩放系数
-int		GZoomStyle = 0;								//放大方式
+double			GZoomOffset_x = 0;					//偏移向量
+double			GZoomOffset_y = 0;
+double			GZoom = 1.0;						//缩放系数
+int				GZoomStyle = 0;						//放大方式
 
 ///---------------------------连接线相关全局变量----------------------------///
 LIN_NDX_STRU	GStartLin = GLin;					// 选中的第一条线
@@ -194,6 +198,8 @@ bool			GShowPnt = true;					//当前显示的结构是否是点
 bool			GShowLin = true;					//当前显示的结构是否是线
 bool			GShowReg = true;					//当前显示的结构是否是区
 
+///--------------------------线上删点相关全局变量---------------------------///
+int				GnPntLinNdx = -1;							//找到的点在线上的序号
 
 
 // CMapEditorView
@@ -895,7 +901,7 @@ void CMapEditorView::OnWindowReset()
 			}
 		}
 	}
-	if (isInit == false & &GRegLNum > 0)					//初始化区的外包络矩形
+	if (isInit == false && GRegLNum > 0)					//初始化区的外包络矩形
 	{
 		for (int i = 0; i < GRegNum; ++i)
 		{
@@ -1113,7 +1119,6 @@ void CMapEditorView::OnPointCreate()
 		MessageBox(L"File have not been created.", L"Message", MB_OK);
 	}
 }
-
 
 void CMapEditorView::OnPointMove()
 {
@@ -1338,7 +1343,19 @@ void CMapEditorView::OnLineUndeleted()
 
 void CMapEditorView::OnLineDeleteDot()
 {
-	// TODO: 在此添加命令处理程序代码
+	if (GLinFCreated)
+	{
+		GCurOperState = OPERSTATE_LIN_DELETE_PNT;		//当前操作状态（线上删点）
+		GCurShowState = SHOWSTATE_UNDEL;				//当前显示状态（未删除）
+		this->Invalidate();
+		GShowPnt = true;								//打开显示点
+		GShowLin = true;								//打开显示线
+		GShowReg = true;								//打开显示区
+	}
+	else
+	{
+		MessageBox(L"File have not been created.", L"Message", MB_OK);
+	}
 }
 
 
@@ -1905,6 +1922,27 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 				GLinChanged = true;
 				GLinNdx = -1;
 			}
+			break;
+		case OPERSTATE_LIN_DELETE_PNT:						//当前为线上删点操作状态
+			PntToDot(dot, point);
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//窗口转数据坐标系
+			DotToPnt(point, dot);
+			LIN_NDX_STRU tmpLine;
+			memcpy_s(&tmpLine, sizeof(LIN_NDX_STRU),
+				&FindLin(GLinTmpNdxF, GLinTmpDatF, point, GLinNum, GLinNdx), sizeof(LIN_NDX_STRU));
+			if (GLinNdx != -1)
+			{
+				FindPntOnLin(tmpLine, GLinTmpDatF, point, GnPntLinNdx);
+				if (GnPntLinNdx != -1)
+				{
+					DelPntOnLin(GLinTmpNdxF, GLinTmpDatF, tmpLine, GnPntLinNdx, GLinNdx);
+					this->Invalidate();
+				}
+				GLinChanged = true;
+				GnPntLinNdx = -1;
+			}
+			break;
+		case OPERSTATE_LIN_ADD_PNT:							//当前为线上加点操作状态
 			break;
 		default:
 			break;

@@ -57,6 +57,10 @@ LIN_NDX_STRU FindDeleteLin(CFile*LinTmpNdxF, CFile*LinTmpDatF, CPoint mousePoint
 //查找最近删除区的函数声明
 REG_NDX_STRU FindDeleteReg(CFile*RegTmpNdxF, CFile*RegTmpDatF, CPoint mousePoint, int RegNum, int&nRegNdx);
 
+//查找线上最近点的函数声明
+D_DOT FindPntOnLin(LIN_NDX_STRU Lin,CFile*LinTmpDatF,CPoint mousePoint,int&nPntLinNdx);
 
+//删除线上某点的函数声明
+void DelPntOnLin(CFile*LinTmpNdxF, CFile*LinTmpDatF, LIN_NDX_STRU&Lin, int nPntLinNdx,int nLin);
 
 #endif // !CALCULATE_H
