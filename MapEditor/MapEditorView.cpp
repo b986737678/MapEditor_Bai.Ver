@@ -1,10 +1,10 @@
 
-// MapEditorView.cpp : CMapEditorView ÀàµÄÊµÏÖ
+// MapEditorView.cpp : CMapEditorView ç±»çš„å®ç°
 //
 
 #include "stdafx.h"
-// SHARED_HANDLERS ¿ÉÒÔÔÚÊµÏÖÔ¤ÀÀ¡¢ËõÂÔÍ¼ºÍËÑË÷É¸Ñ¡Æ÷¾ä±úµÄ
-// ATL ÏîÄ¿ÖĞ½øĞĞ¶¨Òå£¬²¢ÔÊĞíÓë¸ÃÏîÄ¿¹²ÏíÎÄµµ´úÂë¡£
+// SHARED_HANDLERS å¯ä»¥åœ¨å®ç°é¢„è§ˆã€ç¼©ç•¥å›¾å’Œæœç´¢ç­›é€‰å™¨å¥æŸ„çš„
+// ATL é¡¹ç›®ä¸­è¿›è¡Œå®šä¹‰ï¼Œå¹¶å…è®¸ä¸è¯¥é¡¹ç›®å…±äº«æ–‡æ¡£ä»£ç ã€‚
 #ifndef SHARED_HANDLERS
 #include "MapEditor.h"
 #endif
@@ -25,38 +25,38 @@
 #define new DEBUG_NEW
 #endif
 
-///-------------------------µãÊı¾İÏà¹ØµÄÈ«¾Ö¿ØÖÆ±äÁ¿------------------------///
-bool	GPntFCreated = false;						//ÁÙÊ±ÎÄ¼şÊÇ·ñ´´½¨
-CString GPntFName;									//ÓÀ¾ÃÎÄ¼şÃû£¨º¬Â·¾¶£©
-CString GPntTmpFName = CString("tempPntF.dat");		//ÁÙÊ±ÎÄ¼şÃû£¨º¬Â·¾¶£©
-bool	GPntChanged = false;						//ÊÇ·ñ¸ü¸Ä
-int		GPntNum = 0;								//ÎïÀíÊı
-int		GPntLNum = 0;								//Âß¼­Ê÷
-CFile	*GPntTmpF = new CFile();					//¶ÁÈ¡ÁÙÊ±ÎÄ¼şµÄÖ¸Õë¶ÔÏó
+///-------------------------ç‚¹æ•°æ®ç›¸å…³çš„å…¨å±€æ§åˆ¶å˜é‡------------------------///
+bool	GPntFCreated = false;						//ä¸´æ—¶æ–‡ä»¶æ˜¯å¦åˆ›å»º
+CString GPntFName;									//æ°¸ä¹…æ–‡ä»¶åï¼ˆå«è·¯å¾„ï¼‰
+CString GPntTmpFName = CString("tempPntF.dat");		//ä¸´æ—¶æ–‡ä»¶åï¼ˆå«è·¯å¾„ï¼‰
+bool	GPntChanged = false;						//æ˜¯å¦æ›´æ”¹
+int		GPntNum = 0;								//ç‰©ç†æ•°
+int		GPntLNum = 0;								//é€»è¾‘æ ‘
+CFile	*GPntTmpF = new CFile();					//è¯»å–ä¸´æ—¶æ–‡ä»¶çš„æŒ‡é’ˆå¯¹è±¡
 
-///-------------------------ÏßÊı¾İÏà¹ØµÄÈ«¾Ö¿ØÖÆ±äÁ¿------------------------///
-bool	GLinFCreated = false;						//ÁÙÊ±ÎÄ¼şÊÇ·ñ´´½¨
-CString	GLinFName;									//ÓÀ¾ÃÎÄ¼şÃû£¨º¬Â·¾¶£©
-CString	GLinTmpNdxFName = CString("tempLinF.ndx");	//ÁÙÊ±Ë÷ÒıÎÄ¼şÃû£¨º¬Â·¾¶£©
-CString GLinTmpDatFName = CString("tempLinF.dat");	//ÁÙÊ±Êı¾İÎÄ¼şÃû£¨º¬Â·¾¶£©
-bool	GLinChanged = false;						//ÊÇ·ñ¸ü¸Ä
-int		GLinNum = 0;								//ÎïÀíÊı
-int		GLinLNum = 0;								//Âß¼­Êı
-CFile	*GLinTmpDatF = new CFile();					//¶ÁÈ¡ÁÙÊ±Êı¾İÎÄ¼şµÄÖ¸Õë¶ÔÏó
-CFile	*GLinTmpNdxF = new CFile();					//¶ÁÈ¡ÁÙÊ±Ë÷ÒıÎÄ¼şµÄÖ¸Õë¶ÔÏó
+///-------------------------çº¿æ•°æ®ç›¸å…³çš„å…¨å±€æ§åˆ¶å˜é‡------------------------///
+bool	GLinFCreated = false;						//ä¸´æ—¶æ–‡ä»¶æ˜¯å¦åˆ›å»º
+CString	GLinFName;									//æ°¸ä¹…æ–‡ä»¶åï¼ˆå«è·¯å¾„ï¼‰
+CString	GLinTmpNdxFName = CString("tempLinF.ndx");	//ä¸´æ—¶ç´¢å¼•æ–‡ä»¶åï¼ˆå«è·¯å¾„ï¼‰
+CString GLinTmpDatFName = CString("tempLinF.dat");	//ä¸´æ—¶æ•°æ®æ–‡ä»¶åï¼ˆå«è·¯å¾„ï¼‰
+bool	GLinChanged = false;						//æ˜¯å¦æ›´æ”¹
+int		GLinNum = 0;								//ç‰©ç†æ•°
+int		GLinLNum = 0;								//é€»è¾‘æ•°
+CFile	*GLinTmpDatF = new CFile();					//è¯»å–ä¸´æ—¶æ•°æ®æ–‡ä»¶çš„æŒ‡é’ˆå¯¹è±¡
+CFile	*GLinTmpNdxF = new CFile();					//è¯»å–ä¸´æ—¶ç´¢å¼•æ–‡ä»¶çš„æŒ‡é’ˆå¯¹è±¡
 
-///-------------------------ÇøÊı¾İÏà¹ØµÄÈ«¾Ö¿ØÖÆ±äÁ¿------------------------///
-bool	GRegFCreated = false;						//ÁÙÊ±ÎÄ¼şÊÇ·ñ´´½¨
-CString	GRegFName;									//ÓÀ¾ÃÎÄ¼şÃû£¨º¬Â·¾¶£©
-CString	GRegTmpNdxFName = CString("tempRegF.ndx");	//ÁÙÊ±Ë÷ÒıÎÄ¼şÃû£¨º¬Â·¾¶£©
-CString GRegTmpDatFName = CString("tempRegF.dat");	//ÁÙÊ±Êı¾İÎÄ¼şÃû£¨º¬Â·¾¶£©
-bool	GRegChanged = false;						//ÊÇ·ñ¸ü¸Ä
-int		GRegNum = 0;								//ÎïÀíÊı
-int		GRegLNum = 0;								//Âß¼­Êı
-CFile	*GRegTmpDatF = new CFile();					//¶ÁÈ¡ÁÙÊ±Êı¾İÎÄ¼şµÄÖ¸Õë¶ÔÏó
-CFile	*GRegTmpNdxF = new CFile();					//¶ÁÈ¡ÁÙÊ±Ë÷ÒıÎÄ¼şµÄÖ¸Õë¶ÔÏó
+///-------------------------åŒºæ•°æ®ç›¸å…³çš„å…¨å±€æ§åˆ¶å˜é‡------------------------///
+bool	GRegFCreated = false;						//ä¸´æ—¶æ–‡ä»¶æ˜¯å¦åˆ›å»º
+CString	GRegFName;									//æ°¸ä¹…æ–‡ä»¶åï¼ˆå«è·¯å¾„ï¼‰
+CString	GRegTmpNdxFName = CString("tempRegF.ndx");	//ä¸´æ—¶ç´¢å¼•æ–‡ä»¶åï¼ˆå«è·¯å¾„ï¼‰
+CString GRegTmpDatFName = CString("tempRegF.dat");	//ä¸´æ—¶æ•°æ®æ–‡ä»¶åï¼ˆå«è·¯å¾„ï¼‰
+bool	GRegChanged = false;						//æ˜¯å¦æ›´æ”¹
+int		GRegNum = 0;								//ç‰©ç†æ•°
+int		GRegLNum = 0;								//é€»è¾‘æ•°
+CFile	*GRegTmpDatF = new CFile();					//è¯»å–ä¸´æ—¶æ•°æ®æ–‡ä»¶çš„æŒ‡é’ˆå¯¹è±¡
+CFile	*GRegTmpNdxF = new CFile();					//è¯»å–ä¸´æ—¶ç´¢å¼•æ–‡ä»¶çš„æŒ‡é’ˆå¯¹è±¡
 
-///-------------------------------Óë²Ù×÷Ïà¹Ø--------------------------------///
+///-------------------------------ä¸æ“ä½œç›¸å…³--------------------------------///
 enum Action
 {
 	Noaction,
@@ -81,83 +81,83 @@ enum Action
 	OPERSTATE_UNDELETE_PNT,
 	OPERSTATE_UNDELETE_LIN,
 	OPERSTATE_UNDELETE_REG
-};													//Ã¶¾Ù²Ù×÷×´Ì¬
-Action GCurOperState;								//²Ù×÷²ÎÊı
+};													//æšä¸¾æ“ä½œçŠ¶æ€
+Action GCurOperState;								//æ“ä½œå‚æ•°
 
-///-------------------------Ä¬ÈÏµã½á¹¹ÓëÁÙÊ±µã½á¹¹--------------------------///
+///-------------------------é»˜è®¤ç‚¹ç»“æ„ä¸ä¸´æ—¶ç‚¹ç»“æ„--------------------------///
 PNT_STRU GPnt = {	
 	GPnt.isDel = 0,
 	GPnt.color = RGB(0,0,0),
 	GPnt.pattern = 0 
-};													//Ä¬ÈÏµã²ÎÊı
+};													//é»˜è®¤ç‚¹å‚æ•°
 
-///-------------------------ÎÄ¼ş°æ±¾ĞÅÏ¢µÄÈ«¾Ö±äÁ¿--------------------------///
+///-------------------------æ–‡ä»¶ç‰ˆæœ¬ä¿¡æ¯çš„å…¨å±€å˜é‡--------------------------///
 VERSION GPntVer = {
 	GPntVer.flag[0] = 'P',
 	GPntVer.flag[1] = 'N',
 	GPntVer.flag[2] = 'T',
-	GPntVer.version = 10	//Ä¬ÈÏ°æ±¾ºÅ
+	GPntVer.version = 10	//é»˜è®¤ç‰ˆæœ¬å·
 };
 
-///-------------------------ÕÒµ½µÄµãÎ»ÓÚÎÄ¼şÖĞµÄÎ»ÖÃ------------------------///
+///-------------------------æ‰¾åˆ°çš„ç‚¹ä½äºæ–‡ä»¶ä¸­çš„ä½ç½®------------------------///
 int GPntNdx = -1;
 
-///-------------------------ÁÙÊ±µã£¬´æ´¢ÕÒµ½µÄµãÊı¾İ------------------------///
+///-------------------------ä¸´æ—¶ç‚¹ï¼Œå­˜å‚¨æ‰¾åˆ°çš„ç‚¹æ•°æ®------------------------///
 PNT_STRU GTPnt;
-///------------------Ä¬ÈÏÏßË÷Òı½á¹¹¡¢ÁÙÊ±ÏßË÷Òı½á¹¹¼°ÆäÏà¹Ø-----------------///
-LIN_NDX_STRU GLin = { 								//Ä¬ÈÏÏß½á¹¹
+///------------------é»˜è®¤çº¿ç´¢å¼•ç»“æ„ã€ä¸´æ—¶çº¿ç´¢å¼•ç»“æ„åŠå…¶ç›¸å…³-----------------///
+LIN_NDX_STRU GLin = { 								//é»˜è®¤çº¿ç»“æ„
 	GLin.isDel = 0,
 	GLin.color = RGB(0,0,0),
 	GLin.pattern = 0,
 	GLin.dotNum = 0,
 	GLin.datOff = 0 
 };
-LIN_NDX_STRU	GTLin;								//Ïß
+LIN_NDX_STRU	GTLin;								//çº¿
 POINT GLPnt = 
 { 
 	GLPnt.x = -1,
 	GLPnt.y = -1 
-};													//¼ÇÂ¼Ïß¶ÎµÄÆğµã
-CPoint			GMPnt(-1, -1);						//¼ÇÂ¼Êó±êÉÏÒ»¸ö×´Ì¬µÄµã
-///---------------------ÏßÎÄ¼şµÄ°æ±¾ĞÅÏ¢£¬ÒÔ¼°Æä³õÊ¼»¯----------------------///
+};													//è®°å½•çº¿æ®µçš„èµ·ç‚¹
+CPoint			GMPnt(-1, -1);						//è®°å½•é¼ æ ‡ä¸Šä¸€ä¸ªçŠ¶æ€çš„ç‚¹
+///---------------------çº¿æ–‡ä»¶çš„ç‰ˆæœ¬ä¿¡æ¯ï¼Œä»¥åŠå…¶åˆå§‹åŒ–----------------------///
 VERSION GLinVer =
 {
 	GLinVer.flag[0] = 'L',
 	GLinVer.flag[1] = 'I',
 	GLinVer.flag[2] = 'N',
-	GLinVer.version = 10							//Ä¬ÈÏ°æ±¾ºÅ
+	GLinVer.version = 10							//é»˜è®¤ç‰ˆæœ¬å·
 };
-///-------------------------ÕÒµ½ÏßÎ»ÓÚÎÄ¼şÖĞµÄÎ»ÖÃ--------------------------///
+///-------------------------æ‰¾åˆ°çº¿ä½äºæ–‡ä»¶ä¸­çš„ä½ç½®--------------------------///
 int GLinNdx = -1;
 
-///---------------------------ÒÆ¶¯ÏßÏà¹ØÈ«¾Ö±äÁ¿----------------------------///
-CPoint			GLinLBDPnt(-1, -1);					// ¼ÇÂ¼Êó±ê×ó¼ü°´ÏÂµÄÎ»ÖÃ£¬ÓÃÀ´¼ÆËãÆ«ÒÆÁ¿
-CPoint			GLinMMPnt(-1, -1);					// ¼ÇÂ¼Êó±êÒÆ¶¯µÄÉÏÒ»¸ö×´Ì¬£¬ÓÃÀ´²Á³ıÒÆ¶¯Ê±µÄÇ°Ò»ÌõÏß
-long			GLinMMOffestX = 0;					// ¼ÇÂ¼Êó±êÒÆ¶¯Ê±ºòµÄXÖáµÄÆ«ÒÆÁ¿
-long			GLinMMOffestY = 0;					// ¼ÇÂ¼Êó±êÒÆ¶¯Ê±ºòµÄYÖáµÄÆ«ÒÆÁ¿
-LIN_NDX_STRU	GLinMMTmpNdx;						// ¼ÇÂ¼Êó±êÑ¡ÖĞµÄÏßµÄË÷Òı
+///---------------------------ç§»åŠ¨çº¿ç›¸å…³å…¨å±€å˜é‡----------------------------///
+CPoint			GLinLBDPnt(-1, -1);					// è®°å½•é¼ æ ‡å·¦é”®æŒ‰ä¸‹çš„ä½ç½®ï¼Œç”¨æ¥è®¡ç®—åç§»é‡
+CPoint			GLinMMPnt(-1, -1);					// è®°å½•é¼ æ ‡ç§»åŠ¨çš„ä¸Šä¸€ä¸ªçŠ¶æ€ï¼Œç”¨æ¥æ“¦é™¤ç§»åŠ¨æ—¶çš„å‰ä¸€æ¡çº¿
+long			GLinMMOffestX = 0;					// è®°å½•é¼ æ ‡ç§»åŠ¨æ—¶å€™çš„Xè½´çš„åç§»é‡
+long			GLinMMOffestY = 0;					// è®°å½•é¼ æ ‡ç§»åŠ¨æ—¶å€™çš„Yè½´çš„åç§»é‡
+LIN_NDX_STRU	GLinMMTmpNdx;						// è®°å½•é¼ æ ‡é€‰ä¸­çš„çº¿çš„ç´¢å¼•
 
-///-------------------------¹ØÓÚ·Å´óËõĞ¡µÄÈ«¾Ö±äÁ¿--------------------------///
-CPoint			GZoomLBDPnt(-1, -1);				//·Å´óÊ±Êó±ê×ó¼üÌ§ÆğµÄµã
-CPoint			GZoomMMPnt(-1, -1);					//·Å´óÊ±Êó±êÒÆ¶¯Ç°Ò»×´Ì¬
+///-------------------------å…³äºæ”¾å¤§ç¼©å°çš„å…¨å±€å˜é‡--------------------------///
+CPoint			GZoomLBDPnt(-1, -1);				//æ”¾å¤§æ—¶é¼ æ ‡å·¦é”®æŠ¬èµ·çš„ç‚¹
+CPoint			GZoomMMPnt(-1, -1);					//æ”¾å¤§æ—¶é¼ æ ‡ç§»åŠ¨å‰ä¸€çŠ¶æ€
 
-double			GZoomOffset_x = 0;					//Æ«ÒÆÏòÁ¿
+double			GZoomOffset_x = 0;					//åç§»å‘é‡
 double			GZoomOffset_y = 0;
-double			GZoom = 1.0;						//Ëõ·ÅÏµÊı
-int				GZoomStyle = 0;						//·Å´ó·½Ê½
+double			GZoom = 1.0;						//ç¼©æ”¾ç³»æ•°
+int				GZoomStyle = 0;						//æ”¾å¤§æ–¹å¼
 
-///---------------------------Á¬½ÓÏßÏà¹ØÈ«¾Ö±äÁ¿----------------------------///
-LIN_NDX_STRU	GStartLin = GLin;					// Ñ¡ÖĞµÄµÚÒ»ÌõÏß
+///---------------------------è¿æ¥çº¿ç›¸å…³å…¨å±€å˜é‡----------------------------///
+LIN_NDX_STRU	GStartLin = GLin;					// é€‰ä¸­çš„ç¬¬ä¸€æ¡çº¿
 int				GnStart = -1;
-LIN_NDX_STRU	GEndLin = GLin;						// Ñ¡ÖĞµÄµÚ¶şÌõÏß
+LIN_NDX_STRU	GEndLin = GLin;						// é€‰ä¸­çš„ç¬¬äºŒæ¡çº¿
 int				GnEnd = -1;
 int				GnLine = 0;
 
-///---------------------------ÔìÇø¹ı³ÌÏà¹ØµãÊı¾İ----------------------------///
+///---------------------------é€ åŒºè¿‡ç¨‹ç›¸å…³ç‚¹æ•°æ®----------------------------///
 CPoint			GRegCreateMMPnt(-1, -1);
 CPoint			GRegCreateStartPnt(-1, -1);
 
-///-------------------Ä¬ÈÏÇøË÷Òı½á¹¹¡¢ÁÙÊ±Ë÷Òı½á¹¹¼°ÆäÏà¹Ø------------------///
+///-------------------é»˜è®¤åŒºç´¢å¼•ç»“æ„ã€ä¸´æ—¶ç´¢å¼•ç»“æ„åŠå…¶ç›¸å…³------------------///
 REG_NDX_STRU	GReg = {
 	GReg.isDel = 0,
 	GReg.color = RGB(0,0,0),
@@ -167,39 +167,39 @@ REG_NDX_STRU	GReg = {
 };
 REG_NDX_STRU	GTReg;
 
-int GRegNdx = -1;									//ÕÒµ½µÄÇøÎ»ÓÚÎÄ¼şÖĞµÄÎ»ÖÃ
+int GRegNdx = -1;									//æ‰¾åˆ°çš„åŒºä½äºæ–‡ä»¶ä¸­çš„ä½ç½®
 
-///---------------------------ÒÆ¶¯ÇøÏà¹ØÈ«¾Ö±äÁ¿----------------------------///
-REG_NDX_STRU	GRegMMTmpNdx;						// ¼ÇÂ¼Êó±êÑ¡ÖĞÇøµÄË÷Òı
-CPoint			GRegLBDPnt(-1, -1);					// ¼ÇÂ¼Êó±ê×ó¼ü°´ÏÂµÄÎ»ÖÃ£¬ÓÃÀ´¼ÆËãÆ«ÒÆÁ¿
-CPoint			GRegMMPnt(-1, -1);					// ¼ÇÂ¼Êó±êÒÆ¶¯Ê±ÉÏÒ»×´Ì¬£¬²Á³ıÒÆ¶¯Ê±Ç°Ò»¸öÇø
-long			GRegMMOffsetX = 0;					// ¼ÇÂ¼Êó±êÒÆ¶¯Ê±µÄXÖáÆ«ÒÆÁ¿
-long			GRegMMOffsetY = 0;					// ¼ÇÂ¼Êó±êÒÆ¶¯Ê±µÄYÖáÆ«ÒÆÁ¿
+///---------------------------ç§»åŠ¨åŒºç›¸å…³å…¨å±€å˜é‡----------------------------///
+REG_NDX_STRU	GRegMMTmpNdx;						// è®°å½•é¼ æ ‡é€‰ä¸­åŒºçš„ç´¢å¼•
+CPoint			GRegLBDPnt(-1, -1);					// è®°å½•é¼ æ ‡å·¦é”®æŒ‰ä¸‹çš„ä½ç½®ï¼Œç”¨æ¥è®¡ç®—åç§»é‡
+CPoint			GRegMMPnt(-1, -1);					// è®°å½•é¼ æ ‡ç§»åŠ¨æ—¶ä¸Šä¸€çŠ¶æ€ï¼Œæ“¦é™¤ç§»åŠ¨æ—¶å‰ä¸€ä¸ªåŒº
+long			GRegMMOffsetX = 0;					// è®°å½•é¼ æ ‡ç§»åŠ¨æ—¶çš„Xè½´åç§»é‡
+long			GRegMMOffsetY = 0;					// è®°å½•é¼ æ ‡ç§»åŠ¨æ—¶çš„Yè½´åç§»é‡
 
-///--------------------------ÒÆ¶¯´°¿ÚÏà¹ØÈ«¾Ö±äÁ¿---------------------------///
-CPoint			GWinMoveLBDPnt(-1, -1);				//ÒÆ¶¯´°¿ÚÊ±×ó¼ü°´ÏÂµã
-CPoint			GWinMoveMMPnt(-1, -1);				//ÒÆ¶¯´°¿ÚÊ±Êó±êÒÆ¶¯Ç°×´Ì¬µãÎ»ÖÃ
+///--------------------------ç§»åŠ¨çª—å£ç›¸å…³å…¨å±€å˜é‡---------------------------///
+CPoint			GWinMoveLBDPnt(-1, -1);				//ç§»åŠ¨çª—å£æ—¶å·¦é”®æŒ‰ä¸‹ç‚¹
+CPoint			GWinMoveMMPnt(-1, -1);				//ç§»åŠ¨çª—å£æ—¶é¼ æ ‡ç§»åŠ¨å‰çŠ¶æ€ç‚¹ä½ç½®
 
-///---------------------------Íâ°ü¾ØĞÎµÄ¶¥µã×ø±ê----------------------------///
+///---------------------------å¤–åŒ…çŸ©å½¢çš„é¡¶ç‚¹åæ ‡----------------------------///
 double			GMaxX = 0;
 double			GMaxY = 0;
 double			GMinX = 0;
 double			GMinY = 0;
 
-///--------------------------ÏÔÊ¾×´Ì¬Ïà¹ØÈ«¾Ö±äÁ¿---------------------------///
+///--------------------------æ˜¾ç¤ºçŠ¶æ€ç›¸å…³å…¨å±€å˜é‡---------------------------///
 enum State
 {
 	SHOWSTATE_UNDEL, 
 	SHOWSTATE_DEL
-};													//Ã¶¾ÙÏÔÊ¾ÀàĞÍ
+};													//æšä¸¾æ˜¾ç¤ºç±»å‹
 
-State			GCurShowState = SHOWSTATE_UNDEL;	//ÏÔÊ¾×´Ì¬£¬Ä¬ÈÏÏÔÊ¾·ÇÉ¾³ı×´Ì¬
-bool			GShowPnt = true;					//µ±Ç°ÏÔÊ¾µÄ½á¹¹ÊÇ·ñÊÇµã
-bool			GShowLin = true;					//µ±Ç°ÏÔÊ¾µÄ½á¹¹ÊÇ·ñÊÇÏß
-bool			GShowReg = true;					//µ±Ç°ÏÔÊ¾µÄ½á¹¹ÊÇ·ñÊÇÇø
+State			GCurShowState = SHOWSTATE_UNDEL;	//æ˜¾ç¤ºçŠ¶æ€ï¼Œé»˜è®¤æ˜¾ç¤ºéåˆ é™¤çŠ¶æ€
+bool			GShowPnt = true;					//å½“å‰æ˜¾ç¤ºçš„ç»“æ„æ˜¯å¦æ˜¯ç‚¹
+bool			GShowLin = true;					//å½“å‰æ˜¾ç¤ºçš„ç»“æ„æ˜¯å¦æ˜¯çº¿
+bool			GShowReg = true;					//å½“å‰æ˜¾ç¤ºçš„ç»“æ„æ˜¯å¦æ˜¯åŒº
 
-///--------------------------ÏßÉÏÉ¾µãÏà¹ØÈ«¾Ö±äÁ¿---------------------------///
-int				GnPntLinNdx = -1;							//ÕÒµ½µÄµãÔÚÏßÉÏµÄĞòºÅ
+///--------------------------çº¿ä¸Šåˆ ç‚¹ç›¸å…³å…¨å±€å˜é‡---------------------------///
+int				GnPntLinNdx = -1;							//æ‰¾åˆ°çš„ç‚¹åœ¨çº¿ä¸Šçš„åºå·
 
 
 // CMapEditorView
@@ -263,11 +263,11 @@ BEGIN_MESSAGE_MAP(CMapEditorView, CView)
 	ON_UPDATE_COMMAND_UI(ID_REGION_SHOW_DELETED, &CMapEditorView::OnUpdateRegionShowDeleted)
 END_MESSAGE_MAP()
 
-// CMapEditorView ¹¹Ôì/Îö¹¹
+// CMapEditorView æ„é€ /ææ„
 
 CMapEditorView::CMapEditorView()
 {
-	// TODO: ÔÚ´Ë´¦Ìí¼Ó¹¹Ôì´úÂë
+	// TODO: åœ¨æ­¤å¤„æ·»åŠ æ„é€ ä»£ç 
 
 }
 
@@ -277,13 +277,13 @@ CMapEditorView::~CMapEditorView()
 
 BOOL CMapEditorView::PreCreateWindow(CREATESTRUCT& cs)
 {
-	// TODO: ÔÚ´Ë´¦Í¨¹ıĞŞ¸Ä
-	//  CREATESTRUCT cs À´ĞŞ¸Ä´°¿ÚÀà»òÑùÊ½
+	// TODO: åœ¨æ­¤å¤„é€šè¿‡ä¿®æ”¹
+	//  CREATESTRUCT cs æ¥ä¿®æ”¹çª—å£ç±»æˆ–æ ·å¼
 
 	return CView::PreCreateWindow(cs);
 }
 
-// CMapEditorView »æÖÆ
+// CMapEditorView ç»˜åˆ¶
 
 void CMapEditorView::OnDraw(CDC* /*pDC*/)
 {
@@ -294,17 +294,17 @@ void CMapEditorView::OnDraw(CDC* /*pDC*/)
 
 
 	CRect mrect;
-	GetClientRect(&mrect);										//»ñÈ¡´°¿Ú¿Í»§ÇøµÄ×ø±ê
+	GetClientRect(&mrect);										//è·å–çª—å£å®¢æˆ·åŒºçš„åæ ‡
 	CClientDC dc(this);
-	dc.FillSolidRect(0, 0, mrect.Width(), mrect.Height(), dc.GetBkColor());//ÓÃÒ»¸öµ¥É«Ìî³äÒ»¸ö¾ØĞÎ
-	dc.SetROP2(R2_NOTXORPEN);									//ÉèÖÃ»æÍ¼Ä£Ê½
-	if (GShowPnt)												//»æÖÆÏÔÊ¾ËùÓĞµã
+	dc.FillSolidRect(0, 0, mrect.Width(), mrect.Height(), dc.GetBkColor());//ç”¨ä¸€ä¸ªå•è‰²å¡«å……ä¸€ä¸ªçŸ©å½¢
+	dc.SetROP2(R2_NOTXORPEN);									//è®¾ç½®ç»˜å›¾æ¨¡å¼
+	if (GShowPnt)												//ç»˜åˆ¶æ˜¾ç¤ºæ‰€æœ‰ç‚¹
 		ShowAllPnt(&dc, GPntTmpF, GPntNum, GZoomOffset_x, GZoomOffset_y, GZoom, GCurShowState);
-	if (GShowLin)												//»æÖÆÏÔÊ¾ËùÓĞÏß
+	if (GShowLin)												//ç»˜åˆ¶æ˜¾ç¤ºæ‰€æœ‰çº¿
 		ShowAllLin(&dc, GLinTmpNdxF, GLinTmpDatF, GLinNum, GZoomOffset_x, GZoomOffset_y, GZoom, GCurShowState);
-	if (GShowReg)												//»æÖÆÏÔÊ¾ËùÓĞÇø
+	if (GShowReg)												//ç»˜åˆ¶æ˜¾ç¤ºæ‰€æœ‰åŒº
 		ShowAllReg(&dc, GRegTmpNdxF, GRegTmpDatF, GRegNum, GZoomOffset_x, GZoomOffset_y, GZoom, GCurShowState);
-	ReleaseDC(&dc);												//ÊÍ·Ådc
+	ReleaseDC(&dc);												//é‡Šæ”¾dc
 }
 
 void CMapEditorView::OnRButtonUp(UINT /* nFlags */, CPoint point)
@@ -320,7 +320,7 @@ void CMapEditorView::OnRButtonUp(UINT /* nFlags */, CPoint point)
 		case OPERSTATE_INPUT_LIN:
 			if (GTLin.dotNum > 1)
 			{
-				WriteLinNdxToFile(GLinTmpNdxF, GLinNum, GTLin);//½«ÏßË÷ÒıÎÄ¼şĞ´ÈëÏßÁÙÊ±Ë÷ÒıÎÄ¼şÖĞ
+				WriteLinNdxToFile(GLinTmpNdxF, GLinNum, GTLin);//å°†çº¿ç´¢å¼•æ–‡ä»¶å†™å…¥çº¿ä¸´æ—¶ç´¢å¼•æ–‡ä»¶ä¸­
 				GLinNum++;
 				GLinLNum++;
 				DrawSeg(&dc, GTLin, GLPnt, point);
@@ -348,7 +348,7 @@ void CMapEditorView::OnRButtonUp(UINT /* nFlags */, CPoint point)
 		switch (GCurOperState)
 		{
 
-		case OPERSTATE_INPUT_REG:								//µ±Ç°ÎªÔìÇø²Ù×÷×´Ì¬
+		case OPERSTATE_INPUT_REG:								//å½“å‰ä¸ºé€ åŒºæ“ä½œçŠ¶æ€
 			if (GTReg.dotNum > 2)
 			{
 				WriteRegNdxToFile(GRegTmpNdxF, GRegNum, GTReg);
@@ -410,7 +410,7 @@ void CMapEditorView::OnContextMenu(CWnd* /* pWnd */, CPoint point)
 }
 
 
-// CMapEditorView Õï¶Ï
+// CMapEditorView è¯Šæ–­
 
 #ifdef _DEBUG
 void CMapEditorView::AssertValid() const
@@ -423,7 +423,7 @@ void CMapEditorView::Dump(CDumpContext& dc) const
 	CView::Dump(dc);
 }
 
-CMapEditorDoc* CMapEditorView::GetDocument() const // ·Çµ÷ÊÔ°æ±¾ÊÇÄÚÁªµÄ
+CMapEditorDoc* CMapEditorView::GetDocument() const // éè°ƒè¯•ç‰ˆæœ¬æ˜¯å†…è”çš„
 {
 	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CMapEditorDoc)));
 	return (CMapEditorDoc*)m_pDocument;
@@ -431,28 +431,28 @@ CMapEditorDoc* CMapEditorView::GetDocument() const // ·Çµ÷ÊÔ°æ±¾ÊÇÄÚÁªµÄ
 #endif //_DEBUG
 
 
-// CMapEditorView ÏûÏ¢´¦Àí³ÌĞò
+// CMapEditorView æ¶ˆæ¯å¤„ç†ç¨‹åº
 
 void CMapEditorView::OnFileNew()
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë
-																//¼ì²âÊÇ·ñÒÑĞÂ½¨ÁÙÊ±ÎÄ¼ş£¬ÒÑÓĞÁÙÊ±ÎÄ¼şÔò·µ»Ø
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
+																//æ£€æµ‹æ˜¯å¦å·²æ–°å»ºä¸´æ—¶æ–‡ä»¶ï¼Œå·²æœ‰ä¸´æ—¶æ–‡ä»¶åˆ™è¿”å›
 	if (GPntFCreated&&GLinFCreated&&GRegFCreated)
 	{
 		MessageBox(L"File have been created.",L"Message",MB_OK);
 		return;
 	}
-	CCreateFileDlg dlg;											//´´½¨¡°ĞÂ½¨ÁÙÊ±ÎÄ¼ş¡±¶Ô»°¿ò¶ÔÏó
-	if (dlg.DoModal() != IDOK)									//ÅĞ¶Ïµ±Ç°²Ù×÷ÊÇ·ñÎª¡°È·¶¨¡±°´Å¥£¬²»ÊÇÔò·µ»Ø
+	CCreateFileDlg dlg;											//åˆ›å»ºâ€œæ–°å»ºä¸´æ—¶æ–‡ä»¶â€å¯¹è¯æ¡†å¯¹è±¡
+	if (dlg.DoModal() != IDOK)									//åˆ¤æ–­å½“å‰æ“ä½œæ˜¯å¦ä¸ºâ€œç¡®å®šâ€æŒ‰é’®ï¼Œä¸æ˜¯åˆ™è¿”å›
 		return;
-	CString str;												//´´½¨Êä³öĞÅÏ¢¶ÔÏó
-	if (!GPntFCreated)											//ÅĞ¶ÏµãÁÙÊ±ÎÄ¼şÊÇ·ñ´æÔÚ£¬²»´æÔÚÔòĞÂ½¨
+	CString str;												//åˆ›å»ºè¾“å‡ºä¿¡æ¯å¯¹è±¡
+	if (!GPntFCreated)											//åˆ¤æ–­ç‚¹ä¸´æ—¶æ–‡ä»¶æ˜¯å¦å­˜åœ¨ï¼Œä¸å­˜åœ¨åˆ™æ–°å»º
 	{
-		GPntTmpFName = dlg.m_add + CString("\\") + GPntTmpFName;//ÁÙÊ±µãÊı¾İÎÄ¼şÃû
+		GPntTmpFName = dlg.m_add + CString("\\") + GPntTmpFName;//ä¸´æ—¶ç‚¹æ•°æ®æ–‡ä»¶å
 		if (GPntTmpF->Open(GPntTmpFName, CFile::modeCreate 
 			| CFile::modeReadWrite | CFile::typeBinary))
 		{
-			GPntFCreated = true;								//ÉèÖÃµãÁÙÊ±ÎÄ¼şĞÂ½¨³É¹¦±êÖ¾Öµ
+			GPntFCreated = true;								//è®¾ç½®ç‚¹ä¸´æ—¶æ–‡ä»¶æ–°å»ºæˆåŠŸæ ‡å¿—å€¼
 			str += "tempPntF.dat\n";
 		}
 		else
@@ -461,15 +461,15 @@ void CMapEditorView::OnFileNew()
 			TRACE(_T("File could not be opened n"));
 		}
 	}
-	if (!GLinFCreated)												  //ÅĞ¶ÏÏßÁÙÊ±ÎÄ¼şÊÇ·ñ´æÔÚ£¬²»´æÔÚÔòĞÂ½¨
+	if (!GLinFCreated)												  //åˆ¤æ–­çº¿ä¸´æ—¶æ–‡ä»¶æ˜¯å¦å­˜åœ¨ï¼Œä¸å­˜åœ¨åˆ™æ–°å»º
 	{
-		GLinTmpNdxFName = dlg.m_add + CString("\\") + GLinTmpNdxFName;//ÁÙÊ±ÏßË÷ÒıÎÄ¼şÃû
-		GLinTmpDatFName = dlg.m_add + CString("\\") + GLinTmpDatFName;//ÁÙÊ±ÏßÊı¾İÎÄ¼şÃû
+		GLinTmpNdxFName = dlg.m_add + CString("\\") + GLinTmpNdxFName;//ä¸´æ—¶çº¿ç´¢å¼•æ–‡ä»¶å
+		GLinTmpDatFName = dlg.m_add + CString("\\") + GLinTmpDatFName;//ä¸´æ—¶çº¿æ•°æ®æ–‡ä»¶å
 		if (GLinTmpNdxF->Open(GLinTmpNdxFName, CFile::modeCreate 
 			| CFile::modeReadWrite | CFile::typeBinary)&&GLinTmpDatF->Open(GLinTmpDatFName,
 				CFile::modeCreate|CFile::modeReadWrite|CFile::typeBinary))
 		{
-			GLinFCreated = true;									  //ÉèÖÃÏßÁÙÊ±ÎÄ¼şĞÂ½¨³É¹¦±êÖ¾Öµ
+			GLinFCreated = true;									  //è®¾ç½®çº¿ä¸´æ—¶æ–‡ä»¶æ–°å»ºæˆåŠŸæ ‡å¿—å€¼
 			str += "tempLinF.dat tempLinF.ndx\n";
 		}
 		else
@@ -479,15 +479,15 @@ void CMapEditorView::OnFileNew()
 			TRACE(_T("File could not be opened \n"));
 		}
 	}
-	if (!GRegFCreated)												  //ÅĞ¶ÏÇøÁÙÊ±ÎÄ¼şÊÇ·ñ´æÔÚ£¬²»´æÔÚÔòĞÂ½¨
+	if (!GRegFCreated)												  //åˆ¤æ–­åŒºä¸´æ—¶æ–‡ä»¶æ˜¯å¦å­˜åœ¨ï¼Œä¸å­˜åœ¨åˆ™æ–°å»º
 	{
-		GRegTmpNdxFName = dlg.m_add + CString("\\") + GRegTmpNdxFName;//ÇøÁÙÊ±Ë÷ÒıÎÄ¼şÃû
-		GRegTmpDatFName = dlg.m_add + CString("\\") + GRegTmpDatFName;//ÇøÁÙÊ±Êı¾İÎÄ¼şÃû
+		GRegTmpNdxFName = dlg.m_add + CString("\\") + GRegTmpNdxFName;//åŒºä¸´æ—¶ç´¢å¼•æ–‡ä»¶å
+		GRegTmpDatFName = dlg.m_add + CString("\\") + GRegTmpDatFName;//åŒºä¸´æ—¶æ•°æ®æ–‡ä»¶å
 		if (GRegTmpNdxF->Open(GRegTmpNdxFName, CFile::modeCreate
 			| CFile::modeReadWrite | CFile::typeBinary)&&GRegTmpDatF->Open(GRegTmpDatFName,
 				CFile::modeCreate|CFile::modeReadWrite|CFile::typeBinary))
 		{
-			GRegFCreated = true;									  //ÉèÖÃÇøÁÙÊ±ÎÄ¼şĞÂ½¨³É¹¦±êÖ¾
+			GRegFCreated = true;									  //è®¾ç½®åŒºä¸´æ—¶æ–‡ä»¶æ–°å»ºæˆåŠŸæ ‡å¿—
 			str += "tempRegF.dat tempRegF.ndx\n";
 		}
 		else
@@ -500,7 +500,7 @@ void CMapEditorView::OnFileNew()
 	if (GPntFCreated&&GLinFCreated&&GRegFCreated)
 	{
 		str += "create successful !";
-		MessageBox(str, L"message", MB_OK);							  //ĞÂ½¨ÁÙÊ±ÎÄ¼ş³É¹¦µ¯³öÌáÊ¾¿ò
+		MessageBox(str, L"message", MB_OK);							  //æ–°å»ºä¸´æ—¶æ–‡ä»¶æˆåŠŸå¼¹å‡ºæç¤ºæ¡†
 	}
 	//dlg.DoModal();
 }
@@ -510,7 +510,7 @@ void CMapEditorView::OnWindowZoomIn()
 {
 	if (GPntFCreated || GLinFCreated || GRegFCreated)
 	{
-		GCurOperState = OPERSTATE_ZOOM_IN;							  //µ±Ç°Îª·Å´ó²Ù×÷×´Ì¬
+		GCurOperState = OPERSTATE_ZOOM_IN;							  //å½“å‰ä¸ºæ”¾å¤§æ“ä½œçŠ¶æ€
 	}
 	else
 	{
@@ -521,16 +521,16 @@ void CMapEditorView::OnWindowZoomIn()
 
 void CMapEditorView::OnFileSavePoint()
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
 	GCurOperState = Noaction;
-	//1.Èç¹û»¹Ã»ÓĞĞÂ½¨»ò´ò¿ªµãÎÄ¼ş£¬ÔòÌáÊ¾ÎÄ¼ş»¹Ã»ÓĞ´ò¿ª£¬È»ºó·µ»Ø
+	//1.å¦‚æœè¿˜æ²¡æœ‰æ–°å»ºæˆ–æ‰“å¼€ç‚¹æ–‡ä»¶ï¼Œåˆ™æç¤ºæ–‡ä»¶è¿˜æ²¡æœ‰æ‰“å¼€ï¼Œç„¶åè¿”å›
 	if (GPntFCreated == false)
 	{
 		MessageBox(L"File have not been created.", L"Message", MB_OK);
 		return;
 	}
 	CFile*pntF = new CFile();
-	//2.Èç¹ûµãÎÄ¼ş²»Îª¿Õ£¬ÔòÉ¾³ıÔ­À´µÄÎÄ¼ş£¬·ñÔòµ÷ÓÃCFileDialogÀàÈÃÓÃ»§ÊäÈëÎÄ¼şÃû
+	//2.å¦‚æœç‚¹æ–‡ä»¶ä¸ä¸ºç©ºï¼Œåˆ™åˆ é™¤åŸæ¥çš„æ–‡ä»¶ï¼Œå¦åˆ™è°ƒç”¨CFileDialogç±»è®©ç”¨æˆ·è¾“å…¥æ–‡ä»¶å
 	if (GPntFName.IsEmpty() == false)
 	{
 		CFile::Remove(GPntFName);
@@ -538,7 +538,7 @@ void CMapEditorView::OnFileSavePoint()
 	else
 	{
 		LPCTSTR lpszFilters;
-		lpszFilters = _T("µã(*.pnt)|*.pnt||");
+		lpszFilters = _T("ç‚¹(*.pnt)|*.pnt||");
 		CFileDialog dlg(false, _T("pnt"), NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, lpszFilters);
 		int nPos = GPntTmpFName.ReverseFind(_T('\\'));
 		CString folderAdd = GPntTmpFName.Left(nPos);
@@ -553,7 +553,7 @@ void CMapEditorView::OnFileSavePoint()
 		}
 	}
 	PNT_STRU tempPnt;
-	//3.ÖØĞÂ´´½¨µãÓÀ¾ÃÎÄ¼ş£¬²¢Ğ´Èë°æ±¾ĞÅÏ¢£¬µãÎïÀíÊıºÍÂß¼­Êı
+	//3.é‡æ–°åˆ›å»ºç‚¹æ°¸ä¹…æ–‡ä»¶ï¼Œå¹¶å†™å…¥ç‰ˆæœ¬ä¿¡æ¯ï¼Œç‚¹ç‰©ç†æ•°å’Œé€»è¾‘æ•°
 	if (pntF->Open(GPntFName, CFile::modeCreate | CFile::modeWrite | CFile::typeBinary))
 	{
 		pntF->Write(&GPntVer, sizeof(VERSION));
@@ -564,7 +564,7 @@ void CMapEditorView::OnFileSavePoint()
 	{
 		TRACE(_T("File could not be opened\n"));
 	}
-	//4.½«µãÁÙÊ±ÎÄ¼şÖĞµÄĞÅÏ¢ÖğÌõĞ´µ½ÓÀ¾ÃÎÄ¼şÖĞ
+	//4.å°†ç‚¹ä¸´æ—¶æ–‡ä»¶ä¸­çš„ä¿¡æ¯é€æ¡å†™åˆ°æ°¸ä¹…æ–‡ä»¶ä¸­
 	for (int i = 0; i < GPntNum; i++)
 	{
 		ReadTempFileToPnt(GPntTmpF, i, tempPnt);
@@ -572,7 +572,7 @@ void CMapEditorView::OnFileSavePoint()
 	}
 	pntF->Close();
 	delete pntF;
-	//5.ĞŞ¸ÄÊı¾İ±ä»¯±êÖ¾£¬¸Ä±äÖ÷´°¿Ú±êÌâÃû³Æ
+	//5.ä¿®æ”¹æ•°æ®å˜åŒ–æ ‡å¿—ï¼Œæ”¹å˜ä¸»çª—å£æ ‡é¢˜åç§°
 	GPntChanged = false;
 	int nPos = GPntFName.ReverseFind(_T('\\'));
 	CString windowText = GPntFName.Right(GPntFName.GetLength() - nPos - 1) + "-MapEditor";
@@ -586,15 +586,15 @@ void CMapEditorView::OnFileOpenPoint()
 {
 	CFileDialog dlg(true);
 	dlg.m_ofn.lpstrFilter = L"pnt\0*.pnt";
-	//Èç¹ûÁÙÊ±ÎÄ¼şÖĞµÄÊı¾İÒÑ¾­¸Ä±ä£¬ÔòÌáÊ¾ÊÇ·ñ±£´æ£¬±£´æÔòµ÷ÓÃOnFileSavePoint()
+	//å¦‚æœä¸´æ—¶æ–‡ä»¶ä¸­çš„æ•°æ®å·²ç»æ”¹å˜ï¼Œåˆ™æç¤ºæ˜¯å¦ä¿å­˜ï¼Œä¿å­˜åˆ™è°ƒç”¨OnFileSavePoint()
 	if (GPntChanged == true)
 	{
 		if (IDYES == AfxMessageBox(L"File has not been saved.Does save File?"), MB_YESNO, MB_ICONQUESTION)
 			OnFileSavePoint();
 	}
-	if (dlg.DoModal() == IDOK)								//µ¯³ö´ò¿ªÎÄ¼ş¶Ô»°¿òÈÃÓÃ»§Ö¸¶¨Òª´ò¿ªµÄÎÄ¼ş
+	if (dlg.DoModal() == IDOK)								//å¼¹å‡ºæ‰“å¼€æ–‡ä»¶å¯¹è¯æ¡†è®©ç”¨æˆ·æŒ‡å®šè¦æ‰“å¼€çš„æ–‡ä»¶
 	{
-		GPntFName = dlg.m_ofn.lpstrFile;					//ÓÀ¾ÃÎÄ¼ş(º¬Â·¾¶)
+		GPntFName = dlg.m_ofn.lpstrFile;					//æ°¸ä¹…æ–‡ä»¶(å«è·¯å¾„)
 		CFile*pntF = new CFile();
 		if (!pntF->Open(GPntFName, CFile::modeRead | CFile::typeBinary))
 		{
@@ -603,12 +603,12 @@ void CMapEditorView::OnFileOpenPoint()
 		}
 		int nPos = GPntFName.ReverseFind(_T('\\'));
 		CString floderAdd = GPntFName.Left(nPos);
-		if (GPntTmpFName != "tempPntF.dat")					//Èç¹ûÁÙÊ±µãÎÄ¼şÒÑ¾­´´½¨Ôò¶¨Î»µ½ÎÄ¼ş¿ªÍ·
+		if (GPntTmpFName != "tempPntF.dat")					//å¦‚æœä¸´æ—¶ç‚¹æ–‡ä»¶å·²ç»åˆ›å»ºåˆ™å®šä½åˆ°æ–‡ä»¶å¼€å¤´
 		{
 			GPntTmpF->SeekToBegin();
 		}
 		else
-		{													//·ñÔò´´½¨ÁÙÊ±ÎÄ¼ş
+		{													//å¦åˆ™åˆ›å»ºä¸´æ—¶æ–‡ä»¶
 			GPntTmpFName = floderAdd + CString("\\") + GPntTmpFName;
 			if (!GPntTmpF->Open(GPntTmpFName, CFile::modeCreate | CFile::modeReadWrite | CFile::typeBinary))
 			{
@@ -620,12 +620,12 @@ void CMapEditorView::OnFileOpenPoint()
 				GPntFCreated = true;
 			}
 		}
-		ReadPntPermanentFileToTemp(pntF, GPntTmpF, GPntNum, GPntLNum);//¶ÁµãÓÀ¾ÃÎÄ¼şµ½ÁÙÊ±ÎÄ¼ş
+		ReadPntPermanentFileToTemp(pntF, GPntTmpF, GPntNum, GPntLNum);//è¯»ç‚¹æ°¸ä¹…æ–‡ä»¶åˆ°ä¸´æ—¶æ–‡ä»¶
 		pntF->Close();
 		delete pntF;
 		CString windowText = dlg.GetFileName() + "-MapEditor";
 		GetParent()->SetWindowTextW(windowText);
-		this->InvalidateRect(NULL);							//ÈÃÊÓ´°¿ÚÎŞĞ§£¬´¥·¢MFCµ÷ÓÃOnDrawº¯ÊıÖØ»æ´°¿Ú
+		this->InvalidateRect(NULL);							//è®©è§†çª—å£æ— æ•ˆï¼Œè§¦å‘MFCè°ƒç”¨OnDrawå‡½æ•°é‡ç»˜çª—å£
 	}
 	GCurOperState = Noaction;
 }
@@ -639,14 +639,14 @@ void CMapEditorView::OnFileOpenLine()
 	{
 		if (IDYES == AfxMessageBox(L"File have not been saved.Does save File?", MB_YESNO, MB_ICONQUESTION))
 		{
-			OnFileSaveLine();								//±£´æÏß´ÓÁÙÊ±ÎÄ¼şĞ´ÈëÓÀ¾ÃÎÄ¼şÖĞ£©
+			OnFileSaveLine();								//ä¿å­˜çº¿ä»ä¸´æ—¶æ–‡ä»¶å†™å…¥æ°¸ä¹…æ–‡ä»¶ä¸­ï¼‰
 		}
 	}
 	if (dlg.DoModal() == IDOK)
 	{
 		GLinFCreated = false;
 		int IsCreate = 0;
-		GLinFName = dlg.m_ofn.lpstrFile;					//ÓÀ¾ÃÎÄ¼ş£¨º¬Â·¾¶£©
+		GLinFName = dlg.m_ofn.lpstrFile;					//æ°¸ä¹…æ–‡ä»¶ï¼ˆå«è·¯å¾„ï¼‰
 		CFile * LinF = new CFile();
 		if (!LinF->Open(GLinFName, CFile::modeRead | CFile::typeBinary))
 		{
@@ -697,12 +697,12 @@ void CMapEditorView::OnFileOpenLine()
 			GLinFCreated = true;
 		}
 		ReadLinPermanentFileToTemp(LinF, GLinTmpDatF, GLinTmpNdxF, GLinVer, 
-			GLinNum, GLinLNum, GLin.datOff);				//´ÓÓÀ¾ÃÎÄ¼ş¶ÁÈ¡ÏßÊı¾İµ½ÁÙÊ±ÎÄ¼ş
-		LinF->Close();										//¹Ø±ÕÏßÓÀ¾ÃÎÄ¼ş
+			GLinNum, GLinLNum, GLin.datOff);				//ä»æ°¸ä¹…æ–‡ä»¶è¯»å–çº¿æ•°æ®åˆ°ä¸´æ—¶æ–‡ä»¶
+		LinF->Close();										//å…³é—­çº¿æ°¸ä¹…æ–‡ä»¶
 		delete LinF;
 		CString windowTest = dlg.GetFileName() + "-MapEditor";
 		GetParent()->SetWindowTextW(windowTest);
-		this->InvalidateRect(NULL);							//ÖØ»æ´°¿ÚÏÔÊ¾
+		this->InvalidateRect(NULL);							//é‡ç»˜çª—å£æ˜¾ç¤º
 		GCurOperState = Noaction;
 	}
 }
@@ -710,27 +710,27 @@ void CMapEditorView::OnFileOpenLine()
 
 void CMapEditorView::OnFileOpenRegion()
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
 }
 
 
 void CMapEditorView::OnFileSaveLine()
 {
 	if (GLinFCreated)
-	{														//ÒÑ¾­´æÔÚÁÙÊ±ÎÄ¼ş
+	{														//å·²ç»å­˜åœ¨ä¸´æ—¶æ–‡ä»¶
 		CFile*LinF = new CFile();
 		if (GLinFName.IsEmpty())
 		{
 			LPCTSTR lpszFilters;
-			lpszFilters = _T("Ïß(*.lin)|*.lin||");
+			lpszFilters = _T("çº¿(*.lin)|*.lin||");
 			CFileDialog dlg(false, _T("lin"), NULL, OFN_HIDEREADONLY 
-				| OFN_OVERWRITEPROMPT, lpszFilters);		//±£´æÏßµÄ¶Ô»°¿ò
+				| OFN_OVERWRITEPROMPT, lpszFilters);		//ä¿å­˜çº¿çš„å¯¹è¯æ¡†
 			int nPos = GLinTmpDatFName.ReverseFind(_T('\\'));
 			CString folderAdd = GLinTmpDatFName.Left(nPos);
 			dlg.m_ofn.lpstrInitialDir = folderAdd;
 			if (dlg.DoModal() == IDOK)
 			{
-				GLinFName = dlg.GetPathName();				//ÏßÎÄ¼şµÄÃû³Æ
+				GLinFName = dlg.GetPathName();				//çº¿æ–‡ä»¶çš„åç§°
 			}
 			else
 			{
@@ -747,11 +747,11 @@ void CMapEditorView::OnFileSaveLine()
 			return;
 		}
 		WriteTempToLinPermanentFile(LinF, GLinTmpDatF, GLinTmpNdxF, GLinVer, 
-			GLinNum, GLinLNum);								//½«ÏßµÄË÷ÒıºÍµãÊı¾İĞ´ÈëÓÀ¾ÃÎÄ¼ş
+			GLinNum, GLinLNum);								//å°†çº¿çš„ç´¢å¼•å’Œç‚¹æ•°æ®å†™å…¥æ°¸ä¹…æ–‡ä»¶
 		LinF->Close();
 		delete LinF;
 
-		GLinChanged = false;								//ÏßÊı¾İÎŞ±ä¸ü
+		GLinChanged = false;								//çº¿æ•°æ®æ— å˜æ›´
 		int nPos = GLinFName.ReverseFind(_T('\\'));
 		CString windowText = GLinFName.Right(GLinFName.GetLength() - nPos - 1) 
 			+ " -MapEditor";
@@ -768,17 +768,17 @@ void CMapEditorView::OnFileSaveLine()
 
 void CMapEditorView::OnFileSaveRegion()
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
 }
 
 
 void CMapEditorView::OnFileSaveAsPoint()
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë
-	CString tempFName = GPntFName;							//±£ÁôÔ­µãÓÀ¾ÃÎÄ¼şÃû
-	GPntFName = CString("");								//½«µãÓÀ¾ÃÎÄ¼şÃûÉèÎª¿Õ
-	OnFileSavePoint();										//µ÷ÓÃOnFileSavePointº¯Êı£¬ÓÀ¾ÃÎÄ¼şÃûÎª¿ÕÊ±×Ô¶¯µ¯³öÎÄ¼şÃû¶Ô»°¿ò
-	if (GPntFName == "")									//ÈôÁí´æÊ§°Ü£¬Ôò»¹Ô­Ô­ÓÀ¾ÃÎÄ¼şÃû
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
+	CString tempFName = GPntFName;							//ä¿ç•™åŸç‚¹æ°¸ä¹…æ–‡ä»¶å
+	GPntFName = CString("");								//å°†ç‚¹æ°¸ä¹…æ–‡ä»¶åè®¾ä¸ºç©º
+	OnFileSavePoint();										//è°ƒç”¨OnFileSavePointå‡½æ•°ï¼Œæ°¸ä¹…æ–‡ä»¶åä¸ºç©ºæ—¶è‡ªåŠ¨å¼¹å‡ºæ–‡ä»¶åå¯¹è¯æ¡†
+	if (GPntFName == "")									//è‹¥å¦å­˜å¤±è´¥ï¼Œåˆ™è¿˜åŸåŸæ°¸ä¹…æ–‡ä»¶å
 	{
 		GPntFName = tempFName;
 	}
@@ -787,29 +787,29 @@ void CMapEditorView::OnFileSaveAsPoint()
 
 void CMapEditorView::OnFileSaveAsLine()
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
 }
 
 
 void CMapEditorView::OnFileSaveAsRegion()
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
 }
 
 
 void CMapEditorView::OnAppExit()
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
 	
-															//1.Èç¹ûµãÊı¾İÒÑ¸Ä±ä£¬Ôò±£´æ
+															//1.å¦‚æœç‚¹æ•°æ®å·²æ”¹å˜ï¼Œåˆ™ä¿å­˜
 	if (GPntChanged == true)
 	{
 		if (IDYES == AfxMessageBox(L"File has not been saved.Does save File?"), MB_YESNO, MB_ICONQUESTION)
 		{
-			OnFileSavePoint();								//±£´æµã
+			OnFileSavePoint();								//ä¿å­˜ç‚¹
 		}
 	}
-															//2.µ÷ÓÃ¸¸´°¿ÚCMainFrameµÄÏú»Ù´°¿Úº¯ÊıDestroyWindow()
+															//2.è°ƒç”¨çˆ¶çª—å£CMainFrameçš„é”€æ¯çª—å£å‡½æ•°DestroyWindow()
 	GetParent()->DestroyWindow();
 }
 
@@ -818,7 +818,7 @@ void CMapEditorView::OnWindowZoomOut()
 {
 	if (GPntFCreated || GLinFCreated || GRegFCreated)
 	{
-		GCurOperState = OPERSTATE_ZOOM_OUT;					//ÉèÖÃÎªËõĞ¡²Ù×÷×´Ì¬
+		GCurOperState = OPERSTATE_ZOOM_OUT;					//è®¾ç½®ä¸ºç¼©å°æ“ä½œçŠ¶æ€
 	}
 	else
 	{
@@ -831,7 +831,7 @@ void CMapEditorView::OnWindowMove()
 {
 	if (GPntFCreated || GLinFCreated || GRegFCreated)
 	{
-		GCurOperState = OPERSTATE_WINDOW_MOVE;				//ÉèÖÃÎª´°¿ÚÒÆ¶¯²Ù×÷×´Ì¬
+		GCurOperState = OPERSTATE_WINDOW_MOVE;				//è®¾ç½®ä¸ºçª—å£ç§»åŠ¨æ“ä½œçŠ¶æ€
 	}
 	else
 	{
@@ -842,30 +842,30 @@ void CMapEditorView::OnWindowMove()
 
 void CMapEditorView::OnWindowReset()
 {
-	GCurShowState = SHOWSTATE_UNDEL;		//ÉèÖÃµ±Ç°ÎªÏÔÊ¾Î´É¾³ı×´Ì¬
+	GCurShowState = SHOWSTATE_UNDEL;		//è®¾ç½®å½“å‰ä¸ºæ˜¾ç¤ºæœªåˆ é™¤çŠ¶æ€
 	this->Invalidate();
 	GShowPnt = true;
 	GShowLin = true;
 	GShowReg = true;
-	//ÖØÖÃÆ«ÒÆÁ¿ºÍ·Å´ó±¶Êı
-	GZoomOffset_x = 0;										// Æ«ÒÆÏòÁ¿x
-	GZoomOffset_y = 0;										// Æ«ÒÆÏòÁ¿y
-	GZoom = 1.0;											// ·Å´óÏµÊı
-	// ±éÀúµã¡¢Ïß¡¢ÇøµÄµãÊı¾İ£¬¼ÆËãÍâ°üÂç¾ØĞÎ
+	//é‡ç½®åç§»é‡å’Œæ”¾å¤§å€æ•°
+	GZoomOffset_x = 0;										// åç§»å‘é‡x
+	GZoomOffset_y = 0;										// åç§»å‘é‡y
+	GZoom = 1.0;											// æ”¾å¤§ç³»æ•°
+	// éå†ç‚¹ã€çº¿ã€åŒºçš„ç‚¹æ•°æ®ï¼Œè®¡ç®—å¤–åŒ…ç»œçŸ©å½¢
 	D_DOT tempPt;
 	PNT_STRU tempPnt;
 	LIN_NDX_STRU tempLin;
 	REG_NDX_STRU tempReg;
 	bool isInit = false;
-	// Ã»ÓĞÍ¼ĞÎ
+	// æ²¡æœ‰å›¾å½¢
 	if (GPntLNum == 0 && GLinLNum == 0 && GRegLNum == 0)
 		return;
-	// ³õÊ¼»¯Íâ°ü¾ØĞÎ
-	if (isInit == false && GPntLNum > 0)					// ³õÊ¼»¯µãµÄÍâ°ü¾ØĞÎ
+	// åˆå§‹åŒ–å¤–åŒ…çŸ©å½¢
+	if (isInit == false && GPntLNum > 0)					// åˆå§‹åŒ–ç‚¹çš„å¤–åŒ…çŸ©å½¢
 	{
 		for (int i = 0; i < GPntNum; ++i)
 		{
-			ReadTempFileToPnt(GPntTmpF, i, tempPnt);		// ´ÓÁÙÊ±ÎÄ¼şÖĞ¶ÁÈ¡µã
+			ReadTempFileToPnt(GPntTmpF, i, tempPnt);		// ä»ä¸´æ—¶æ–‡ä»¶ä¸­è¯»å–ç‚¹
 			if (tempPnt.isDel)
 				continue;
 			else
@@ -879,11 +879,11 @@ void CMapEditorView::OnWindowReset()
 			}
 		}
 	}
-	if (isInit == false && GLinLNum > 0)					//³õÊ¼»¯ÏßµÄÍâ°üÂç¾ØĞÎ
+	if (isInit == false && GLinLNum > 0)					//åˆå§‹åŒ–çº¿çš„å¤–åŒ…ç»œçŸ©å½¢
 	{
 		for (int i = 0; i < GLinNum; ++i)
 		{
-			ReadTempFileToLinNdx(GLinTmpNdxF, i, tempLin);	// ´ÓÁÙÊ±ÎÄ¼ş¶ÁÈ¡ÏßË÷Òı
+			ReadTempFileToLinNdx(GLinTmpNdxF, i, tempLin);	// ä»ä¸´æ—¶æ–‡ä»¶è¯»å–çº¿ç´¢å¼•
 			if (tempLin.isDel)
 				continue;
 			else
@@ -901,11 +901,11 @@ void CMapEditorView::OnWindowReset()
 			}
 		}
 	}
-	if (isInit == false && GRegLNum > 0)					//³õÊ¼»¯ÇøµÄÍâ°üÂç¾ØĞÎ
+	if (isInit == false && GRegLNum > 0)					//åˆå§‹åŒ–åŒºçš„å¤–åŒ…ç»œçŸ©å½¢
 	{
 		for (int i = 0; i < GRegNum; ++i)
 		{
-			ReadTempFileToRegNdx(GRegTmpNdxF, i, tempReg);	//´ÓÁÙÊ±ÎÄ¼ş¶ÁÇøË÷Òı
+			ReadTempFileToRegNdx(GRegTmpNdxF, i, tempReg);	//ä»ä¸´æ—¶æ–‡ä»¶è¯»åŒºç´¢å¼•
 			if (tempReg.isDel)
 				continue;
 			else
@@ -923,13 +923,13 @@ void CMapEditorView::OnWindowReset()
 			}
 		}
 	}
-	// Î´ÄÜ³õÊ¼»¯³É¹¦
+	// æœªèƒ½åˆå§‹åŒ–æˆåŠŸ
 	if (isInit == false)
 	{
 		this->Invalidate();
 		return;
 	}
-	// ±éÀúËùÓĞµÄµã
+	// éå†æ‰€æœ‰çš„ç‚¹
 	if (GPntFCreated)
 	{
 		for (int i = 0; i < GPntNum; i++)
@@ -950,7 +950,7 @@ void CMapEditorView::OnWindowReset()
 			}
 		}
 	}
-	// ±éÀúËùÓĞµÄÏß
+	// éå†æ‰€æœ‰çš„çº¿
 	if (GLinFCreated)
 	{
 		for (int i = 0; i < GLinNum; i++)
@@ -975,7 +975,7 @@ void CMapEditorView::OnWindowReset()
 			}
 		}
 	}
-	// ±éÀúËùÓĞµÄÇø
+	// éå†æ‰€æœ‰çš„åŒº
 	if (GRegFCreated)
 	{
 		for (int i = 0; i < GRegLNum; i++)
@@ -1022,7 +1022,7 @@ void CMapEditorView::OnWindowReset()
 	rect.left = (long)GMinX;
 	rect.bottom = (long)GMaxY;
 	rect.top = (long)GMinY;
-	// ¸ù¾İÍâ°üÂç¾ØĞÎ¼ÆËãÆ«ÒÆÁ¿ºÍ·Å´ó±¶Êı£¬²¢ÖØ»æ¿Í»§Çø
+	// æ ¹æ®å¤–åŒ…ç»œçŸ©å½¢è®¡ç®—åç§»é‡å’Œæ”¾å¤§å€æ•°ï¼Œå¹¶é‡ç»˜å®¢æˆ·åŒº
 	modulusZoom(client, rect, zoom);
 	double x0 = GetCenter(rect).x - (client.right / 2.0) + (client.right*(zoom - 1) / (2.0* zoom));
 	double y0 = GetCenter(rect).y - (client.bottom / 2.0) + (client.bottom*(zoom - 1) / (2.0* zoom));
@@ -1036,15 +1036,15 @@ void CMapEditorView::OnWindowReset()
 
 void CMapEditorView::OnWindowShowPoint()
 {
-	//Èôµ±Ç°ÏÔÊ¾×´Ì¬ÊÇÏÔÊ¾É¾³ı×´Ì¬£¬ÔòÏÈ°ÑËùÓĞÏÔÊ¾¿ª¹Ø¶¼¹Ø±Õ
+	//è‹¥å½“å‰æ˜¾ç¤ºçŠ¶æ€æ˜¯æ˜¾ç¤ºåˆ é™¤çŠ¶æ€ï¼Œåˆ™å…ˆæŠŠæ‰€æœ‰æ˜¾ç¤ºå¼€å…³éƒ½å…³é—­
 	if (GCurShowState == SHOWSTATE_DEL)
 	{
 		GShowPnt = false;
 		GShowLin = false;
 		GShowReg = false;
 	}
-	GCurShowState = SHOWSTATE_UNDEL;//½«ÏÔÊ¾×´Ì¬¸ü¸ÄÎªÏÔÊ¾Î´É¾³ı×´Ì¬
-	//Èôµ±Ç°ÒÑ¾­¡°ÏÔÊ¾µã¡±£¬Ôò½«¹Ø±Õ¿ª¹Ø£¬²»ÔÙ¡°ÏÔÊ¾µã¡±
+	GCurShowState = SHOWSTATE_UNDEL;//å°†æ˜¾ç¤ºçŠ¶æ€æ›´æ”¹ä¸ºæ˜¾ç¤ºæœªåˆ é™¤çŠ¶æ€
+	//è‹¥å½“å‰å·²ç»â€œæ˜¾ç¤ºç‚¹â€ï¼Œåˆ™å°†å…³é—­å¼€å…³ï¼Œä¸å†â€œæ˜¾ç¤ºç‚¹â€
 	if (GShowPnt == true)
 	{
 		GShowPnt = false;
@@ -1053,21 +1053,21 @@ void CMapEditorView::OnWindowShowPoint()
 	{
 		GShowPnt = true;
 	}
-	this->InvalidateRect(NULL);		//Ë¢ĞÂ´°¿Ú
+	this->InvalidateRect(NULL);		//åˆ·æ–°çª—å£
 }
 
 
 void CMapEditorView::OnWindowShowLine()
 {
-	//Èôµ±Ç°ÏÔÊ¾×´Ì¬ÊÇÏÔÊ¾É¾³ı×´Ì¬£¬ÔòÏÈ°ÑËùÓĞÏÔÊ¾¿ª¹Ø¶¼¹Ø±Õ
+	//è‹¥å½“å‰æ˜¾ç¤ºçŠ¶æ€æ˜¯æ˜¾ç¤ºåˆ é™¤çŠ¶æ€ï¼Œåˆ™å…ˆæŠŠæ‰€æœ‰æ˜¾ç¤ºå¼€å…³éƒ½å…³é—­
 	if (GCurShowState == SHOWSTATE_DEL)
 	{
 		GShowPnt = false;
 		GShowLin = false;
 		GShowReg = false;
 	}
-	GCurShowState = SHOWSTATE_UNDEL;//½«ÏÔÊ¾×´Ì¬¸ü¸ÄÎªÏÔÊ¾Î´É¾³ı×´Ì¬
-	//Èôµ±Ç°ÒÑ¾­¡°ÏÔÊ¾Ïß¡±£¬Ôò½«¹Ø±Õ¿ª¹Ø£¬²»ÔÙ¡°ÏÔÊ¾Ïß¡±
+	GCurShowState = SHOWSTATE_UNDEL;//å°†æ˜¾ç¤ºçŠ¶æ€æ›´æ”¹ä¸ºæ˜¾ç¤ºæœªåˆ é™¤çŠ¶æ€
+	//è‹¥å½“å‰å·²ç»â€œæ˜¾ç¤ºçº¿â€ï¼Œåˆ™å°†å…³é—­å¼€å…³ï¼Œä¸å†â€œæ˜¾ç¤ºçº¿â€
 	if (GShowLin == true)
 	{
 		GShowLin = false;
@@ -1076,21 +1076,21 @@ void CMapEditorView::OnWindowShowLine()
 	{
 		GShowLin = true;
 	}
-	this->InvalidateRect(NULL);		//Ë¢ĞÂ´°¿Ú
+	this->InvalidateRect(NULL);		//åˆ·æ–°çª—å£
 }
 
 
 void CMapEditorView::OnWindowShowRegion()
 {
-	//Èôµ±Ç°ÏÔÊ¾×´Ì¬ÊÇÏÔÊ¾É¾³ı×´Ì¬£¬ÔòÏÈ°ÑËùÓĞÏÔÊ¾¿ª¹Ø¶¼¹Ø±Õ
+	//è‹¥å½“å‰æ˜¾ç¤ºçŠ¶æ€æ˜¯æ˜¾ç¤ºåˆ é™¤çŠ¶æ€ï¼Œåˆ™å…ˆæŠŠæ‰€æœ‰æ˜¾ç¤ºå¼€å…³éƒ½å…³é—­
 	if (GCurShowState == SHOWSTATE_DEL)
 	{
 		GShowPnt = false;
 		GShowLin = false;
 		GShowReg = false;
 	}
-	GCurShowState = SHOWSTATE_UNDEL;//½«ÏÔÊ¾×´Ì¬¸ü¸ÄÎªÏÔÊ¾Î´É¾³ı×´Ì¬
-	//Èôµ±Ç°ÒÑ¾­¡°ÏÔÊ¾Çø¡±£¬Ôò½«¹Ø±Õ¿ª¹Ø£¬²»ÔÙ¡°ÏÔÊ¾Çø¡±
+	GCurShowState = SHOWSTATE_UNDEL;//å°†æ˜¾ç¤ºçŠ¶æ€æ›´æ”¹ä¸ºæ˜¾ç¤ºæœªåˆ é™¤çŠ¶æ€
+	//è‹¥å½“å‰å·²ç»â€œæ˜¾ç¤ºåŒºâ€ï¼Œåˆ™å°†å…³é—­å¼€å…³ï¼Œä¸å†â€œæ˜¾ç¤ºåŒºâ€
 	if (GShowReg == true)
 	{
 		GShowReg = false;
@@ -1099,16 +1099,16 @@ void CMapEditorView::OnWindowShowRegion()
 	{
 		GShowReg = true;
 	}
-	this->InvalidateRect(NULL);		//Ë¢ĞÂ´°¿Ú
+	this->InvalidateRect(NULL);		//åˆ·æ–°çª—å£
 }
 
 void CMapEditorView::OnPointCreate()
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
 	if (GPntFCreated)
 	{
-		GCurOperState = OPERSTATE_INPUT_PNT;			// ÉèÖÃÎª¡°Ôìµã¡±×´Ì¬
-		GCurShowState = SHOWSTATE_UNDEL;				//ÉèÖÃµ±Ç°ÎªÏÔÊ¾Î´É¾³ı×´Ì¬
+		GCurOperState = OPERSTATE_INPUT_PNT;			// è®¾ç½®ä¸ºâ€œé€ ç‚¹â€çŠ¶æ€
+		GCurShowState = SHOWSTATE_UNDEL;				//è®¾ç½®å½“å‰ä¸ºæ˜¾ç¤ºæœªåˆ é™¤çŠ¶æ€
 		this->Invalidate();
 		GShowPnt = true;
 		GShowLin = true;
@@ -1122,11 +1122,11 @@ void CMapEditorView::OnPointCreate()
 
 void CMapEditorView::OnPointMove()
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
 	if (GPntFCreated)
 	{
-		GCurOperState = OPERSTATE_MOVE_PNT;				//ÉèÖÃ²Ù×÷×´Ì¬£¨ÒÆ¶¯µã£©
-		GCurShowState = SHOWSTATE_UNDEL;				//ÉèÖÃµ±Ç°ÎªÏÔÊ¾Î´É¾³ı×´Ì¬
+		GCurOperState = OPERSTATE_MOVE_PNT;				//è®¾ç½®æ“ä½œçŠ¶æ€ï¼ˆç§»åŠ¨ç‚¹ï¼‰
+		GCurShowState = SHOWSTATE_UNDEL;				//è®¾ç½®å½“å‰ä¸ºæ˜¾ç¤ºæœªåˆ é™¤çŠ¶æ€
 		this->Invalidate();
 		GShowPnt = true;
 		GShowLin = true;
@@ -1141,11 +1141,11 @@ void CMapEditorView::OnPointMove()
 
 void CMapEditorView::OnPointDelete()
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
 	if (GPntFCreated)
 	{
-		GCurOperState = OPERSTATE_DELETE_PNT;			//ÉèÖÃ²Ù×÷×´Ì¬(É¾³ıµã)
-		GCurShowState = SHOWSTATE_UNDEL;				//ÉèÖÃµ±Ç°ÎªÏÔÊ¾Î´É¾³ı×´Ì¬
+		GCurOperState = OPERSTATE_DELETE_PNT;			//è®¾ç½®æ“ä½œçŠ¶æ€(åˆ é™¤ç‚¹)
+		GCurShowState = SHOWSTATE_UNDEL;				//è®¾ç½®å½“å‰ä¸ºæ˜¾ç¤ºæœªåˆ é™¤çŠ¶æ€
 		this->Invalidate();
 		GShowPnt = true;
 		GShowLin = true;
@@ -1160,9 +1160,9 @@ void CMapEditorView::OnPointDelete()
 
 void CMapEditorView::OnPointSetDefparameter()
 {
-	CPointParameterDlg dlg;								//µã²ÎÊıÉèÖÃµÄ¶Ô»°¿ò
-	dlg.m_Pattern = GPnt.pattern;						//µãĞÍ
-	dlg.m_ColorButton.SetColor(GPnt.color);				//ÑÕÉ«
+	CPointParameterDlg dlg;								//ç‚¹å‚æ•°è®¾ç½®çš„å¯¹è¯æ¡†
+	dlg.m_Pattern = GPnt.pattern;						//ç‚¹å‹
+	dlg.m_ColorButton.SetColor(GPnt.color);				//é¢œè‰²
 	if (IDOK == dlg.DoModal())
 	{
 		GPnt.pattern = dlg.m_Pattern;
@@ -1174,30 +1174,30 @@ void CMapEditorView::OnPointSetDefparameter()
 
 void CMapEditorView::OnPointShowDeleted()
 {
-	//Èôµ±Ç°ÏÔÊ¾×´Ì¬²»ÊÇÏÔÊ¾É¾³ı×´Ì¬£¬ÔòÇĞ»»ÎªÏÔÊ¾É¾³ı×´Ì¬²¢ÏÔÊ¾µã
+	//è‹¥å½“å‰æ˜¾ç¤ºçŠ¶æ€ä¸æ˜¯æ˜¾ç¤ºåˆ é™¤çŠ¶æ€ï¼Œåˆ™åˆ‡æ¢ä¸ºæ˜¾ç¤ºåˆ é™¤çŠ¶æ€å¹¶æ˜¾ç¤ºç‚¹
 	if (GCurShowState != SHOWSTATE_DEL)
 	{
-		GCurShowState = SHOWSTATE_DEL;					//ÉèÖÃÎªÏÔÊ¾É¾³ı×´Ì¬
+		GCurShowState = SHOWSTATE_DEL;					//è®¾ç½®ä¸ºæ˜¾ç¤ºåˆ é™¤çŠ¶æ€
 		GShowPnt = true;
 		GShowLin = false;
 		GShowReg = false;
 	}
-	//Èôµ±Ç°×´Ì¬ÊÇÏÔÊ¾É¾³ı×´Ì¬£¬µ«µ±Ç°ÏÔÊ¾µÄ²»ÊÇµã£¬Ôò½«ÏÔÊ¾µãµÄ¿ª¹Ø´ò¿ª
+	//è‹¥å½“å‰çŠ¶æ€æ˜¯æ˜¾ç¤ºåˆ é™¤çŠ¶æ€ï¼Œä½†å½“å‰æ˜¾ç¤ºçš„ä¸æ˜¯ç‚¹ï¼Œåˆ™å°†æ˜¾ç¤ºç‚¹çš„å¼€å…³æ‰“å¼€
 	else if (GCurShowState == SHOWSTATE_DEL && GShowPnt != true)
 	{
 		GShowPnt = true;
 		GShowLin = false;
 		GShowReg = false;
 	}
-	//ÆäËûÇé¿öÏÂÔò½«ÏÔÊ¾×´Ì¬ÉèÖÃÎªÏÔÊ¾Î´É¾³ıµÄ×´Ì¬£¬²¢´ò¿ªËùÓĞµÄÏÔÊ¾µÄ¿ª¹Ø
+	//å…¶ä»–æƒ…å†µä¸‹åˆ™å°†æ˜¾ç¤ºçŠ¶æ€è®¾ç½®ä¸ºæ˜¾ç¤ºæœªåˆ é™¤çš„çŠ¶æ€ï¼Œå¹¶æ‰“å¼€æ‰€æœ‰çš„æ˜¾ç¤ºçš„å¼€å…³
 	else
 	{
-		GCurShowState = SHOWSTATE_UNDEL;				//ÉèÖÃÎªÏÔÊ¾Î´É¾³ı×´Ì¬
+		GCurShowState = SHOWSTATE_UNDEL;				//è®¾ç½®ä¸ºæ˜¾ç¤ºæœªåˆ é™¤çŠ¶æ€
 		GShowPnt = true;
 		GShowLin = true;
 		GShowReg = true;
 	}
-	this->InvalidateRect(NULL);							//Ë¢ĞÂ´°¿Ú
+	this->InvalidateRect(NULL);							//åˆ·æ–°çª—å£
 }
 
 
@@ -1205,12 +1205,12 @@ void CMapEditorView::OnPointUndelete()
 {
 	if (GPntFCreated)
 	{
-		GCurOperState = OPERSTATE_UNDELETE_PNT;			//µ±Ç°²Ù×÷×´Ì¬£¨»Ö¸´µã£©
-		GCurShowState = SHOWSTATE_DEL;					//µ±Ç°ÏÔÊ¾×´Ì¬£¨É¾³ıµã£©
+		GCurOperState = OPERSTATE_UNDELETE_PNT;			//å½“å‰æ“ä½œçŠ¶æ€ï¼ˆæ¢å¤ç‚¹ï¼‰
+		GCurShowState = SHOWSTATE_DEL;					//å½“å‰æ˜¾ç¤ºçŠ¶æ€ï¼ˆåˆ é™¤ç‚¹ï¼‰
 		this->Invalidate();
-		GShowPnt = true;								//´ò¿ªÏÔÊ¾µã
-		GShowLin = false;								//¹Ø±ÕÏÔÊ¾Ïß
-		GShowReg = false;								//¹Ø±ÕÏÔÊ¾Çø
+		GShowPnt = true;								//æ‰“å¼€æ˜¾ç¤ºç‚¹
+		GShowLin = false;								//å…³é—­æ˜¾ç¤ºçº¿
+		GShowReg = false;								//å…³é—­æ˜¾ç¤ºåŒº
 	}
 	else
 	{
@@ -1223,12 +1223,12 @@ void CMapEditorView::OnPointModifyParameter()
 {
 	if (GPntFCreated)
 	{
-		GCurOperState = OPERSTATE_MODIFY_POINT_PARAMETER;//µ±Ç°²Ù×÷×´Ì¬£¨»Ö¸´µã£©
-		GCurShowState = SHOWSTATE_UNDEL;				//µ±Ç°ÏÔÊ¾×´Ì¬£¨²»É¾³ıµã£©
+		GCurOperState = OPERSTATE_MODIFY_POINT_PARAMETER;//å½“å‰æ“ä½œçŠ¶æ€ï¼ˆæ¢å¤ç‚¹ï¼‰
+		GCurShowState = SHOWSTATE_UNDEL;				//å½“å‰æ˜¾ç¤ºçŠ¶æ€ï¼ˆä¸åˆ é™¤ç‚¹ï¼‰
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		GShowPnt = true;								//´ò¿ªÏÔÊ¾µã					 ????????????????????????????????????????
-		GShowLin = true;								//¹Ø±ÕÏÔÊ¾Ïß             ´æÔÚÒÉÎÊ????????????????????????????????????????
-		GShowReg = true;								//¹Ø±ÕÏÔÊ¾Çø				     ????????????????????????????????????????
+		GShowPnt = true;								//æ‰“å¼€æ˜¾ç¤ºç‚¹					 ????????????????????????????????????????
+		GShowLin = true;								//å…³é—­æ˜¾ç¤ºçº¿             å­˜åœ¨ç–‘é—®????????????????????????????????????????
+		GShowReg = true;								//å…³é—­æ˜¾ç¤ºåŒº				     ????????????????????????????????????????
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		this->Invalidate();
 	}
@@ -1241,11 +1241,11 @@ void CMapEditorView::OnPointModifyParameter()
 
 void CMapEditorView::OnLineCreate()
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
 	if (GLinFCreated)
 	{
 		GCurOperState = OPERSTATE_INPUT_LIN;
-		GCurShowState = SHOWSTATE_UNDEL;			//ÉèÖÃµ±Ç°ÎªÏÔÊ¾Î´É¾³ı×´Ì¬
+		GCurShowState = SHOWSTATE_UNDEL;			//è®¾ç½®å½“å‰ä¸ºæ˜¾ç¤ºæœªåˆ é™¤çŠ¶æ€
 		this->Invalidate();
 		GShowPnt = true;
 		GShowLin = true;
@@ -1262,8 +1262,8 @@ void CMapEditorView::OnLineMove()
 {
 	if (GLinFCreated)
 	{
-		GCurOperState = OPERSTATE_MOVE_LIN;			// µ±Ç°ÎªÒÆ¶¯Ïß²Ù×÷×´Ì¬
-		GCurShowState = SHOWSTATE_UNDEL;			//ÉèÖÃµ±Ç°ÎªÏÔÊ¾Î´É¾³ı×´Ì¬
+		GCurOperState = OPERSTATE_MOVE_LIN;			// å½“å‰ä¸ºç§»åŠ¨çº¿æ“ä½œçŠ¶æ€
+		GCurShowState = SHOWSTATE_UNDEL;			//è®¾ç½®å½“å‰ä¸ºæ˜¾ç¤ºæœªåˆ é™¤çŠ¶æ€
 		this->Invalidate();
 		GShowPnt = true;
 		GShowLin = true;
@@ -1281,7 +1281,7 @@ void CMapEditorView::OnLineDelete()
 	if (GLinFCreated)
 	{
 		GCurOperState = OPERSTATE_DELETE_LIN;
-		GCurShowState = SHOWSTATE_UNDEL;			//ÉèÖÃµ±Ç°ÎªÏÔÊ¾Î´É¾³ı×´Ì¬
+		GCurShowState = SHOWSTATE_UNDEL;			//è®¾ç½®å½“å‰ä¸ºæ˜¾ç¤ºæœªåˆ é™¤çŠ¶æ€
 		this->Invalidate();
 		GShowPnt = true;
 		GShowLin = true;
@@ -1296,30 +1296,30 @@ void CMapEditorView::OnLineDelete()
 
 void CMapEditorView::OnLineShowDeleted()
 {
-	//Èôµ±Ç°ÏÔÊ¾×´Ì¬²»ÊÇÏÔÊ¾É¾³ı×´Ì¬£¬ÔòÇĞ»»ÎªÏÔÊ¾É¾³ı×´Ì¬²¢ÏÔÊ¾Ïß
+	//è‹¥å½“å‰æ˜¾ç¤ºçŠ¶æ€ä¸æ˜¯æ˜¾ç¤ºåˆ é™¤çŠ¶æ€ï¼Œåˆ™åˆ‡æ¢ä¸ºæ˜¾ç¤ºåˆ é™¤çŠ¶æ€å¹¶æ˜¾ç¤ºçº¿
 	if (GCurShowState != SHOWSTATE_DEL)
 	{
-		GCurShowState = SHOWSTATE_DEL;					//ÉèÖÃÎªÏÔÊ¾É¾³ı×´Ì¬
+		GCurShowState = SHOWSTATE_DEL;					//è®¾ç½®ä¸ºæ˜¾ç¤ºåˆ é™¤çŠ¶æ€
 		GShowPnt = false;
 		GShowLin = true;
 		GShowReg = false;
 	}
-	//Èôµ±Ç°×´Ì¬ÊÇÏÔÊ¾É¾³ı×´Ì¬£¬µ«µ±Ç°ÏÔÊ¾µÄ²»ÊÇÏß£¬Ôò½«ÏÔÊ¾ÏßµÄ¿ª¹Ø´ò¿ª
+	//è‹¥å½“å‰çŠ¶æ€æ˜¯æ˜¾ç¤ºåˆ é™¤çŠ¶æ€ï¼Œä½†å½“å‰æ˜¾ç¤ºçš„ä¸æ˜¯çº¿ï¼Œåˆ™å°†æ˜¾ç¤ºçº¿çš„å¼€å…³æ‰“å¼€
 	else if (GCurShowState == SHOWSTATE_DEL && GShowLin != true)
 	{
 		GShowPnt = false;
 		GShowLin = true;
 		GShowReg = false;
 	}
-	//ÆäËûÇé¿öÏÂÔò½«ÏÔÊ¾×´Ì¬ÉèÖÃÎªÏÔÊ¾Î´É¾³ıµÄ×´Ì¬£¬²¢´ò¿ªËùÓĞµÄÏÔÊ¾µÄ¿ª¹Ø
+	//å…¶ä»–æƒ…å†µä¸‹åˆ™å°†æ˜¾ç¤ºçŠ¶æ€è®¾ç½®ä¸ºæ˜¾ç¤ºæœªåˆ é™¤çš„çŠ¶æ€ï¼Œå¹¶æ‰“å¼€æ‰€æœ‰çš„æ˜¾ç¤ºçš„å¼€å…³
 	else
 	{
-		GCurShowState = SHOWSTATE_UNDEL;				//ÉèÖÃÎªÏÔÊ¾Î´É¾³ı×´Ì¬
+		GCurShowState = SHOWSTATE_UNDEL;				//è®¾ç½®ä¸ºæ˜¾ç¤ºæœªåˆ é™¤çŠ¶æ€
 		GShowPnt = true;
 		GShowLin = true;
 		GShowReg = true;
 	}
-	this->InvalidateRect(NULL);							//Ë¢ĞÂ´°¿Ú
+	this->InvalidateRect(NULL);							//åˆ·æ–°çª—å£
 }
 
 
@@ -1327,12 +1327,12 @@ void CMapEditorView::OnLineUndeleted()
 {
 	if (GLinFCreated)
 	{
-		GCurOperState = OPERSTATE_UNDELETE_LIN;			//µ±Ç°²Ù×÷×´Ì¬£¨»Ö¸´Ïß£©
-		GCurShowState = SHOWSTATE_DEL;					//µ±Ç°ÏÔÊ¾×´Ì¬£¨É¾³ıÏß£©
+		GCurOperState = OPERSTATE_UNDELETE_LIN;			//å½“å‰æ“ä½œçŠ¶æ€ï¼ˆæ¢å¤çº¿ï¼‰
+		GCurShowState = SHOWSTATE_DEL;					//å½“å‰æ˜¾ç¤ºçŠ¶æ€ï¼ˆåˆ é™¤çº¿ï¼‰
 		this->Invalidate();
-		GShowPnt = false;								//¹Ø±ÕÏÔÊ¾µã
-		GShowLin = true;								//´ò¿ªÏÔÊ¾Ïß
-		GShowReg = false;								//¹Ø±ÕÏÔÊ¾Çø
+		GShowPnt = false;								//å…³é—­æ˜¾ç¤ºç‚¹
+		GShowLin = true;								//æ‰“å¼€æ˜¾ç¤ºçº¿
+		GShowReg = false;								//å…³é—­æ˜¾ç¤ºåŒº
 	}
 	else
 	{
@@ -1345,12 +1345,12 @@ void CMapEditorView::OnLineDeleteDot()
 {
 	if (GLinFCreated)
 	{
-		GCurOperState = OPERSTATE_LIN_DELETE_PNT;		//µ±Ç°²Ù×÷×´Ì¬£¨ÏßÉÏÉ¾µã£©
-		GCurShowState = SHOWSTATE_UNDEL;				//µ±Ç°ÏÔÊ¾×´Ì¬£¨Î´É¾³ı£©
+		GCurOperState = OPERSTATE_LIN_DELETE_PNT;		//å½“å‰æ“ä½œçŠ¶æ€ï¼ˆçº¿ä¸Šåˆ ç‚¹ï¼‰
+		GCurShowState = SHOWSTATE_UNDEL;				//å½“å‰æ˜¾ç¤ºçŠ¶æ€ï¼ˆæœªåˆ é™¤ï¼‰
 		this->Invalidate();
-		GShowPnt = true;								//´ò¿ªÏÔÊ¾µã
-		GShowLin = true;								//´ò¿ªÏÔÊ¾Ïß
-		GShowReg = true;								//´ò¿ªÏÔÊ¾Çø
+		GShowPnt = true;								//æ‰“å¼€æ˜¾ç¤ºç‚¹
+		GShowLin = true;								//æ‰“å¼€æ˜¾ç¤ºçº¿
+		GShowReg = true;								//æ‰“å¼€æ˜¾ç¤ºåŒº
 	}
 	else
 	{
@@ -1361,7 +1361,7 @@ void CMapEditorView::OnLineDeleteDot()
 
 void CMapEditorView::OnLineAddDot()
 {
-	// TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë
+	// TODO: åœ¨æ­¤æ·»åŠ å‘½ä»¤å¤„ç†ç¨‹åºä»£ç 
 }
 
 
@@ -1369,7 +1369,7 @@ void CMapEditorView::OnLineLink()
 {
 	if (GLinFCreated)
 	{
-		GCurOperState = OPERSTATE_LINK_LIN;					//ÉèÖÃÎªÁ¬½ÓÏß²Ù×÷×´Ì¬
+		GCurOperState = OPERSTATE_LINK_LIN;					//è®¾ç½®ä¸ºè¿æ¥çº¿æ“ä½œçŠ¶æ€
 	}
 	else
 	{
@@ -1382,12 +1382,12 @@ void CMapEditorView::OnLineModifyParameter()
 {
 	if (GLinFCreated)
 	{
-		GCurOperState = OPERSTATE_MODIFY_LINE_PARAMETER;//µ±Ç°²Ù×÷×´Ì¬£¨»Ö¸´µã£©
-		GCurShowState = SHOWSTATE_UNDEL;				//µ±Ç°ÏÔÊ¾×´Ì¬£¨·ÇÉ¾³ı£©
+		GCurOperState = OPERSTATE_MODIFY_LINE_PARAMETER;//å½“å‰æ“ä½œçŠ¶æ€ï¼ˆæ¢å¤ç‚¹ï¼‰
+		GCurShowState = SHOWSTATE_UNDEL;				//å½“å‰æ˜¾ç¤ºçŠ¶æ€ï¼ˆéåˆ é™¤ï¼‰
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		GShowPnt = true;								//¹Ø±ÕÏÔÊ¾µã					 ????????????????????????????????????????
-		GShowLin = true;								//´ò¿ªÏÔÊ¾Ïß             ´æÔÚÒÉÎÊ????????????????????????????????????????
-		GShowReg = true;								//¹Ø±ÕÏÔÊ¾Çø				     ????????????????????????????????????????
+		GShowPnt = true;								//å…³é—­æ˜¾ç¤ºç‚¹					 ????????????????????????????????????????
+		GShowLin = true;								//æ‰“å¼€æ˜¾ç¤ºçº¿             å­˜åœ¨ç–‘é—®????????????????????????????????????????
+		GShowReg = true;								//å…³é—­æ˜¾ç¤ºåŒº				     ????????????????????????????????????????
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		this->Invalidate();
 	}
@@ -1400,9 +1400,9 @@ void CMapEditorView::OnLineModifyParameter()
 
 void CMapEditorView::OnLineSetDefparameter()
 {
-	CLineParameterDlg dlg;								//Ïß²ÎÊıÉèÖÃµÄ¶Ô»°¿ò
-	dlg.m_Pattern = GLin.pattern;						//ÏßĞÍ
-	dlg.m_ColorButton.SetColor(GLin.color);				//ÑÕÉ«
+	CLineParameterDlg dlg;								//çº¿å‚æ•°è®¾ç½®çš„å¯¹è¯æ¡†
+	dlg.m_Pattern = GLin.pattern;						//çº¿å‹
+	dlg.m_ColorButton.SetColor(GLin.color);				//é¢œè‰²
 	if (IDOK == dlg.DoModal())
 	{
 		GLin.pattern = dlg.m_Pattern;
@@ -1416,7 +1416,7 @@ void CMapEditorView::OnRegionCreate()
 {
 	if (GRegFCreated)
 	{
-		GCurOperState = OPERSTATE_INPUT_REG;				//µ±Ç°ÉèÖÃÎªÔìÇø²Ù×÷×´Ì¬
+		GCurOperState = OPERSTATE_INPUT_REG;				//å½“å‰è®¾ç½®ä¸ºé€ åŒºæ“ä½œçŠ¶æ€
 	}
 	else
 	{
@@ -1429,7 +1429,7 @@ void CMapEditorView::OnRegionMove()
 {
 	if (GRegFCreated)
 	{
-		GCurOperState = OPERSTATE_MOVE_REG;					//µ±Ç°ÉèÖÃÎªÒÆ¶¯Çø²Ù×÷×´Ì¬
+		GCurOperState = OPERSTATE_MOVE_REG;					//å½“å‰è®¾ç½®ä¸ºç§»åŠ¨åŒºæ“ä½œçŠ¶æ€
 	}
 	else
 	{
@@ -1442,7 +1442,7 @@ void CMapEditorView::OnRegionDelete()
 {
 	if (GRegFCreated)
 	{
-		GCurOperState = OPERSTATE_DELETE_REG;				//ÉèÖÃµ±Ç°ÎªÉ¾³ıÇø²Ù×÷×´Ì¬
+		GCurOperState = OPERSTATE_DELETE_REG;				//è®¾ç½®å½“å‰ä¸ºåˆ é™¤åŒºæ“ä½œçŠ¶æ€
 	}
 	else
 	{
@@ -1453,30 +1453,30 @@ void CMapEditorView::OnRegionDelete()
 
 void CMapEditorView::OnRegionShowDeleted()
 {
-	//Èôµ±Ç°ÏÔÊ¾×´Ì¬²»ÊÇÏÔÊ¾É¾³ı×´Ì¬£¬ÔòÇĞ»»ÎªÏÔÊ¾É¾³ı×´Ì¬²¢ÏÔÊ¾Çø
+	//è‹¥å½“å‰æ˜¾ç¤ºçŠ¶æ€ä¸æ˜¯æ˜¾ç¤ºåˆ é™¤çŠ¶æ€ï¼Œåˆ™åˆ‡æ¢ä¸ºæ˜¾ç¤ºåˆ é™¤çŠ¶æ€å¹¶æ˜¾ç¤ºåŒº
 	if (GCurShowState != SHOWSTATE_DEL)
 	{
-		GCurShowState = SHOWSTATE_DEL;					//ÉèÖÃÎªÏÔÊ¾É¾³ı×´Ì¬
+		GCurShowState = SHOWSTATE_DEL;					//è®¾ç½®ä¸ºæ˜¾ç¤ºåˆ é™¤çŠ¶æ€
 		GShowPnt = false;
 		GShowLin = false;
 		GShowReg = true;
 	}
-	//Èôµ±Ç°×´Ì¬ÊÇÏÔÊ¾É¾³ı×´Ì¬£¬µ«µ±Ç°ÏÔÊ¾µÄ²»ÊÇÇø£¬Ôò½«ÏÔÊ¾ÇøµÄ¿ª¹Ø´ò¿ª
+	//è‹¥å½“å‰çŠ¶æ€æ˜¯æ˜¾ç¤ºåˆ é™¤çŠ¶æ€ï¼Œä½†å½“å‰æ˜¾ç¤ºçš„ä¸æ˜¯åŒºï¼Œåˆ™å°†æ˜¾ç¤ºåŒºçš„å¼€å…³æ‰“å¼€
 	else if (GCurShowState == SHOWSTATE_DEL && GShowReg != true)
 	{
 		GShowPnt = false;
 		GShowLin = false;
 		GShowReg = true;
 	}
-	//ÆäËûÇé¿öÏÂÔò½«ÏÔÊ¾×´Ì¬ÉèÖÃÎªÏÔÊ¾Î´É¾³ıµÄ×´Ì¬£¬²¢´ò¿ªËùÓĞµÄÏÔÊ¾µÄ¿ª¹Ø
+	//å…¶ä»–æƒ…å†µä¸‹åˆ™å°†æ˜¾ç¤ºçŠ¶æ€è®¾ç½®ä¸ºæ˜¾ç¤ºæœªåˆ é™¤çš„çŠ¶æ€ï¼Œå¹¶æ‰“å¼€æ‰€æœ‰çš„æ˜¾ç¤ºçš„å¼€å…³
 	else
 	{
-		GCurShowState = SHOWSTATE_UNDEL;				//ÉèÖÃÎªÏÔÊ¾Î´É¾³ı×´Ì¬
+		GCurShowState = SHOWSTATE_UNDEL;				//è®¾ç½®ä¸ºæ˜¾ç¤ºæœªåˆ é™¤çŠ¶æ€
 		GShowPnt = true;
 		GShowLin = true;
 		GShowReg = true;
 	}
-	this->InvalidateRect(NULL);							//Ë¢ĞÂ´°¿Ú
+	this->InvalidateRect(NULL);							//åˆ·æ–°çª—å£
 }
 
 
@@ -1484,12 +1484,12 @@ void CMapEditorView::OnRegionUndeleted()
 {
 	if (GRegFCreated)
 	{
-		GCurOperState = OPERSTATE_UNDELETE_REG;			//µ±Ç°²Ù×÷×´Ì¬£¨»Ö¸´Çø£©
-		GCurShowState = SHOWSTATE_DEL;					//µ±Ç°ÏÔÊ¾×´Ì¬£¨É¾³ıÇø£©
+		GCurOperState = OPERSTATE_UNDELETE_REG;			//å½“å‰æ“ä½œçŠ¶æ€ï¼ˆæ¢å¤åŒºï¼‰
+		GCurShowState = SHOWSTATE_DEL;					//å½“å‰æ˜¾ç¤ºçŠ¶æ€ï¼ˆåˆ é™¤åŒºï¼‰
 		this->Invalidate();
-		GShowPnt = false;								//¹Ø±ÕÏÔÊ¾µã
-		GShowLin = false;								//¹Ø±ÕÏÔÊ¾Ïß
-		GShowReg = true;								//´ò¿ªÏÔÊ¾Çø
+		GShowPnt = false;								//å…³é—­æ˜¾ç¤ºç‚¹
+		GShowLin = false;								//å…³é—­æ˜¾ç¤ºçº¿
+		GShowReg = true;								//æ‰“å¼€æ˜¾ç¤ºåŒº
 	}
 	else
 	{
@@ -1502,12 +1502,12 @@ void CMapEditorView::OnRegionModifyParameter()
 {
 	if (GRegFCreated)
 	{
-		GCurOperState = OPERSTATE_MODIFY_REGION_PARAMETER;//µ±Ç°²Ù×÷×´Ì¬£¨ĞŞ¸ÄÇø£©
-		GCurShowState = SHOWSTATE_UNDEL;				//µ±Ç°ÏÔÊ¾×´Ì¬£¨·ÇÉ¾³ı£©
+		GCurOperState = OPERSTATE_MODIFY_REGION_PARAMETER;//å½“å‰æ“ä½œçŠ¶æ€ï¼ˆä¿®æ”¹åŒºï¼‰
+		GCurShowState = SHOWSTATE_UNDEL;				//å½“å‰æ˜¾ç¤ºçŠ¶æ€ï¼ˆéåˆ é™¤ï¼‰
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		GShowPnt = true;								//¹Ø±ÕÏÔÊ¾µã					 ????????????????????????????????????????
-		GShowLin = true;								//´ò¿ªÏÔÊ¾Ïß             ´æÔÚÒÉÎÊ????????????????????????????????????????
-		GShowReg = true;								//¹Ø±ÕÏÔÊ¾Çø				     ????????????????????????????????????????
+		GShowPnt = true;								//å…³é—­æ˜¾ç¤ºç‚¹					 ????????????????????????????????????????
+		GShowLin = true;								//æ‰“å¼€æ˜¾ç¤ºçº¿             å­˜åœ¨ç–‘é—®????????????????????????????????????????
+		GShowReg = true;								//å…³é—­æ˜¾ç¤ºåŒº				     ????????????????????????????????????????
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		this->Invalidate();
 	}
@@ -1520,9 +1520,9 @@ void CMapEditorView::OnRegionModifyParameter()
 
 void CMapEditorView::OnRegionSetDefparameter()
 {
-	CRegionParameterDlg dlg;							//Çø²ÎÊıÉèÖÃµÄ¶Ô»°¿ò
-	dlg.m_Pattern = GReg.pattern;						//ÇøĞÍ
-	dlg.m_ColorButton.SetColor(GReg.color);				//ÑÕÉ«
+	CRegionParameterDlg dlg;							//åŒºå‚æ•°è®¾ç½®çš„å¯¹è¯æ¡†
+	dlg.m_Pattern = GReg.pattern;						//åŒºå‹
+	dlg.m_ColorButton.SetColor(GReg.color);				//é¢œè‰²
 	if (IDOK == dlg.DoModal())
 	{
 		GReg.pattern = dlg.m_Pattern;
@@ -1534,20 +1534,20 @@ void CMapEditorView::OnRegionSetDefparameter()
 
 void CMapEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	// TODO: ÔÚ´ËÌí¼ÓÏûÏ¢´¦Àí³ÌĞò´úÂëºÍ/»òµ÷ÓÃÄ¬ÈÏÖµ
+	// TODO: åœ¨æ­¤æ·»åŠ æ¶ˆæ¯å¤„ç†ç¨‹åºä»£ç å’Œ/æˆ–è°ƒç”¨é»˜è®¤å€¼
 	if (GPntFCreated)
 	{
 		switch (GCurOperState)
 		{
-		case OPERSTATE_MOVE_PNT:									//µ±Ç°ÎªÒÆ¶¯µã×´Ì¬
+		case OPERSTATE_MOVE_PNT:									//å½“å‰ä¸ºç§»åŠ¨ç‚¹çŠ¶æ€
 			D_DOT dot;
 			PntToDot(dot, point);
-			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);	// ×ø±êÏµ×ª»»
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);	// åæ ‡ç³»è½¬æ¢
 			DotToPnt(point, dot);
-			GTPnt = FindPnt(point, GPntNum, GPntTmpF, GPntNdx);		// ²éÕÒ×î½üµã
+			GTPnt = FindPnt(point, GPntNum, GPntTmpF, GPntNdx);		// æŸ¥æ‰¾æœ€è¿‘ç‚¹
 			dot.x = GTPnt.x;
 			dot.y = GTPnt.y;
-			PntDPtoVP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);	// ×ø±êÏµ×ª»»
+			PntDPtoVP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);	// åæ ‡ç³»è½¬æ¢
 			GTPnt.x = dot.x;
 			GTPnt.y = dot.y;
 			break;
@@ -1559,17 +1559,17 @@ void CMapEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 	{
 		switch (GCurOperState)
 		{
-		case OPERSTATE_MOVE_LIN:									//µ±Ç°ÎªÒÆ¶¯Ïß×´Ì¬
+		case OPERSTATE_MOVE_LIN:									//å½“å‰ä¸ºç§»åŠ¨çº¿çŠ¶æ€
 		{
 			D_DOT dot;
 			PntToDot(dot, point);
-			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);	// ×ø±êÏµ×ª»»
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);	// åæ ‡ç³»è½¬æ¢
 			DotToPnt(point, dot);
 			GLinMMTmpNdx = FindLin(GLinTmpNdxF, GLinTmpDatF, point, 
-				GLinNum, GLinNdx);									//²éÕÒµ¥»÷µã×î½üµÄÒ»ÌõÏß
+				GLinNum, GLinNdx);									//æŸ¥æ‰¾å•å‡»ç‚¹æœ€è¿‘çš„ä¸€æ¡çº¿
 			GLinMMOffestX = 0;
 			GLinMMOffestY = 0;
-			PntDPtoVP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);	// ×ø±êÏµ×ª»»
+			PntDPtoVP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);	// åæ ‡ç³»è½¬æ¢
 			DotToPnt(point, dot);
 			GLinLBDPnt = point;
 			GLinMMPnt = point;
@@ -1583,14 +1583,14 @@ void CMapEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 	{
 		switch (GCurOperState)
 		{
-		case OPERSTATE_MOVE_REG:							//µ±Ç°ÎªÒÆ¶¯Çø²Ù×÷×´Ì¬
+		case OPERSTATE_MOVE_REG:							//å½“å‰ä¸ºç§»åŠ¨åŒºæ“ä½œçŠ¶æ€
 			GRegLBDPnt = point;
 			GRegMMPnt = point;
 			D_DOT dot;
 			PntToDot(dot, point);
-			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);// ´°¿Ú×ªÊı¾İ
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);// çª—å£è½¬æ•°æ®
 			DotToPnt(point, dot);
-			GRegMMTmpNdx = FindReg(GRegTmpNdxF, GRegTmpDatF, point, GRegNum, GRegNdx);// ²éÕÒ×î½üÇø£¬¼¯µãÑ¡ÖĞµÄÇø
+			GRegMMTmpNdx = FindReg(GRegTmpNdxF, GRegTmpDatF, point, GRegNum, GRegNdx);// æŸ¥æ‰¾æœ€è¿‘åŒºï¼Œé›†ç‚¹é€‰ä¸­çš„åŒº
 			GRegMMOffsetX = 0;
 			GRegMMOffsetY = 0;
 			break;
@@ -1602,11 +1602,11 @@ void CMapEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 	{
 		switch (GCurOperState)
 		{
-		case OPERSTATE_ZOOM_IN:								//µ±Ç°Îª·Å´ó²Ù×÷×´Ì¬
+		case OPERSTATE_ZOOM_IN:								//å½“å‰ä¸ºæ”¾å¤§æ“ä½œçŠ¶æ€
 			GZoomLBDPnt = point;
 			GZoomMMPnt = point;
 			break;
-		case OPERSTATE_WINDOW_MOVE:							//µ±Ç°Îª´°¿ÚÒÆ¶¯×´Ì¬
+		case OPERSTATE_WINDOW_MOVE:							//å½“å‰ä¸ºçª—å£ç§»åŠ¨çŠ¶æ€
 			GWinMoveLBDPnt = point;
 			GWinMoveMMPnt = point;
 			break;
@@ -1621,97 +1621,97 @@ void CMapEditorView::OnLButtonDown(UINT nFlags, CPoint point)
 
 void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 {
-	CClientDC dc(this);										//»­±Ê£¬¶¨ÒådcÊ±µ÷ÓÃ¹¹Ôìº¯Êı	
-	dc.SetROP2(R2_NOTXORPEN);								//»æÍ¼µÄÄ£Ê½ÉèÖÃ
-	if (GPntFCreated)										//ÒÑ´´½¨ÁÙÊ±ÎÄ¼ş
+	CClientDC dc(this);										//ç”»ç¬”ï¼Œå®šä¹‰dcæ—¶è°ƒç”¨æ„é€ å‡½æ•°	
+	dc.SetROP2(R2_NOTXORPEN);								//ç»˜å›¾çš„æ¨¡å¼è®¾ç½®
+	if (GPntFCreated)										//å·²åˆ›å»ºä¸´æ—¶æ–‡ä»¶
 	{
 		D_DOT dot;
 		switch (GCurOperState)
 		{
-		case OPERSTATE_INPUT_PNT:							//µ±Ç°Îª»æÖÆµã×´Ì¬
-			PNT_STRU pnt;									//µã¶ÔÏó
+		case OPERSTATE_INPUT_PNT:							//å½“å‰ä¸ºç»˜åˆ¶ç‚¹çŠ¶æ€
+			PNT_STRU pnt;									//ç‚¹å¯¹è±¡
 			memcpy_s(&pnt, sizeof(PNT_STRU), &GPnt, sizeof(PNT_STRU));
 			PntToDot(dot, point);
-			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//×ø±êÏµ×ª»»
-			pnt.x = dot.x;									//ÉèÖÃµã×ø±êµÄx
-			pnt.y = dot.y;									//ÉèÖÃµã×ø±êµÄy
-			WritePntToFile(GPntTmpF, GPntNum, pnt);			//½«µãĞ´ÈëÁÙÊ±ÎÄ¼ş
-			PntDPtoVP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//×ø±êÏµ×ª»»
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//åæ ‡ç³»è½¬æ¢
+			pnt.x = dot.x;									//è®¾ç½®ç‚¹åæ ‡çš„x
+			pnt.y = dot.y;									//è®¾ç½®ç‚¹åæ ‡çš„y
+			WritePntToFile(GPntTmpF, GPntNum, pnt);			//å°†ç‚¹å†™å…¥ä¸´æ—¶æ–‡ä»¶
+			PntDPtoVP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//åæ ‡ç³»è½¬æ¢
 			pnt.x = dot.x;
 			pnt.y = dot.y;
-			DrawPnt(&dc, pnt);								//»æÖÆµã
-			GPntNum++;										//µãÎïÀíÊı¼Ó1
-			GPntLNum++;										//µãÂß¼­Êı¼Ó1
-			GPntChanged = true;								//ÊÇ·ñ¸ü¸Ä±êÖ¾ÉèÖÃÎªtrue
+			DrawPnt(&dc, pnt);								//ç»˜åˆ¶ç‚¹
+			GPntNum++;										//ç‚¹ç‰©ç†æ•°åŠ 1
+			GPntLNum++;										//ç‚¹é€»è¾‘æ•°åŠ 1
+			GPntChanged = true;								//æ˜¯å¦æ›´æ”¹æ ‡å¿—è®¾ç½®ä¸ºtrue
 			break;
-		case OPERSTATE_DELETE_PNT:							//µ±Ç°ÎªÉ¾³ıµã×´Ì¬
+		case OPERSTATE_DELETE_PNT:							//å½“å‰ä¸ºåˆ é™¤ç‚¹çŠ¶æ€
 			PntToDot(dot, point);
-			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//×ª»»×ø±êÏµ
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//è½¬æ¢åæ ‡ç³»
 			DotToPnt(point, dot);
 			FindPnt(point, GPntNum, GPntTmpF, GPntNdx);
-			if (GPntNdx != -1)								//Èç¹ûÕÒµ½
+			if (GPntNdx != -1)								//å¦‚æœæ‰¾åˆ°
 			{
 				PNT_STRU pnt;
-				ReadTempFileToPnt(GPntTmpF, GPntNdx, pnt);	//´ÓÁÙÊ±ÎÄ¼ş¶Áµã
-				pnt.isDel = 1;								//É¾³ı±ê¼ÇÉèÖÃÎª1
-				UpdatePnt(GPntTmpF, GPntNdx, pnt);			//¸üĞÂ¸ÃµãÊı¾İ
+				ReadTempFileToPnt(GPntTmpF, GPntNdx, pnt);	//ä»ä¸´æ—¶æ–‡ä»¶è¯»ç‚¹
+				pnt.isDel = 1;								//åˆ é™¤æ ‡è®°è®¾ç½®ä¸º1
+				UpdatePnt(GPntTmpF, GPntNdx, pnt);			//æ›´æ–°è¯¥ç‚¹æ•°æ®
 				dot.x = pnt.x;
 				dot.y = pnt.y;
-				PntDPtoVP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//×ª»»×ø±êÏµ
+				PntDPtoVP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//è½¬æ¢åæ ‡ç³»
 				pnt.x = dot.x;
 				pnt.y = dot.y;
-				DrawPnt(&dc,pnt);							//Òì»òÄ£Ê½ÖØ»æ¸ÃµãÒÔÇå³ıÆÁÄ»
+				DrawPnt(&dc,pnt);							//å¼‚æˆ–æ¨¡å¼é‡ç»˜è¯¥ç‚¹ä»¥æ¸…é™¤å±å¹•
 				GPntNdx = -1;
-				GPntChanged = true;							//Êı¾İ·¢Éú±ä¸ü
-				GPntLNum--;									//É¾³ıÒ»¸öµã£¬Âß¼­Êı¼õ1£¬µ«ÎïÀí´æ´¢²»±ä
+				GPntChanged = true;							//æ•°æ®å‘ç”Ÿå˜æ›´
+				GPntLNum--;									//åˆ é™¤ä¸€ä¸ªç‚¹ï¼Œé€»è¾‘æ•°å‡1ï¼Œä½†ç‰©ç†å­˜å‚¨ä¸å˜
 			}
 			break;
-		case OPERSTATE_MOVE_PNT:							//µ±Ç°ÎªÒÆ¶¯µã²Ù×÷×´Ì¬
+		case OPERSTATE_MOVE_PNT:							//å½“å‰ä¸ºç§»åŠ¨ç‚¹æ“ä½œçŠ¶æ€
 			if (GPntNdx != -1)
 			{
 				PNT_STRU pnt;
 				PntToDot(dot, point);
-				PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);// ×ø±êÏµ×ª»»
-				ReadTempFileToPnt(GPntTmpF, GPntNdx, pnt);	// ´ÓÁÙÊ±ÎÄ¼ş¶ÁÈ¡µã
-				pnt.x = dot.x;								// ÒÆ¶¯ºóµÄµã×ø±êx
-				pnt.y = dot.y;								// ÒÆ¶¯ºóµÄµã×ø±êy
-				UpdatePnt(GPntTmpF, GPntNdx, pnt);			// ¸üĞÂµãÊı¾İ(Ğ´ÈëÁÙÊ±ÎÄ¼ş)
+				PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);// åæ ‡ç³»è½¬æ¢
+				ReadTempFileToPnt(GPntTmpF, GPntNdx, pnt);	// ä»ä¸´æ—¶æ–‡ä»¶è¯»å–ç‚¹
+				pnt.x = dot.x;								// ç§»åŠ¨åçš„ç‚¹åæ ‡x
+				pnt.y = dot.y;								// ç§»åŠ¨åçš„ç‚¹åæ ‡y
+				UpdatePnt(GPntTmpF, GPntNdx, pnt);			// æ›´æ–°ç‚¹æ•°æ®(å†™å…¥ä¸´æ—¶æ–‡ä»¶)
 				GPntNdx = -1;
-				GPntChanged = true;							//Êı¾İ·¢Éú±ä¸ü
+				GPntChanged = true;							//æ•°æ®å‘ç”Ÿå˜æ›´
 			}
 			break;
-		case OPERSTATE_UNDELETE_PNT:						//µ±Ç°×´Ì¬£¨»Ö¸´µã£©
+		case OPERSTATE_UNDELETE_PNT:						//å½“å‰çŠ¶æ€ï¼ˆæ¢å¤ç‚¹ï¼‰
 			PntToDot(dot, point);
-			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//´°¿Ú×ªÊı¾İ×ø±ê
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//çª—å£è½¬æ•°æ®åæ ‡
 			DotToPnt(point, dot);
-			FindDeletePnt(point, GPntNum, GPntTmpF, GPntNdx);//²éÕÒ×î½üµÄÉ¾³ıµã
+			FindDeletePnt(point, GPntNum, GPntTmpF, GPntNdx);//æŸ¥æ‰¾æœ€è¿‘çš„åˆ é™¤ç‚¹
 			if (GPntNdx != -1)
 			{
 				PNT_STRU pnt;
-				ReadTempFileToPnt(GPntTmpF, GPntNdx, pnt);	//´ÓÁÙÊ±ÎÄ¼şÖĞ¶Áµã
-				pnt.isDel = 0;								//ÉèÖÃÉ¾³ı±ê¼ÇÎª0£¬¼´²»É¾³ı
-				UpdatePnt(GPntTmpF, GPntNdx, pnt);			//¸üĞÂµã
+				ReadTempFileToPnt(GPntTmpF, GPntNdx, pnt);	//ä»ä¸´æ—¶æ–‡ä»¶ä¸­è¯»ç‚¹
+				pnt.isDel = 0;								//è®¾ç½®åˆ é™¤æ ‡è®°ä¸º0ï¼Œå³ä¸åˆ é™¤
+				UpdatePnt(GPntTmpF, GPntNdx, pnt);			//æ›´æ–°ç‚¹
 				dot.x = pnt.x;
 				dot.y = pnt.y;
-				PntDPtoVP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//Êı¾İ×ª´°¿Ú
+				PntDPtoVP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//æ•°æ®è½¬çª—å£
 				pnt.x = dot.x;
 				pnt.y = dot.y;
-				DrawPnt(&dc, pnt);							//ÔÚµ±Ç°ÊÓÍ¼ÖĞÓÃÒì»òÄ£Ê½²Á³ı»Ö¸´µÄµã
+				DrawPnt(&dc, pnt);							//åœ¨å½“å‰è§†å›¾ä¸­ç”¨å¼‚æˆ–æ¨¡å¼æ“¦é™¤æ¢å¤çš„ç‚¹
 				GPntChanged = true;
 				GPntNdx = -1;
 			}
 			break;
-		case OPERSTATE_MODIFY_POINT_PARAMETER:				//µ±Ç°ÎªĞŞ¸Äµã²ÎÊı²Ù×÷×´Ì¬
+		case OPERSTATE_MODIFY_POINT_PARAMETER:				//å½“å‰ä¸ºä¿®æ”¹ç‚¹å‚æ•°æ“ä½œçŠ¶æ€
 			PntToDot(dot, point);
-			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//´°¿Ú×ªÊı¾İ×ø±êÏµ
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//çª—å£è½¬æ•°æ®åæ ‡ç³»
 			DotToPnt(point, dot);
 			PNT_STRU tempPoint;
 			memcpy_s(&tempPoint, sizeof(PNT_STRU), 
 				&FindPnt(point, GPntNum, GPntTmpF, GPntNdx), sizeof(PNT_STRU));
-															//²éÕÒ×î½üµã
+															//æŸ¥æ‰¾æœ€è¿‘ç‚¹
 			if (GPntNdx != -1)
 			{
-				CPointParameterDlg dlg;						//µã²ÎÊıÉèÖÃ¶Ô»°¿ò
+				CPointParameterDlg dlg;						//ç‚¹å‚æ•°è®¾ç½®å¯¹è¯æ¡†
 				dlg.m_ColorButton.SetColor(tempPoint.color);
 				dlg.m_Pattern = tempPoint.pattern;
 				if (IDOK == dlg.DoModal())
@@ -1721,7 +1721,7 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 						sizeof(COLORREF));
 					tempPoint.pattern = dlg.m_Pattern;
 					GPntTmpF->Seek(GPntNdx * sizeof(PNT_STRU), CFile::begin);
-					GPntTmpF->Write(&tempPoint, sizeof(PNT_STRU));//Ğ´ÈëµãÊı¾İ
+					GPntTmpF->Write(&tempPoint, sizeof(PNT_STRU));//å†™å…¥ç‚¹æ•°æ®
 				}
 				this->Invalidate();
 				GPntChanged = true;
@@ -1737,61 +1737,61 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 		D_DOT dot;
 		switch (GCurOperState)
 		{
-		case OPERSTATE_INPUT_LIN:							//µ±Ç°Îª»æÖÆÏß×´Ì¬
+		case OPERSTATE_INPUT_LIN:							//å½“å‰ä¸ºç»˜åˆ¶çº¿çŠ¶æ€
 			if (GTLin.dotNum == 0)
 				memcpy_s(&GTLin, sizeof(LIN_NDX_STRU), &GLin,
 					sizeof(LIN_NDX_STRU));
 			PntToDot(dot, point);
-			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);// ×ø±êÏµ×ª»»
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);// åæ ‡ç³»è½¬æ¢
 			WriteLinDatToFile(GLinTmpDatF, GLin.datOff, GTLin.dotNum, dot);
-			//½«ÏßµÄµãÊı¾İĞ´ÈëÁÙÊ±ÎÄ¼şÖĞ
-			GTLin.dotNum++;									//Ïß½Úµã´¦¼Ó1
-			PntDPtoVP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);// ×ø±êÏµ×ª»»
-			GLPnt.x = (long)dot.x;							//ÉèÖÃÏß¶ÎµÄÆğµã(x)
-			GLPnt.y = (long)dot.y;							//ÉèÖÃÏß¶ÎµÄÆğµã(y)
-			GLinChanged = true;								//ÏßÊı¾İ±ä¸ü
+			//å°†çº¿çš„ç‚¹æ•°æ®å†™å…¥ä¸´æ—¶æ–‡ä»¶ä¸­
+			GTLin.dotNum++;									//çº¿èŠ‚ç‚¹å¤„åŠ 1
+			PntDPtoVP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);// åæ ‡ç³»è½¬æ¢
+			GLPnt.x = (long)dot.x;							//è®¾ç½®çº¿æ®µçš„èµ·ç‚¹(x)
+			GLPnt.y = (long)dot.y;							//è®¾ç½®çº¿æ®µçš„èµ·ç‚¹(y)
+			GLinChanged = true;								//çº¿æ•°æ®å˜æ›´
 			break;
-		case OPERSTATE_DELETE_LIN:							//µ±Ç°ÎªÉ¾³ıÏß×´Ì¬
+		case OPERSTATE_DELETE_LIN:							//å½“å‰ä¸ºåˆ é™¤çº¿çŠ¶æ€
 			PntToDot(dot, point);
-			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);// ×ø±êÏµ×ª»»
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);// åæ ‡ç³»è½¬æ¢
 			DotToPnt(point, dot);
-			FindLin(GLinTmpNdxF, GLinTmpDatF, point, GLinNum, GLinNdx);//ÕÒ×î½üÏß
+			FindLin(GLinTmpNdxF, GLinTmpDatF, point, GLinNum, GLinNdx);//æ‰¾æœ€è¿‘çº¿
 			if (GLinNdx != -1)
 			{
-				GLinLNum--;									//Âß¼­Êı¼õ1
-				GLinChanged = true;							//ÏßÊı¾İ±ä¸ü
+				GLinLNum--;									//é€»è¾‘æ•°å‡1
+				GLinChanged = true;							//çº¿æ•°æ®å˜æ›´
 				LIN_NDX_STRU TmpLinNdx;
 				D_DOT dot1, dot2;
 				POINT pnt1, pnt2;
-				//´ÓÁÙÊ±ÏßË÷ÒıÎÄ¼şÖĞ¶ÁÈ¡ÏßË÷Òı
+				//ä»ä¸´æ—¶çº¿ç´¢å¼•æ–‡ä»¶ä¸­è¯»å–çº¿ç´¢å¼•
 				ReadTempFileToLinNdx(GLinTmpNdxF, GLinNdx, TmpLinNdx);
-				TmpLinNdx.isDel = 1;						//ÉèÖÃÉ¾³ı±êÖ¾
-				UpdateLin(GLinTmpNdxF, GLinNdx, TmpLinNdx);	//¸üĞÂÏßÊı¾İ
+				TmpLinNdx.isDel = 1;						//è®¾ç½®åˆ é™¤æ ‡å¿—
+				UpdateLin(GLinTmpNdxF, GLinNdx, TmpLinNdx);	//æ›´æ–°çº¿æ•°æ®
 				for (int i = 0; i < TmpLinNdx.dotNum - 1; ++i)
 				{
-					//´ÓÁÙÊ±ÏßµÄµãÊı¾İÎÄ¼şÖĞ¶ÁÈ¡µã
+					//ä»ä¸´æ—¶çº¿çš„ç‚¹æ•°æ®æ–‡ä»¶ä¸­è¯»å–ç‚¹
 					ReadTempFileToLinDat(GLinTmpDatF, TmpLinNdx.datOff, i, dot1);
 					ReadTempFileToLinDat(GLinTmpDatF, TmpLinNdx.datOff, i + 1, dot2);
-					//×ø±êÏµ×ª»»£¨Êı¾İ×ª´°¿Ú×ø±êÏµ£©
+					//åæ ‡ç³»è½¬æ¢ï¼ˆæ•°æ®è½¬çª—å£åæ ‡ç³»ï¼‰
 					PntDPtoVP(dot1, GZoom, GZoomOffset_x, GZoomOffset_y);
 					PntDPtoVP(dot2, GZoom, GZoomOffset_x, GZoomOffset_y);
 					DotToPnt(pnt1, dot1);
 					DotToPnt(pnt2, dot2);
-					DrawSeg(&dc, TmpLinNdx, pnt1, pnt2);	//ÖØ»æ£¨Òì»òÄ£Ê½²Á³ı£©
+					DrawSeg(&dc, TmpLinNdx, pnt1, pnt2);	//é‡ç»˜ï¼ˆå¼‚æˆ–æ¨¡å¼æ“¦é™¤ï¼‰
 				}
 				GLinNdx = -1;
 			}
 			break;
-		case OPERSTATE_MOVE_LIN:							//µ±Ç°ÎªÒÆ¶¯Ïß²Ù×÷×´Ì¬
+		case OPERSTATE_MOVE_LIN:							//å½“å‰ä¸ºç§»åŠ¨çº¿æ“ä½œçŠ¶æ€
 			if (GLinNdx != -1)
 			{
 				if (GLinLBDPnt.x != -1 && GLinLBDPnt.y != -1)
 				{
 					D_DOT dot1, dot2;
 					PntToDot(dot1, point);
-					PntVPtoDP(dot1, GZoom, GZoomOffset_x, GZoomOffset_y);// ×ø±êÏµ×ª»»
+					PntVPtoDP(dot1, GZoom, GZoomOffset_x, GZoomOffset_y);// åæ ‡ç³»è½¬æ¢
 					PntToDot(dot2, GLinLBDPnt);
-					PntVPtoDP(dot2, GZoom, GZoomOffset_x, GZoomOffset_y);// ×ø±êÏµ×ª»»
+					PntVPtoDP(dot2, GZoom, GZoomOffset_x, GZoomOffset_y);// åæ ‡ç³»è½¬æ¢
 					double offset_x = dot1.x - dot2.x;
 					double offset_y = dot1.y - dot2.y;
 					UpdateLin(GLinTmpNdxF, GLinTmpDatF, GLinNdx, offset_x, offset_y);
@@ -1802,25 +1802,25 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 				}
 			}
 			break;
-		case OPERSTATE_LINK_LIN:							//µ±Ç°ÎªÁ¬½ÓÏß×´Ì¬
+		case OPERSTATE_LINK_LIN:							//å½“å‰ä¸ºè¿æ¥çº¿çŠ¶æ€
 			if (GnLine < 2)
 			{
 				LIN_NDX_STRU line;
 				D_DOT dot;
 				PntToDot(dot, point);
-				PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);// ×ø±êÏµ×ª»»
+				PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);// åæ ‡ç³»è½¬æ¢
 				DotToPnt(point, dot);
-				// ²éÕÒÊó±êµãÎ»ÖÃ×î½üµÄÏß
+				// æŸ¥æ‰¾é¼ æ ‡ç‚¹ä½ç½®æœ€è¿‘çš„çº¿
 				line = FindLin(GLinTmpNdxF, GLinTmpDatF, point, GLinNum, GLinNdx);
 				if (GLinNdx != -1)
 				{
 					GnLine++;
-					if (GnLine == 1)						// Ñ¡ÖĞµÚÒ»ÌõÏß
+					if (GnLine == 1)						// é€‰ä¸­ç¬¬ä¸€æ¡çº¿
 					{
 						GStartLin = line;
 						GnStart = GLinNdx;
 					}
-					else if (GnLine == 2)					// Ñ¡ÖĞµÚ¶şÌõÏß
+					else if (GnLine == 2)					// é€‰ä¸­ç¬¬äºŒæ¡çº¿
 					{
 						if (GnStart != GLinNdx)
 						{
@@ -1836,24 +1836,24 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 				if (GnLine != 0)
 				{
 					D_DOT pt;
-					if (GnLine == 1)						// Ñ¡ÖĞµÚÒ»ÌõÏß£¬Æä¶Ëµã»­Ô²±ê¼Ç
+					if (GnLine == 1)						// é€‰ä¸­ç¬¬ä¸€æ¡çº¿ï¼Œå…¶ç«¯ç‚¹ç”»åœ†æ ‡è®°
 					{
-						// ´ÓÁÙÊ±ÎÄ¼şÖĞ¶ÁÈ¡ÏßµÄÆğµã²¢½«Æä×ªÎª´°¿Ú×ø±ê£¬»­Ô²
+						// ä»ä¸´æ—¶æ–‡ä»¶ä¸­è¯»å–çº¿çš„èµ·ç‚¹å¹¶å°†å…¶è½¬ä¸ºçª—å£åæ ‡ï¼Œç”»åœ†
 						ReadTempFileToLinDat(GLinTmpDatF, GStartLin.datOff, 0, pt);
 						PntDPtoVP(pt, GZoom, GZoomOffset_x, GZoomOffset_y);
 						dc.Ellipse((long)pt.x - 2, (long)pt.y - 2, (long)pt.x + 2, (long)pt.y + 2);
-						// ´ÓÁÙÊ±ÎÄ¼şÖĞ¶ÁÈ¡ÏßµÄÖÕµã²¢½«Æä×ªÎª´°¿Ú×ø±ê£¬»­Ô²
+						// ä»ä¸´æ—¶æ–‡ä»¶ä¸­è¯»å–çº¿çš„ç»ˆç‚¹å¹¶å°†å…¶è½¬ä¸ºçª—å£åæ ‡ï¼Œç”»åœ†
 						ReadTempFileToLinDat(GLinTmpDatF, GStartLin.datOff, GStartLin.dotNum - 1, pt);
 						PntDPtoVP(pt, GZoom, GZoomOffset_x, GZoomOffset_y);
 						dc.Ellipse((long)pt.x - 2, (long)pt.y - 2, (long)pt.x + 2, (long)pt.y + 2);
 					}
-					else									//Ñ¡ÖĞµÚ¶şÌõÏß£¬Á¬½ÓÏß
+					else									//é€‰ä¸­ç¬¬äºŒæ¡çº¿ï¼Œè¿æ¥çº¿
 					{
-						// ¸Ä±äÏßµÄµãÊı¾İ£¬¼´½«Á¬½ÓÏßµÄµãÊı¾İĞ´ÈëÎÄ¼şÖĞ
+						// æ”¹å˜çº¿çš„ç‚¹æ•°æ®ï¼Œå³å°†è¿æ¥çº¿çš„ç‚¹æ•°æ®å†™å…¥æ–‡ä»¶ä¸­
 						AlterLindot(GLinTmpDatF, GStartLin, GEndLin, GnStart, GnEnd, GLin.datOff);
-						AlterStartLin(GLinTmpNdxF, GLin.datOff, GnStart, GStartLin.dotNum + GEndLin.dotNum);// ĞŞ¸ÄµÚÒ»ÌõÏßË÷Òı
-						AlterEndLin(GLinTmpNdxF, GnEnd);	// ĞŞ¸ÄµÚ¶şÌõÏßË÷Òı
-						GLin.datOff += (GStartLin.dotNum + GEndLin.dotNum) * sizeof(D_DOT);// Á¬½ÓÏßË÷Òı
+						AlterStartLin(GLinTmpNdxF, GLin.datOff, GnStart, GStartLin.dotNum + GEndLin.dotNum);// ä¿®æ”¹ç¬¬ä¸€æ¡çº¿ç´¢å¼•
+						AlterEndLin(GLinTmpNdxF, GnEnd);	// ä¿®æ”¹ç¬¬äºŒæ¡çº¿ç´¢å¼•
+						GLin.datOff += (GStartLin.dotNum + GEndLin.dotNum) * sizeof(D_DOT);// è¿æ¥çº¿ç´¢å¼•
 						GnLine = 0;
 						GLinLNum--;
 						GLinChanged = true;
@@ -1865,48 +1865,48 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 				}
 			}
 			break;
-		case OPERSTATE_UNDELETE_LIN:						//µ±Ç°×´Ì¬£¨»Ö¸´Ïß£©
+		case OPERSTATE_UNDELETE_LIN:						//å½“å‰çŠ¶æ€ï¼ˆæ¢å¤çº¿ï¼‰
 			PntToDot(dot, point);
-			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);// ×ø±êÏµ×ª»»
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);// åæ ‡ç³»è½¬æ¢
 			DotToPnt(point, dot);
 			GLinLNum++;
-			FindDeleteLin(GLinTmpNdxF, GLinTmpDatF, point, GLinNum, GLinNdx);//ÕÒ×î½üÏß
+			FindDeleteLin(GLinTmpNdxF, GLinTmpDatF, point, GLinNum, GLinNdx);//æ‰¾æœ€è¿‘çº¿
 			if (GLinNdx != -1)
 			{
-				GLinChanged = true;							//ÏßÊı¾İ±ä¸ü
+				GLinChanged = true;							//çº¿æ•°æ®å˜æ›´
 				LIN_NDX_STRU TmpLinNdx;
 				D_DOT dot1, dot2;
 				POINT pnt1, pnt2;
-				//´ÓÁÙÊ±ÏßË÷ÒıÎÄ¼şÖĞ¶ÁÈ¡ÏßË÷Òı
+				//ä»ä¸´æ—¶çº¿ç´¢å¼•æ–‡ä»¶ä¸­è¯»å–çº¿ç´¢å¼•
 				ReadTempFileToLinNdx(GLinTmpNdxF, GLinNdx, TmpLinNdx);
-				TmpLinNdx.isDel = 0;						//ÉèÖÃÉ¾³ı±êÖ¾
-				UpdateLin(GLinTmpNdxF, GLinNdx, TmpLinNdx);	//¸üĞÂÏßÊı¾İ
+				TmpLinNdx.isDel = 0;						//è®¾ç½®åˆ é™¤æ ‡å¿—
+				UpdateLin(GLinTmpNdxF, GLinNdx, TmpLinNdx);	//æ›´æ–°çº¿æ•°æ®
 				for (int i = 0; i < TmpLinNdx.dotNum - 1; ++i)
 				{
-					//´ÓÁÙÊ±ÏßµÄµãÊı¾İÎÄ¼şÖĞ¶ÁÈ¡µã
+					//ä»ä¸´æ—¶çº¿çš„ç‚¹æ•°æ®æ–‡ä»¶ä¸­è¯»å–ç‚¹
 					ReadTempFileToLinDat(GLinTmpDatF, TmpLinNdx.datOff, i, dot1);
 					ReadTempFileToLinDat(GLinTmpDatF, TmpLinNdx.datOff, i + 1, dot2);
-					//×ø±êÏµ×ª»»£¨Êı¾İ×ª´°¿Ú×ø±êÏµ£©
+					//åæ ‡ç³»è½¬æ¢ï¼ˆæ•°æ®è½¬çª—å£åæ ‡ç³»ï¼‰
 					PntDPtoVP(dot1, GZoom, GZoomOffset_x, GZoomOffset_y);
 					PntDPtoVP(dot2, GZoom, GZoomOffset_x, GZoomOffset_y);
 					DotToPnt(pnt1, dot1);
 					DotToPnt(pnt2, dot2);
-					DrawSeg(&dc, TmpLinNdx, pnt1, pnt2);	//ÖØ»æ£¨Òì»òÄ£Ê½²Á³ı£©
+					DrawSeg(&dc, TmpLinNdx, pnt1, pnt2);	//é‡ç»˜ï¼ˆå¼‚æˆ–æ¨¡å¼æ“¦é™¤ï¼‰
 				}
 				GLinNdx = -1;
 			}
 			break;
-		case OPERSTATE_MODIFY_LINE_PARAMETER:				//µ±Ç°ÎªĞŞ¸ÄÏß²ÎÊı²Ù×÷×´Ì¬
+		case OPERSTATE_MODIFY_LINE_PARAMETER:				//å½“å‰ä¸ºä¿®æ”¹çº¿å‚æ•°æ“ä½œçŠ¶æ€
 			PntToDot(dot, point);
-			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//´°¿Ú×ªÊı¾İ×ø±êÏµ
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//çª—å£è½¬æ•°æ®åæ ‡ç³»
 			DotToPnt(point, dot);
 			LIN_NDX_STRU tempLine;
 			memcpy_s(&tempLine, sizeof(LIN_NDX_STRU),
 				&FindLin(GLinTmpNdxF,GLinTmpDatF,point,GLinNum,GLinNdx), sizeof(LIN_NDX_STRU));
-			//²éÕÒ×î½üµã
+			//æŸ¥æ‰¾æœ€è¿‘ç‚¹
 			if (GLinNdx != -1)
 			{
-				CLineParameterDlg dlg;						//Ïß²ÎÊıÉèÖÃ¶Ô»°¿ò
+				CLineParameterDlg dlg;						//çº¿å‚æ•°è®¾ç½®å¯¹è¯æ¡†
 				dlg.m_ColorButton.SetColor(tempLine.color);
 				dlg.m_Pattern = tempLine.pattern;
 				if (IDOK == dlg.DoModal())
@@ -1916,16 +1916,16 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 						sizeof(COLORREF));
 					tempLine.pattern = dlg.m_Pattern;
 					GLinTmpNdxF->Seek(GLinNdx * sizeof(LIN_NDX_STRU), CFile::begin);
-					GLinTmpNdxF->Write(&tempLine, sizeof(LIN_NDX_STRU));//Ğ´ÈëµãÊı¾İ
+					GLinTmpNdxF->Write(&tempLine, sizeof(LIN_NDX_STRU));//å†™å…¥ç‚¹æ•°æ®
 				}
 				this->Invalidate();
 				GLinChanged = true;
 				GLinNdx = -1;
 			}
 			break;
-		case OPERSTATE_LIN_DELETE_PNT:						//µ±Ç°ÎªÏßÉÏÉ¾µã²Ù×÷×´Ì¬
+		case OPERSTATE_LIN_DELETE_PNT:						//å½“å‰ä¸ºçº¿ä¸Šåˆ ç‚¹æ“ä½œçŠ¶æ€
 			PntToDot(dot, point);
-			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//´°¿Ú×ªÊı¾İ×ø±êÏµ
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//çª—å£è½¬æ•°æ®åæ ‡ç³»
 			DotToPnt(point, dot);
 			LIN_NDX_STRU tmpLine;
 			memcpy_s(&tmpLine, sizeof(LIN_NDX_STRU),
@@ -1940,9 +1940,10 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 				}
 				GLinChanged = true;
 				GnPntLinNdx = -1;
+				GLinNdx = -1;
 			}
 			break;
-		case OPERSTATE_LIN_ADD_PNT:							//µ±Ç°ÎªÏßÉÏ¼Óµã²Ù×÷×´Ì¬
+		case OPERSTATE_LIN_ADD_PNT:							//å½“å‰ä¸ºçº¿ä¸ŠåŠ ç‚¹æ“ä½œçŠ¶æ€
 			break;
 		default:
 			break;
@@ -1953,7 +1954,7 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 		D_DOT dot;
 		switch (GCurOperState)
 		{
-		case OPERSTATE_INPUT_REG:							//µ±Ç°ÎªÔìÇø²Ù×÷×´Ì¬
+		case OPERSTATE_INPUT_REG:							//å½“å‰ä¸ºé€ åŒºæ“ä½œçŠ¶æ€
 			if (GTReg.dotNum == 0)
 			{
 				memcpy_s(&GTReg, sizeof(REG_NDX_STRU), &GReg, sizeof(REG_NDX_STRU));
@@ -1967,45 +1968,45 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 				GRegCreateMMPnt = point;
 			}
 			PntToDot(dot, point);
-			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//´°¿Ú×ªÊı¾İ
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//çª—å£è½¬æ•°æ®
 			WriteRegDatToFile(GRegTmpDatF, GReg.datOff, GTReg.dotNum, dot);
-																//½«ÇøµÄµãÊı¾İĞ´ÈëÎÄ¼ş
-			GTReg.dotNum++;										//Çø½ÚµãÊı¼ÓÒ»
+																//å°†åŒºçš„ç‚¹æ•°æ®å†™å…¥æ–‡ä»¶
+			GTReg.dotNum++;										//åŒºèŠ‚ç‚¹æ•°åŠ ä¸€
 			if (GTReg.dotNum == 2)
 			{
-				this->Invalidate();								//Çø½ÚµãÊıÉÙÓÚ3¸öÔòÈ¡Ïû²Ù×÷
+				this->Invalidate();								//åŒºèŠ‚ç‚¹æ•°å°‘äº3ä¸ªåˆ™å–æ¶ˆæ“ä½œ
 			}
 			GRegChanged = true;
 			break;
-		case OPERSTATE_DELETE_REG:								//µ±Ç°ÎªÉ¾³ıÇø²Ù×÷×´Ì¬
+		case OPERSTATE_DELETE_REG:								//å½“å‰ä¸ºåˆ é™¤åŒºæ“ä½œçŠ¶æ€
 			PntToDot(dot, point);
-			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//´°¿Ú×ªÊı¾İ×ø±ê
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//çª—å£è½¬æ•°æ®åæ ‡
 			DotToPnt(point,dot);
-			FindReg(GRegTmpNdxF, GRegTmpDatF, point, GRegNum, GRegNdx);//²éÕÒÇø
+			FindReg(GRegTmpNdxF, GRegTmpDatF, point, GRegNum, GRegNdx);//æŸ¥æ‰¾åŒº
 			if (GRegNdx != -1) {
 				GRegLNum--;
 				GRegChanged = true;
 				REG_NDX_STRU TmpRegNdx;
-				ReadTempFileToRegNdx(GRegTmpNdxF, GRegNdx, TmpRegNdx);//´ÓÁÙÊ±ÎÄ¼şÖĞ¶ÁÈ¡É¾³ıÇøµÄË÷Òı
-				TmpRegNdx.isDel = 1;							//ÉèÖÃÉ¾³ı±ê¼Ç
-				UpdateReg(GRegTmpNdxF, GRegNdx, TmpRegNdx);		//¸üĞÂÇøÊı¾İ
+				ReadTempFileToRegNdx(GRegTmpNdxF, GRegNdx, TmpRegNdx);//ä»ä¸´æ—¶æ–‡ä»¶ä¸­è¯»å–åˆ é™¤åŒºçš„ç´¢å¼•
+				TmpRegNdx.isDel = 1;							//è®¾ç½®åˆ é™¤æ ‡è®°
+				UpdateReg(GRegTmpNdxF, GRegNdx, TmpRegNdx);		//æ›´æ–°åŒºæ•°æ®
 				D_DOT* dot = new D_DOT[TmpRegNdx.dotNum];
 				GRegTmpDatF->Seek(TmpRegNdx.datOff, CFile::begin);
 				GRegTmpDatF->Read(dot, TmpRegNdx.dotNum * sizeof(D_DOT));
 				for (int i = 0; i < TmpRegNdx.dotNum; ++i)
 				{
-																// ½«É¾³ıÇøµÄµãÊı¾İ×ø±ê×ªÎª´°¿Ú×ø±ê
+																// å°†åˆ é™¤åŒºçš„ç‚¹æ•°æ®åæ ‡è½¬ä¸ºçª—å£åæ ‡
 					PntDPtoVP(dot[i], GZoom, GZoomOffset_x, GZoomOffset_y);
 				}
 				POINT * pnt = new POINT[TmpRegNdx.dotNum];
 				DotToPnt(pnt, dot, TmpRegNdx.dotNum);
-				DrawReg(&dc, TmpRegNdx, pnt, TmpRegNdx.dotNum);	//ÖØ»æ(²Á³ıÇø)
+				DrawReg(&dc, TmpRegNdx, pnt, TmpRegNdx.dotNum);	//é‡ç»˜(æ“¦é™¤åŒº)
 				delete[] pnt;
 				delete[] dot;
 				GRegNdx = -1;
 			}
 			break;
-		case OPERSTATE_MOVE_REG:								//µ±Ç°ÎªÒÆ¶¯Çø²Ù×÷×´Ì¬
+		case OPERSTATE_MOVE_REG:								//å½“å‰ä¸ºç§»åŠ¨åŒºæ“ä½œçŠ¶æ€
 			if (GRegNdx != -1)
 			{
 				if (GRegLBDPnt.x != -1 && GRegLBDPnt.y != -1)
@@ -2017,7 +2018,7 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 					PntVPtoDP(dot2, GZoom, GZoomOffset_x, GZoomOffset_y);
 					double offset_x = dot1.x - dot2.x;
 					double offset_y = dot1.y - dot2.y;
-					UpdateReg(GRegTmpNdxF, GRegTmpDatF, GRegNdx, offset_x, offset_y);// ¸üĞÂÇøÊı¾İ
+					UpdateReg(GRegTmpNdxF, GRegTmpDatF, GRegNdx, offset_x, offset_y);// æ›´æ–°åŒºæ•°æ®
 					GRegNdx = -1;
 					GRegMMOffsetX = 0;
 					GRegMMOffsetY = 0;
@@ -2025,45 +2026,45 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 				}
 			}
 			break;
-		case OPERSTATE_UNDELETE_REG:						//µ±Ç°×´Ì¬£¨»Ö¸´Çø£©
+		case OPERSTATE_UNDELETE_REG:						//å½“å‰çŠ¶æ€ï¼ˆæ¢å¤åŒºï¼‰
 			PntToDot(dot, point);
-			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);// ×ø±êÏµ×ª»»
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);// åæ ‡ç³»è½¬æ¢
 			DotToPnt(point, dot);
-			FindDeleteReg(GRegTmpNdxF, GRegTmpDatF, point, GRegNum, GRegNdx);//²éÕÒÇø
+			FindDeleteReg(GRegTmpNdxF, GRegTmpDatF, point, GRegNum, GRegNdx);//æŸ¥æ‰¾åŒº
 			if (GRegNdx != -1) {
 				GRegLNum++;
 				GRegChanged = true;
 				REG_NDX_STRU TmpRegNdx;
-				ReadTempFileToRegNdx(GRegTmpNdxF, GRegNdx, TmpRegNdx);//´ÓÁÙÊ±ÎÄ¼şÖĞ¶ÁÈ¡»Ö¸´ÇøµÄË÷Òı
-				TmpRegNdx.isDel = 0;							//ÉèÖÃÉ¾³ı±ê¼Ç
-				UpdateReg(GRegTmpNdxF, GRegNdx, TmpRegNdx);		//¸üĞÂÇøÊı¾İ
+				ReadTempFileToRegNdx(GRegTmpNdxF, GRegNdx, TmpRegNdx);//ä»ä¸´æ—¶æ–‡ä»¶ä¸­è¯»å–æ¢å¤åŒºçš„ç´¢å¼•
+				TmpRegNdx.isDel = 0;							//è®¾ç½®åˆ é™¤æ ‡è®°
+				UpdateReg(GRegTmpNdxF, GRegNdx, TmpRegNdx);		//æ›´æ–°åŒºæ•°æ®
 				D_DOT* dot = new D_DOT[TmpRegNdx.dotNum];
 				GRegTmpDatF->Seek(TmpRegNdx.datOff, CFile::begin);
 				GRegTmpDatF->Read(dot, TmpRegNdx.dotNum * sizeof(D_DOT));
 				for (int i = 0; i < TmpRegNdx.dotNum; ++i)
 				{
-					// ½«»Ö¸´ÇøµÄµãÊı¾İ×ø±ê×ªÎª´°¿Ú×ø±ê
+					// å°†æ¢å¤åŒºçš„ç‚¹æ•°æ®åæ ‡è½¬ä¸ºçª—å£åæ ‡
 					PntDPtoVP(dot[i], GZoom, GZoomOffset_x, GZoomOffset_y);
 				}
 				POINT * pnt = new POINT[TmpRegNdx.dotNum];
 				DotToPnt(pnt, dot, TmpRegNdx.dotNum);
-				DrawReg(&dc, TmpRegNdx, pnt, TmpRegNdx.dotNum);	//ÖØ»æ(²Á³ıÇø)
+				DrawReg(&dc, TmpRegNdx, pnt, TmpRegNdx.dotNum);	//é‡ç»˜(æ“¦é™¤åŒº)
 				delete[] pnt;
 				delete[] dot;
 				GRegNdx = -1;
 			}
 			break;
-		case OPERSTATE_MODIFY_REGION_PARAMETER:				//µ±Ç°ÎªĞŞ¸ÄÇø²ÎÊı²Ù×÷×´Ì¬
+		case OPERSTATE_MODIFY_REGION_PARAMETER:				//å½“å‰ä¸ºä¿®æ”¹åŒºå‚æ•°æ“ä½œçŠ¶æ€
 			PntToDot(dot, point);
-			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//´°¿Ú×ªÊı¾İ×ø±êÏµ
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//çª—å£è½¬æ•°æ®åæ ‡ç³»
 			DotToPnt(point, dot);
 			REG_NDX_STRU tempRegion;
 			memcpy_s(&tempRegion, sizeof(REG_NDX_STRU),
 				&FindReg(GRegTmpNdxF, GRegTmpDatF, point, GRegNum, GRegNdx), sizeof(REG_NDX_STRU));
-			//²éÕÒ×î½üµã
+			//æŸ¥æ‰¾æœ€è¿‘ç‚¹
 			if (GRegNdx != -1)
 			{
-				CRegionParameterDlg dlg;					//Çø²ÎÊıÉèÖÃ¶Ô»°¿ò
+				CRegionParameterDlg dlg;					//åŒºå‚æ•°è®¾ç½®å¯¹è¯æ¡†
 				dlg.m_ColorButton.SetColor(tempRegion.color);
 				dlg.m_Pattern = tempRegion.pattern;
 				if (IDOK == dlg.DoModal())
@@ -2073,7 +2074,7 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 						sizeof(COLORREF));
 					tempRegion.pattern = dlg.m_Pattern;
 					GRegTmpNdxF->Seek(GRegNdx * sizeof(REG_NDX_STRU), CFile::begin);
-					GRegTmpNdxF->Write(&tempRegion, sizeof(REG_NDX_STRU));//Ğ´ÈëÇøÊı¾İ
+					GRegTmpNdxF->Write(&tempRegion, sizeof(REG_NDX_STRU));//å†™å…¥åŒºæ•°æ®
 				}
 				this->Invalidate();
 				GRegChanged = true;
@@ -2090,27 +2091,27 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 		double zoom = 1.0;
 		switch (GCurOperState)
 		{
-		case OPERSTATE_ZOOM_IN:								//µ±Ç°Îª·Å´ó²Ù×÷×´Ì¬
+		case OPERSTATE_ZOOM_IN:								//å½“å‰ä¸ºæ”¾å¤§æ“ä½œçŠ¶æ€
 			GetClientRect(&client);
 			if (abs(GZoomLBDPnt.x - GZoomMMPnt.x) <= 10 && 
 				abs(GZoomLBDPnt.y - GZoomMMPnt.y) <= 10)
 			{
-				GZoomStyle = 0;								//µ¥»÷·Å´ó
+				GZoomStyle = 0;								//å•å‡»æ”¾å¤§
 			}
 			else
 			{
-				GZoomStyle = 1;								//À­¿ò·Å´ó
+				GZoomStyle = 1;								//æ‹‰æ¡†æ”¾å¤§
 			}
 			if (GZoomStyle == 0)
-			{												//µ¥»÷·Å´ó
+			{												//å•å‡»æ”¾å¤§
 				double x0 = point.x - (client.right / 2.0) + (client.right / 8.0);
 				double y0 = point.y - (client.bottom / 2.0) + (client.bottom / 8.0);
-				GZoomOffset_x += (x0 / GZoom);				//Æ«ÒÆÏòÁ¿x
-				GZoomOffset_y += (y0 / GZoom);				//Æ«ÒÆÏòÁ¿y
-				GZoom *= 4 / 3.0;							//Ëõ·ÅÏµÊıÊÇ4/3
+				GZoomOffset_x += (x0 / GZoom);				//åç§»å‘é‡x
+				GZoomOffset_y += (y0 / GZoom);				//åç§»å‘é‡y
+				GZoom *= 4 / 3.0;							//ç¼©æ”¾ç³»æ•°æ˜¯4/3
 			}
 			else
-			{												//À­¿ò·Å´ó
+			{												//æ‹‰æ¡†æ”¾å¤§
 				rect.right = max(point.x, GZoomLBDPnt.x);
 				rect.left = min(point.x, GZoomLBDPnt.x);
 				rect.bottom = max(point.y, GZoomLBDPnt.y);
@@ -2120,30 +2121,30 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 					(client.right *(zoom - 1) / (2.0* zoom));
 				double y0 = GetCenter(rect).y - (client.bottom / 2.0) + 
 					(client.bottom* (zoom - 1) / (2.0* zoom));
-				GZoomOffset_x += (x0 / GZoom);				//Æ«ÒÆÏòÁ¿x
-				GZoomOffset_y += (y0 / GZoom);				//Æ«ÒÆÏòÁ¿y
-				GZoom *= zoom;								//Ëõ·ÅÏµÊı
+				GZoomOffset_x += (x0 / GZoom);				//åç§»å‘é‡x
+				GZoomOffset_y += (y0 / GZoom);				//åç§»å‘é‡y
+				GZoom *= zoom;								//ç¼©æ”¾ç³»æ•°
 				GZoomStyle = 0;
 			}
 			GZoomLBDPnt = CPoint(-1, -1);
 			GZoomMMPnt = CPoint(-1, -1);
 			this->Invalidate();
 			break;
-		case OPERSTATE_ZOOM_OUT:							//µ±Ç°ÎªËõĞ¡²Ù×÷×´Ì¬
+		case OPERSTATE_ZOOM_OUT:							//å½“å‰ä¸ºç¼©å°æ“ä½œçŠ¶æ€
 			if (true)
 			{
 				GetClientRect(&client);
 				double x0 = point.x - (client.right / 2.0) - (client.right / 8.0);
 				double y0 = point.y - (client.bottom / 2.0) + (client.bottom / 8.0);
-				GZoomOffset_x += (x0 / GZoom);				//Æ«ÒÆÏòÁ¿x
-				GZoomOffset_y += (y0 / GZoom);				//Æ«ÒÆÏòÁ¿y
-				GZoom *= 3 / 4.0;							//Ëõ·ÅÏµÊıÎª3/4
+				GZoomOffset_x += (x0 / GZoom);				//åç§»å‘é‡x
+				GZoomOffset_y += (y0 / GZoom);				//åç§»å‘é‡y
+				GZoom *= 3 / 4.0;							//ç¼©æ”¾ç³»æ•°ä¸º3/4
 				this->Invalidate();
 			}
 			break;
-		case OPERSTATE_WINDOW_MOVE:							//µ±Ç°Îª´°¿ÚÒÆ¶¯²Ù×÷×´Ì¬
-			GWinMoveLBDPnt = CPoint(-1, 1);					//¸´Î»ÒÆ¶¯´°¿ÚÊ±×ó¼ü°´ÏÂµã
-			GWinMoveMMPnt = CPoint(-1, -1);					//¸´Î»ÒÆ¶¯´°¿ÚÒÆ¶¯Ç°×´Ì¬µãÎ»ÖÃ
+		case OPERSTATE_WINDOW_MOVE:							//å½“å‰ä¸ºçª—å£ç§»åŠ¨æ“ä½œçŠ¶æ€
+			GWinMoveLBDPnt = CPoint(-1, 1);					//å¤ä½ç§»åŠ¨çª—å£æ—¶å·¦é”®æŒ‰ä¸‹ç‚¹
+			GWinMoveMMPnt = CPoint(-1, -1);					//å¤ä½ç§»åŠ¨çª—å£ç§»åŠ¨å‰çŠ¶æ€ç‚¹ä½ç½®
 			break;
 		default:
 			break;
@@ -2157,8 +2158,8 @@ void CMapEditorView::OnDestroy()
 {
 	CView::OnDestroy();
 
-	// TODO: ÔÚ´Ë´¦Ìí¼ÓÏûÏ¢´¦Àí³ÌĞò´úÂë
-	if (GPntFCreated)//Èç¹ûµãÁÙÊ±ÎÄ¼şÒÑ´´½¨£¬Ôò¹Ø±Õ²¢É¾³ı
+	// TODO: åœ¨æ­¤å¤„æ·»åŠ æ¶ˆæ¯å¤„ç†ç¨‹åºä»£ç 
+	if (GPntFCreated)//å¦‚æœç‚¹ä¸´æ—¶æ–‡ä»¶å·²åˆ›å»ºï¼Œåˆ™å…³é—­å¹¶åˆ é™¤
 	{
 		if (GPntTmpF->m_hFile != CFile::hFileNull)
 		{
@@ -2166,9 +2167,9 @@ void CMapEditorView::OnDestroy()
 			GPntTmpF->Remove(GPntTmpFName);
 		}
 	}
-	delete GPntTmpF;		//É¾³ıµãÁÙÊ±ÎÄ¼ş¶ÔÏó
-	//Ïß¡¢ÇøÏà¹Ø¹¦ÄÜÉĞÎ´ÊµÏÖ£¬µ«ÏÈ°ÑÒÔÏÂ´úÂë¼ÓÉÏ
-	if (GLinFCreated)		//Èç¹ûÏßÁÙÊ±ÎÄ¼şÒÑ´´½¨£¬Ôò¹Ø±Õ²¢É¾³ı
+	delete GPntTmpF;		//åˆ é™¤ç‚¹ä¸´æ—¶æ–‡ä»¶å¯¹è±¡
+	//çº¿ã€åŒºç›¸å…³åŠŸèƒ½å°šæœªå®ç°ï¼Œä½†å…ˆæŠŠä»¥ä¸‹ä»£ç åŠ ä¸Š
+	if (GLinFCreated)		//å¦‚æœçº¿ä¸´æ—¶æ–‡ä»¶å·²åˆ›å»ºï¼Œåˆ™å…³é—­å¹¶åˆ é™¤
 	{
 		if (GLinTmpDatF->m_hFile != CFile::hFileNull)
 		{
@@ -2181,9 +2182,9 @@ void CMapEditorView::OnDestroy()
 			GLinTmpNdxF->Remove(GLinTmpNdxFName);
 		}
 	}
-	delete GLinTmpDatF;									//É¾³ıÏßÁÙÊ±ÎÄ¼ş¶ÔÏó
+	delete GLinTmpDatF;									//åˆ é™¤çº¿ä¸´æ—¶æ–‡ä»¶å¯¹è±¡
 	delete GLinTmpNdxF;		
-	if (GRegFCreated)									//Èç¹ûÇøÁÙÊ±ÎÄ¼şÒÑ´´½¨£¬Ôò¹Ø±Õ²¢É¾³ı
+	if (GRegFCreated)									//å¦‚æœåŒºä¸´æ—¶æ–‡ä»¶å·²åˆ›å»ºï¼Œåˆ™å…³é—­å¹¶åˆ é™¤
 	{
 		if (GRegTmpDatF->m_hFile != CFile::hFileNull)
 		{
@@ -2196,7 +2197,7 @@ void CMapEditorView::OnDestroy()
 			GRegTmpNdxF->Remove(GRegTmpNdxFName);
 		}
 	}
-	delete GRegTmpDatF;									//É¾³ıÇøÁÙÊ±ÎÄ¼ş¶ÔÏó
+	delete GRegTmpDatF;									//åˆ é™¤åŒºä¸´æ—¶æ–‡ä»¶å¯¹è±¡
 	delete GRegTmpNdxF;		
 }
 
@@ -2207,15 +2208,15 @@ void CMapEditorView::OnMouseMove(UINT nFlags, CPoint point)
 	{
 		switch (GCurOperState)
 		{
-		case OPERSTATE_MOVE_PNT:						//ÒÆ¶¯µã²Ù×÷
+		case OPERSTATE_MOVE_PNT:						//ç§»åŠ¨ç‚¹æ“ä½œ
 			if (GPntNdx != -1)
 			{
-				CClientDC dc(this);						//»ñµÃ±¾´°¿Ú»òµ±Ç°»î¶¯ÊÓÍ¼
-				dc.SetROP2(R2_NOTXORPEN);				//ÉèÖÃÒì»òÄ£Ê½»­µã
-				DrawPnt(&dc, GTPnt);					//ÔÚÔ­Î»ÖÃ»­£¬Çå³ıÔ­µãÍ¼ĞÎ
-				GTPnt.x = point.x;						//ÒÆ¶¯µãµÄ×ø±êx
-				GTPnt.y = point.y;						//ÒÆ¶¯µãµÄ×ø±êy
-				DrawPnt(&dc, GTPnt);					//ÔÚĞÂÎ»ÖÃ»­
+				CClientDC dc(this);						//è·å¾—æœ¬çª—å£æˆ–å½“å‰æ´»åŠ¨è§†å›¾
+				dc.SetROP2(R2_NOTXORPEN);				//è®¾ç½®å¼‚æˆ–æ¨¡å¼ç”»ç‚¹
+				DrawPnt(&dc, GTPnt);					//åœ¨åŸä½ç½®ç”»ï¼Œæ¸…é™¤åŸç‚¹å›¾å½¢
+				GTPnt.x = point.x;						//ç§»åŠ¨ç‚¹çš„åæ ‡x
+				GTPnt.y = point.y;						//ç§»åŠ¨ç‚¹çš„åæ ‡y
+				DrawPnt(&dc, GTPnt);					//åœ¨æ–°ä½ç½®ç”»
 			}
 			break;
 		default:
@@ -2226,35 +2227,35 @@ void CMapEditorView::OnMouseMove(UINT nFlags, CPoint point)
 	{
 		switch (GCurOperState)
 		{
-		case OPERSTATE_INPUT_LIN:						//µ±Ç°Îª»æÖÆÏß×´Ì¬
+		case OPERSTATE_INPUT_LIN:						//å½“å‰ä¸ºç»˜åˆ¶çº¿çŠ¶æ€
 			if (GTLin.dotNum > 0)
 			{
-				CClientDC dc(this);						//»ñµÃ±¾´°¿Ú»òµ±Ç°»î¶¯ÊÓÍ¼
-				dc.SetROP2(R2_NOTXORPEN);				//ÉèÖÃÒì»òÄ£Ê½»­µã
+				CClientDC dc(this);						//è·å¾—æœ¬çª—å£æˆ–å½“å‰æ´»åŠ¨è§†å›¾
+				dc.SetROP2(R2_NOTXORPEN);				//è®¾ç½®å¼‚æˆ–æ¨¡å¼ç”»ç‚¹
 				if (GMPnt.x != -1 && GMPnt.y != -1)
 				{
-					DrawSeg(&dc, GTLin, GLPnt, GMPnt);	//Ä¬ÈÏÑùÊ½»æÖÆÏß¶Î
+					DrawSeg(&dc, GTLin, GLPnt, GMPnt);	//é»˜è®¤æ ·å¼ç»˜åˆ¶çº¿æ®µ
 				}
-				GMPnt.x = point.x;						//ÉèÖÃÊó±êÉÏÒ»×´Ì¬µã(x)
-				GMPnt.y = point.y;						//ÉèÖÃÊó±êÉÏÒ»×ø±êµã(y)
+				GMPnt.x = point.x;						//è®¾ç½®é¼ æ ‡ä¸Šä¸€çŠ¶æ€ç‚¹(x)
+				GMPnt.y = point.y;						//è®¾ç½®é¼ æ ‡ä¸Šä¸€åæ ‡ç‚¹(y)
 				POINT mpoint = { mpoint.x = point.x,mpoint.y = point.y };
-				DrawSeg(&dc, GTLin, GLPnt, mpoint);		//Ä¬ÈÏÑùÊ½»æÖÆÏß¶Î
+				DrawSeg(&dc, GTLin, GLPnt, mpoint);		//é»˜è®¤æ ·å¼ç»˜åˆ¶çº¿æ®µ
 			}
 			break;
-		case OPERSTATE_MOVE_LIN:						//µ±Ç°ÎªÒÆ¶¯µã×´Ì¬
+		case OPERSTATE_MOVE_LIN:						//å½“å‰ä¸ºç§»åŠ¨ç‚¹çŠ¶æ€
 			if (GLinNdx != -1)
 			{
 				CClientDC dc(this);
-				dc.SetROP2(R2_NOTXORPEN);				//ÉèÖÃÒì»òÄ£Ê½
+				dc.SetROP2(R2_NOTXORPEN);				//è®¾ç½®å¼‚æˆ–æ¨¡å¼
 				D_DOT dot1, dot2;
 				POINT pnt1, pnt2;
-														// ²Á³ıÔ­À´µÄÏß
+														// æ“¦é™¤åŸæ¥çš„çº¿
 				for (int i = 0; i < GLinMMTmpNdx.dotNum - 1; i++)
 				{
-														// ´ÓÁÙÊ±ÎÄ¼şÖĞ¶ÁÈ¡ÏßµÄµã
+														// ä»ä¸´æ—¶æ–‡ä»¶ä¸­è¯»å–çº¿çš„ç‚¹
 					ReadTempFileToLinDat(GLinTmpDatF, GLinMMTmpNdx.datOff, i, dot1);
 					ReadTempFileToLinDat(GLinTmpDatF, GLinMMTmpNdx.datOff, i + 1, dot2);
-														//×ø±êÏµ×ª»»£¨Êı¾İ×ª´°¿Ú£©
+														//åæ ‡ç³»è½¬æ¢ï¼ˆæ•°æ®è½¬çª—å£ï¼‰
 					PntDPtoVP(dot1, GZoom, GZoomOffset_x, GZoomOffset_y);
 					PntDPtoVP(dot2, GZoom, GZoomOffset_x, GZoomOffset_y);
 					DotToPnt(pnt1, dot1);
@@ -2263,18 +2264,18 @@ void CMapEditorView::OnMouseMove(UINT nFlags, CPoint point)
 					pnt1.y += GLinMMOffestY;
 					pnt2.x += GLinMMOffestX;
 					pnt2.y += GLinMMOffestY;
-					DrawSeg(&dc, GLinMMTmpNdx, pnt1, pnt2);//ÖØ»æ£¨Òì»òÄ£Ê½²Á³ı£©
+					DrawSeg(&dc, GLinMMTmpNdx, pnt1, pnt2);//é‡ç»˜ï¼ˆå¼‚æˆ–æ¨¡å¼æ“¦é™¤ï¼‰
 				}
-														// ¼ÆËãÆ«ÒÆÁ¿
+														// è®¡ç®—åç§»é‡
 				GLinMMOffestX = GLinMMOffestX + point.x - GLinMMPnt.x;
 				GLinMMOffestY = GLinMMOffestY + point.y - GLinMMPnt.y;
-														// ÔÚĞÂµÄÎ»ÖÃ»æÖÆÒ»ÌõĞÂµÄÏß¶Î
+														// åœ¨æ–°çš„ä½ç½®ç»˜åˆ¶ä¸€æ¡æ–°çš„çº¿æ®µ
 				for (int i = 0; i < GLinMMTmpNdx.dotNum - 1; i++)
 				{
-														// ´ÓÁÙÊ±ÎÄ¼şÖĞ¶ÁÈ¡ÏßµÄµã
+														// ä»ä¸´æ—¶æ–‡ä»¶ä¸­è¯»å–çº¿çš„ç‚¹
 					ReadTempFileToLinDat(GLinTmpDatF, GLinMMTmpNdx.datOff, i, dot1);
 					ReadTempFileToLinDat(GLinTmpDatF, GLinMMTmpNdx.datOff, i + 1, dot2);
-														//×ª»»×ø±êÏµ£¨Êı¾İ×ª´°¿Ú£©
+														//è½¬æ¢åæ ‡ç³»ï¼ˆæ•°æ®è½¬çª—å£ï¼‰
 					PntDPtoVP(dot1, GZoom, GZoomOffset_x, GZoomOffset_y);
 					PntDPtoVP(dot2, GZoom, GZoomOffset_x, GZoomOffset_y);
 					DotToPnt(pnt1, dot1);
@@ -2283,7 +2284,7 @@ void CMapEditorView::OnMouseMove(UINT nFlags, CPoint point)
 					pnt1.y += GLinMMOffestY;
 					pnt2.x += GLinMMOffestX;
 					pnt2.y += GLinMMOffestY;
-					DrawSeg(&dc, GLinMMTmpNdx, pnt1, pnt2);//ÖØ»æ£¨»æÖÆĞÂÏß£©
+					DrawSeg(&dc, GLinMMTmpNdx, pnt1, pnt2);//é‡ç»˜ï¼ˆç»˜åˆ¶æ–°çº¿ï¼‰
 				}
 				GLinMMPnt = point;
 			}
@@ -2296,13 +2297,13 @@ void CMapEditorView::OnMouseMove(UINT nFlags, CPoint point)
 	{
 		switch (GCurOperState)
 		{
-		case OPERSTATE_INPUT_REG:								//µ±Ç°ÎªÔìÇø²Ù×÷×´Ì¬
+		case OPERSTATE_INPUT_REG:								//å½“å‰ä¸ºé€ åŒºæ“ä½œçŠ¶æ€
 			if (GRegCreateMMPnt.x != -1 && GRegCreateMMPnt.y != -1)
 			{
 				CClientDC dc(this);
 				dc.SetROP2(R2_NOTXORPEN);
 				LIN_NDX_STRU tln = { tln.pattern = GTReg.pattern, tln.color = GTReg.color };
-				//ÉèÖÃÇø²ÎÊı
+				//è®¾ç½®åŒºå‚æ•°
 				if (GTReg.dotNum == 1)
 				{
 					DrawSeg(&dc, tln, GRegCreateStartPnt, GRegCreateMMPnt);
@@ -2314,9 +2315,9 @@ void CMapEditorView::OnMouseMove(UINT nFlags, CPoint point)
 					for (int i = 0; i < GTReg.dotNum; ++i)
 					{
 						ReadTempFileToRegDat(GRegTmpDatF, GTReg.datOff, i, dot[i]);
-						//´ÓÁÙÊ±ÎÄ¼şÖĞ¶ÁÈ¡ÇøµÄµãÊı¾İ
+						//ä»ä¸´æ—¶æ–‡ä»¶ä¸­è¯»å–åŒºçš„ç‚¹æ•°æ®
 						PntDPtoVP(dot[i], GZoom, GZoomOffset_x, GZoomOffset_y);
-						//½«ÇøµÄµãÊı¾İ×ø±ê×ª»»Îª´°¿Ú×ø±ê
+						//å°†åŒºçš„ç‚¹æ•°æ®åæ ‡è½¬æ¢ä¸ºçª—å£åæ ‡
 					}
 					POINT* pnt = new POINT[GTReg.dotNum + 1];
 					DotToPnt(pnt, dot, GTReg.dotNum);
@@ -2334,9 +2335,9 @@ void CMapEditorView::OnMouseMove(UINT nFlags, CPoint point)
 			if (GRegNdx != -1)
 			{
 				CClientDC dc(this);
-				dc.SetROP2(R2_NOTXORPEN);							// ÉèÖÃÒì»ò²Ù×÷
+				dc.SetROP2(R2_NOTXORPEN);							// è®¾ç½®å¼‚æˆ–æ“ä½œ
 				D_DOT * dot = new D_DOT[GRegMMTmpNdx.dotNum];
-																	// ²Á³ıÔ­À´µÄÇø
+																	// æ“¦é™¤åŸæ¥çš„åŒº
 				for (int i = 0; i < GRegMMTmpNdx.dotNum; i++)
 				{
 					ReadTempFileToRegDat(GRegTmpDatF, GRegMMTmpNdx.datOff, i, dot[i]);
@@ -2347,10 +2348,10 @@ void CMapEditorView::OnMouseMove(UINT nFlags, CPoint point)
 				POINT* pnt = new POINT[GRegMMTmpNdx.dotNum];
 				DotToPnt(pnt, dot, GRegMMTmpNdx.dotNum);
 				DrawReg(&dc, GRegMMTmpNdx, pnt, GRegMMTmpNdx.dotNum);
-																	// ¼ÆËãÆ«ÒÆÁ¿
+																	// è®¡ç®—åç§»é‡
 				GRegMMOffsetX = GRegMMOffsetX + point.x - GRegMMPnt.x;
 				GRegMMOffsetY = GRegMMOffsetY + point.y - GRegMMPnt.y;
-																	// ÔÚĞÂµÄÎ»ÖÃ»æÖÆÒ»¸öÇø
+																	// åœ¨æ–°çš„ä½ç½®ç»˜åˆ¶ä¸€ä¸ªåŒº
 				for (int i = 0; i < GRegMMTmpNdx.dotNum; i++)
 				{
 					ReadTempFileToRegDat(GRegTmpDatF, GRegMMTmpNdx.datOff, i, dot[i]);
@@ -2371,28 +2372,28 @@ void CMapEditorView::OnMouseMove(UINT nFlags, CPoint point)
 	}
 	if (GPntFCreated || GLinFCreated || GRegFCreated)
 	{
-		CClientDC dc(this);								//»ñµÃ±¾´°¿Ú»òµ±Ç°»î¶¯ÊÓÍ¼
+		CClientDC dc(this);								//è·å¾—æœ¬çª—å£æˆ–å½“å‰æ´»åŠ¨è§†å›¾
 		CPen pen(PS_DOT, 1, RGB(0, 0, 0));
 		CPen * oldPen = dc.SelectObject(&pen);
 		switch (GCurOperState)
 		{
-		case OPERSTATE_ZOOM_IN:							//µ±Ç°Îª·Å´ó²Ù×÷×´Ì¬
+		case OPERSTATE_ZOOM_IN:							//å½“å‰ä¸ºæ”¾å¤§æ“ä½œçŠ¶æ€
 			if (GZoomLBDPnt.x != -1 && GZoomMMPnt.y != -1)
 			{
-				dc.SetROP2(R2_NOTXORPEN);				//ÉèÖÃÎªÒì»òÄ£Ê½»­Ïß
+				dc.SetROP2(R2_NOTXORPEN);				//è®¾ç½®ä¸ºå¼‚æˆ–æ¨¡å¼ç”»çº¿
 				dc.Rectangle(GZoomLBDPnt.x, GZoomLBDPnt.y, GZoomMMPnt.x, GZoomMMPnt.y);
 				dc.Rectangle(GZoomLBDPnt.x, GZoomLBDPnt.y, point.x, point.y);
 				GZoomMMPnt = point;
 				dc.SelectObject(oldPen);
 			}
 			break;
-		case OPERSTATE_WINDOW_MOVE:						//µ±Ç°Îª´°¿ÚÒÆ¶¯²Ù×÷×´Ì¬
+		case OPERSTATE_WINDOW_MOVE:						//å½“å‰ä¸ºçª—å£ç§»åŠ¨æ“ä½œçŠ¶æ€
 			if (GWinMoveMMPnt.x != -1 && GWinMoveMMPnt.y != -1)
 			{
-				CPoint offset(0, 0);					//Êó±êÒÆ¶¯Æ«ÒÆÁ¿
+				CPoint offset(0, 0);					//é¼ æ ‡ç§»åŠ¨åç§»é‡
 				offset.x = point.x - GWinMoveLBDPnt.x;
 				offset.y = point.y - GWinMoveLBDPnt.y;
-				GZoomOffset_x -= offset.x / GZoom;		//±ä»»·Å´óÓëËõĞ¡Ê±µÄÆ«ÒÆÁ¿
+				GZoomOffset_x -= offset.x / GZoom;		//å˜æ¢æ”¾å¤§ä¸ç¼©å°æ—¶çš„åç§»é‡
 				GZoomOffset_y -= offset.y / GZoom;
 				GWinMoveLBDPnt = point;
 				this->Invalidate();
@@ -2408,10 +2409,10 @@ void CMapEditorView::OnMouseMove(UINT nFlags, CPoint point)
 
 void CMapEditorView::OnUpdateWindowShowPoint(CCmdUI *pCmdUI)
 {
-	//ÏÔÊ¾×´Ì¬ÊÇÏÔÊ¾Î´É¾³ı×´Ì¬²¢ÇÒÏÔÊ¾µãÔò½«²Ëµ¥±ê¼ÇÑ¡ÖĞ
+	//æ˜¾ç¤ºçŠ¶æ€æ˜¯æ˜¾ç¤ºæœªåˆ é™¤çŠ¶æ€å¹¶ä¸”æ˜¾ç¤ºç‚¹åˆ™å°†èœå•æ ‡è®°é€‰ä¸­
 	if (GCurShowState == SHOWSTATE_UNDEL && GShowPnt == true)
 	{
-		pCmdUI->SetCheck(1);//²Ëµ¥Ñ¡ÖĞ±ê¼Ç
+		pCmdUI->SetCheck(1);//èœå•é€‰ä¸­æ ‡è®°
 	}
 	else
 	{
@@ -2422,10 +2423,10 @@ void CMapEditorView::OnUpdateWindowShowPoint(CCmdUI *pCmdUI)
 
 void CMapEditorView::OnUpdateWindowShowLine(CCmdUI *pCmdUI)
 {
-	//ÏÔÊ¾×´Ì¬ÊÇÏÔÊ¾Î´É¾³ı×´Ì¬²¢ÇÒÏÔÊ¾ÏßÔò½«²Ëµ¥±ê¼ÇÑ¡ÖĞ
+	//æ˜¾ç¤ºçŠ¶æ€æ˜¯æ˜¾ç¤ºæœªåˆ é™¤çŠ¶æ€å¹¶ä¸”æ˜¾ç¤ºçº¿åˆ™å°†èœå•æ ‡è®°é€‰ä¸­
 	if (GCurShowState == SHOWSTATE_UNDEL && GShowLin == true)
 	{
-		pCmdUI->SetCheck(1);//²Ëµ¥Ñ¡ÖĞ±ê¼Ç
+		pCmdUI->SetCheck(1);//èœå•é€‰ä¸­æ ‡è®°
 	}
 	else
 	{
@@ -2436,10 +2437,10 @@ void CMapEditorView::OnUpdateWindowShowLine(CCmdUI *pCmdUI)
 
 void CMapEditorView::OnUpdateWindowShowRegion(CCmdUI *pCmdUI)
 {
-	//ÏÔÊ¾×´Ì¬ÊÇÏÔÊ¾Î´É¾³ı×´Ì¬²¢ÇÒÏÔÊ¾ÇøÔò½«²Ëµ¥±ê¼ÇÑ¡ÖĞ
+	//æ˜¾ç¤ºçŠ¶æ€æ˜¯æ˜¾ç¤ºæœªåˆ é™¤çŠ¶æ€å¹¶ä¸”æ˜¾ç¤ºåŒºåˆ™å°†èœå•æ ‡è®°é€‰ä¸­
 	if (GCurShowState == SHOWSTATE_UNDEL && GShowReg == true)
 	{
-		pCmdUI->SetCheck(1);//²Ëµ¥Ñ¡ÖĞ±ê¼Ç
+		pCmdUI->SetCheck(1);//èœå•é€‰ä¸­æ ‡è®°
 	}
 	else
 	{
@@ -2450,7 +2451,7 @@ void CMapEditorView::OnUpdateWindowShowRegion(CCmdUI *pCmdUI)
 
 void CMapEditorView::OnUpdatePointShowDeleted(CCmdUI *pCmdUI)
 {
-	//Èôµ±Ç°ÏÔÊ¾×´Ì¬ÊÇÏÔÊ¾É¾³ı×´Ì¬ÇÒÏÔÊ¾µã£¬²Ëµ¥±ê¼ÇÑ¡ÖĞ£»·ñÔòÈ¡Ïû
+	//è‹¥å½“å‰æ˜¾ç¤ºçŠ¶æ€æ˜¯æ˜¾ç¤ºåˆ é™¤çŠ¶æ€ä¸”æ˜¾ç¤ºç‚¹ï¼Œèœå•æ ‡è®°é€‰ä¸­ï¼›å¦åˆ™å–æ¶ˆ
 	if (GCurShowState == SHOWSTATE_DEL && GShowPnt == true)
 	{
 		pCmdUI->SetCheck(1);
@@ -2464,7 +2465,7 @@ void CMapEditorView::OnUpdatePointShowDeleted(CCmdUI *pCmdUI)
 
 void CMapEditorView::OnUpdateLineShowDeleted(CCmdUI *pCmdUI)
 {
-	//Èôµ±Ç°ÏÔÊ¾×´Ì¬ÊÇÏÔÊ¾É¾³ı×´Ì¬ÇÒÏÔÊ¾Ïß£¬²Ëµ¥±ê¼ÇÑ¡ÖĞ£»·ñÔòÈ¡Ïû
+	//è‹¥å½“å‰æ˜¾ç¤ºçŠ¶æ€æ˜¯æ˜¾ç¤ºåˆ é™¤çŠ¶æ€ä¸”æ˜¾ç¤ºçº¿ï¼Œèœå•æ ‡è®°é€‰ä¸­ï¼›å¦åˆ™å–æ¶ˆ
 	if (GCurShowState == SHOWSTATE_DEL && GShowLin == true)
 	{
 		pCmdUI->SetCheck(1);
@@ -2478,7 +2479,7 @@ void CMapEditorView::OnUpdateLineShowDeleted(CCmdUI *pCmdUI)
 
 void CMapEditorView::OnUpdateRegionShowDeleted(CCmdUI *pCmdUI)
 {
-	//Èôµ±Ç°ÏÔÊ¾×´Ì¬ÊÇÏÔÊ¾É¾³ı×´Ì¬ÇÒÏÔÊ¾Çø£¬²Ëµ¥±ê¼ÇÑ¡ÖĞ£»·ñÔòÈ¡Ïû
+	//è‹¥å½“å‰æ˜¾ç¤ºçŠ¶æ€æ˜¯æ˜¾ç¤ºåˆ é™¤çŠ¶æ€ä¸”æ˜¾ç¤ºåŒºï¼Œèœå•æ ‡è®°é€‰ä¸­ï¼›å¦åˆ™å–æ¶ˆ
 	if (GCurShowState == SHOWSTATE_DEL && GShowReg == true)
 	{
 		pCmdUI->SetCheck(1);
