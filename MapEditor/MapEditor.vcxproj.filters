@@ -75,6 +75,9 @@
     <ClInclude Include="PointParameterDlg.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="LineParameterDlg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MapEditor.cpp">
@@ -105,6 +108,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="PointParameterDlg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="LineParameterDlg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

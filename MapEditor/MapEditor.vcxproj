@@ -105,6 +105,7 @@
   <ItemGroup>
     <ClInclude Include="Calculate.h" />
     <ClInclude Include="CCreateFileDlg.h" />
+    <ClInclude Include="LineParameterDlg.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MapEditor.h" />
     <ClInclude Include="MapEditorDoc.h" />
@@ -120,6 +121,7 @@
   <ItemGroup>
     <ClCompile Include="Calculate.cpp" />
     <ClCompile Include="CCreateFileDlg.cpp" />
+    <ClCompile Include="LineParameterDlg.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MapEditor.cpp" />
     <ClCompile Include="MapEditorDoc.cpp" />

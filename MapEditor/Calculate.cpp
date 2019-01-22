@@ -305,7 +305,7 @@ BOOL PtInPolygon(CPoint p, D_DOT * ptPolygon, int nCount)
 	return (nCross % 2 == 1);
 }
 
-/*查找里鼠标点最近的区*/
+/*查找离鼠标点最近的区*/
 REG_NDX_STRU FindReg(CFile * RegTmpNdxF, CFile * RegTmpDatF, CPoint mousePoint, int RegNum, int & nRegNdx)
 {
 	REG_NDX_STRU RegNdx;
@@ -345,9 +345,12 @@ REG_NDX_STRU FindReg(CFile * RegTmpNdxF, CFile * RegTmpDatF, CPoint mousePoint, 
 PNT_STRU FindDeletePnt(CPoint mousePoint, int PntNum, CFile * PntTmpF, int & nPnt)
 {
 	PNT_STRU point;
-	PNT_STRU tPnt = { tPnt.x = 0,tPnt.y = 0,
+	PNT_STRU tPnt = { 
+		tPnt.x = 0,
+		tPnt.y = 0,
 		tPnt.color = RGB(0,0,0),
-		tPnt.pattern = 0,tPnt.isDel = 0 };
+		tPnt.pattern = 0,
+		tPnt.isDel = 0 };
 	double min = 10;									//在十个像素范围内寻找
 	for (int i = 0; i < PntNum; ++i)
 	{
@@ -366,4 +369,39 @@ PNT_STRU FindDeletePnt(CPoint mousePoint, int PntNum, CFile * PntTmpF, int & nPn
 		}
 	}
 	return tPnt;
+}
+
+LIN_NDX_STRU FindDeleteLin(CFile * LinTmpNdxF, CFile * LinTmpDatF, CPoint mousePoint, int LinNum, int & nLinNdx)
+{
+	double min = 10;
+	LIN_NDX_STRU tLine = {
+		tLine.isDel = 0,
+		tLine.color = RGB(0, 0, 0),
+		tLine.pattern = 0,
+		tLine.dotNum = 0,
+		tLine.datOff = 0
+	}, line;
+	D_DOT pt1, pt2, mpt;
+	CFile tempLinDatF;
+	for (int i = 0; i < LinNum; ++i)
+	{
+		ReadTempFileToLinNdx(LinTmpNdxF, i, line);
+		if (line.isDel == 1)
+		{
+			for (int j = 0; j < line.dotNum - 1; ++j)
+			{
+				ReadTempFileToLinDat(LinTmpDatF, line.datOff, j, pt1);
+				ReadTempFileToLinDat(LinTmpDatF, line.datOff, j + 1, pt2);
+				mpt.x = mousePoint.x;
+				mpt.y = mousePoint.y;
+				if (isSmall(min, DisPntToSeg(pt1, pt2, mpt)))
+				{
+					nLinNdx = i;
+					min = DisPntToSeg(pt1, pt2, mpt);
+					tLine = line;
+				}
+			}
+		}
+	}
+	return tLine;
 }

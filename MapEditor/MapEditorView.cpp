@@ -18,6 +18,7 @@
 #include"WriteOrRead.h"
 #include"Calculate.h"
 #include"PointParameterDlg.h"
+#include"LineParameterDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -251,6 +252,7 @@ BEGIN_MESSAGE_MAP(CMapEditorView, CView)
 	ON_UPDATE_COMMAND_UI(ID_WINDOW_SHOW_LINE, &CMapEditorView::OnUpdateWindowShowLine)
 	ON_UPDATE_COMMAND_UI(ID_WINDOW_SHOW_REGION, &CMapEditorView::OnUpdateWindowShowRegion)
 	ON_UPDATE_COMMAND_UI(ID_POINT_SHOW_DELETED, &CMapEditorView::OnUpdatePointShowDeleted)
+	ON_UPDATE_COMMAND_UI(ID_LINE_SHOW_DELETED, &CMapEditorView::OnUpdateLineShowDeleted)
 END_MESSAGE_MAP()
 
 // CMapEditorView 构造/析构
@@ -291,7 +293,7 @@ void CMapEditorView::OnDraw(CDC* /*pDC*/)
 	if (GShowPnt)												//绘制显示所有点
 		ShowAllPnt(&dc, GPntTmpF, GPntNum, GZoomOffset_x, GZoomOffset_y, GZoom, GCurShowState);
 	if (GShowLin)												//绘制显示所有线
-		ShowAllLin(&dc, GLinTmpNdxF, GLinTmpDatF, GLinNum, GZoomOffset_x, GZoomOffset_y, GZoom, 0);
+		ShowAllLin(&dc, GLinTmpNdxF, GLinTmpDatF, GLinNum, GZoomOffset_x, GZoomOffset_y, GZoom, GCurShowState);
 	if (GShowReg)												//绘制显示所有区
 		ShowAllReg(&dc, GRegTmpNdxF, GRegTmpDatF, GRegNum, GZoomOffset_x, GZoomOffset_y, GZoom, 0);
 	ReleaseDC(&dc);												//释放dc
@@ -1064,8 +1066,8 @@ void CMapEditorView::OnPointCreate()
 	// TODO: 在此添加命令处理程序代码
 	if (GPntFCreated)
 	{
-		GCurOperState = OPERSTATE_INPUT_PNT;		// 设置为“造点”状态
-		GCurShowState = SHOWSTATE_UNDEL;			//设置当前为显示未删除状态
+		GCurOperState = OPERSTATE_INPUT_PNT;			// 设置为“造点”状态
+		GCurShowState = SHOWSTATE_UNDEL;				//设置当前为显示未删除状态
 		this->Invalidate();
 		GShowPnt = true;
 		GShowLin = true;
@@ -1083,8 +1085,8 @@ void CMapEditorView::OnPointMove()
 	// TODO: 在此添加命令处理程序代码
 	if (GPntFCreated)
 	{
-		GCurOperState = OPERSTATE_MOVE_PNT;			//设置操作状态（移动点）
-		GCurShowState = SHOWSTATE_UNDEL;			//设置当前为显示未删除状态
+		GCurOperState = OPERSTATE_MOVE_PNT;				//设置操作状态（移动点）
+		GCurShowState = SHOWSTATE_UNDEL;				//设置当前为显示未删除状态
 		this->Invalidate();
 		GShowPnt = true;
 		GShowLin = true;
@@ -1102,8 +1104,8 @@ void CMapEditorView::OnPointDelete()
 	// TODO: 在此添加命令处理程序代码
 	if (GPntFCreated)
 	{
-		GCurOperState = OPERSTATE_DELETE_PNT;		// 设置操作状态(删除点)
-		GCurShowState = SHOWSTATE_UNDEL;			//设置当前为显示未删除状态
+		GCurOperState = OPERSTATE_DELETE_PNT;			//设置操作状态(删除点)
+		GCurShowState = SHOWSTATE_UNDEL;				//设置当前为显示未删除状态
 		this->Invalidate();
 		GShowPnt = true;
 		GShowLin = true;
@@ -1118,9 +1120,9 @@ void CMapEditorView::OnPointDelete()
 
 void CMapEditorView::OnPointSetDefparameter()
 {
-	CPointParameterDlg dlg;					//点参数设置的对话框
-	dlg.m_Pattern = GPnt.pattern;			//点型
-	dlg.m_ColorButton.SetColor(GPnt.color);	//颜色
+	CPointParameterDlg dlg;								//点参数设置的对话框
+	dlg.m_Pattern = GPnt.pattern;						//点型
+	dlg.m_ColorButton.SetColor(GPnt.color);				//颜色
 	if (IDOK == dlg.DoModal())
 	{
 		GPnt.pattern = dlg.m_Pattern;
@@ -1254,13 +1256,48 @@ void CMapEditorView::OnLineDelete()
 
 void CMapEditorView::OnLineShowDeleted()
 {
-	// TODO: 在此添加命令处理程序代码
+	//若当前显示状态不是显示删除状态，则切换为显示删除状态并显示线
+	if (GCurShowState != SHOWSTATE_DEL)
+	{
+		GCurShowState = SHOWSTATE_DEL;					//设置为显示删除状态
+		GShowPnt = false;
+		GShowLin = true;
+		GShowReg = false;
+	}
+	//若当前状态是显示删除状态，但当前显示的不是线，则将显示线的开关打开
+	else if (GCurShowState == SHOWSTATE_DEL && GShowLin != true)
+	{
+		GShowPnt = false;
+		GShowLin = true;
+		GShowReg = false;
+	}
+	//其他情况下则将显示状态设置为显示未删除的状态，并打开所有的显示的开关
+	else
+	{
+		GCurShowState = SHOWSTATE_UNDEL;				//设置为显示未删除状态
+		GShowPnt = true;
+		GShowLin = true;
+		GShowReg = true;
+	}
+	this->InvalidateRect(NULL);							//刷新窗口
 }
 
 
 void CMapEditorView::OnLineUndeleted()
 {
-	// TODO: 在此添加命令处理程序代码
+	if (GLinFCreated)
+	{
+		GCurOperState = OPERSTATE_UNDELETE_LIN;			//当前操作状态（恢复点）
+		GCurShowState = SHOWSTATE_DEL;					//当前显示状态（删除点）
+		this->Invalidate();
+		GShowPnt = false;								//关闭显示点
+		GShowLin = true;								//打开显示线
+		GShowReg = false;								//关闭显示区
+	}
+	else
+	{
+		MessageBox(L"File have not been created.", L"Message", MB_OK);
+	}
 }
 
 
@@ -1291,13 +1328,35 @@ void CMapEditorView::OnLineLink()
 
 void CMapEditorView::OnLineModifyParameter()
 {
-	// TODO: 在此添加命令处理程序代码
+	if (GLinFCreated)
+	{
+		GCurOperState = OPERSTATE_MODIFY_LINE_PARAMETER;//当前操作状态（恢复点）
+		GCurShowState = SHOWSTATE_UNDEL;				//当前显示状态（非删除）
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		GShowPnt = true;								//关闭显示点					 ????????????????????????????????????????
+		GShowLin = true;								//打开显示线             存在疑问????????????????????????????????????????
+		GShowReg = true;								//关闭显示区				     ????????????????????????????????????????
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		this->Invalidate();
+	}
+	else
+	{
+		MessageBox(L"File have not been created.", L"Message", MB_OK);
+	}
 }
 
 
 void CMapEditorView::OnLineSetDefparameter()
 {
-	// TODO: 在此添加命令处理程序代码
+	CLineParameterDlg dlg;								//线参数设置的对话框
+	dlg.m_Pattern = GLin.pattern;						//线型
+	dlg.m_ColorButton.SetColor(GLin.color);				//颜色
+	if (IDOK == dlg.DoModal())
+	{
+		GLin.pattern = dlg.m_Pattern;
+		COLORREF tempColor = dlg.m_ColorButton.GetColor();
+		memcpy_s(&GLin.color, sizeof(COLORREF), &tempColor, sizeof(COLORREF));
+	}
 }
 
 
@@ -1590,7 +1649,7 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 			FindLin(GLinTmpNdxF, GLinTmpDatF, point, GLinNum, GLinNdx);//找最近线
 			if (GLinNdx != -1)
 			{
-				GLinNum--;
+				GLinLNum--;									//逻辑数减1
 				GLinChanged = true;							//线数据变更
 				LIN_NDX_STRU TmpLinNdx;
 				D_DOT dot1, dot2;
@@ -1695,6 +1754,64 @@ void CMapEditorView::OnLButtonUp(UINT nFlags, CPoint point)
 						this->Invalidate();
 					}
 				}
+			}
+			break;
+		case OPERSTATE_UNDELETE_LIN:						//当前状态（恢复线）
+			PntToDot(dot, point);
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);// 坐标系转换
+			DotToPnt(point, dot);
+			GLinLNum++;
+			FindDeleteLin(GLinTmpNdxF, GLinTmpDatF, point, GLinNum, GLinNdx);//找最近线
+			if (GLinNdx != -1)
+			{
+				GLinChanged = true;							//线数据变更
+				LIN_NDX_STRU TmpLinNdx;
+				D_DOT dot1, dot2;
+				POINT pnt1, pnt2;
+				//从临时线索引文件中读取线索引
+				ReadTempFileToLinNdx(GLinTmpNdxF, GLinNdx, TmpLinNdx);
+				TmpLinNdx.isDel = 0;						//设置删除标志
+				UpdateLin(GLinTmpNdxF, GLinNdx, TmpLinNdx);	//更新线数据
+				for (int i = 0; i < TmpLinNdx.dotNum - 1; ++i)
+				{
+					//从临时线的点数据文件中读取点
+					ReadTempFileToLinDat(GLinTmpDatF, TmpLinNdx.datOff, i, dot1);
+					ReadTempFileToLinDat(GLinTmpDatF, TmpLinNdx.datOff, i + 1, dot2);
+					//坐标系转换（数据转窗口坐标系）
+					PntDPtoVP(dot1, GZoom, GZoomOffset_x, GZoomOffset_y);
+					PntDPtoVP(dot2, GZoom, GZoomOffset_x, GZoomOffset_y);
+					DotToPnt(pnt1, dot1);
+					DotToPnt(pnt2, dot2);
+					DrawSeg(&dc, TmpLinNdx, pnt1, pnt2);	//重绘（异或模式擦除）
+				}
+				GLinNdx = -1;
+			}
+			break;
+		case OPERSTATE_MODIFY_LINE_PARAMETER:				//当前为修改线参数操作状态
+			PntToDot(dot, point);
+			PntVPtoDP(dot, GZoom, GZoomOffset_x, GZoomOffset_y);//窗口转数据坐标系
+			DotToPnt(point, dot);
+			LIN_NDX_STRU tempLine;
+			memcpy_s(&tempLine, sizeof(LIN_NDX_STRU),
+				&FindLin(GLinTmpNdxF,GLinTmpDatF,point,GLinNum,GLinNdx), sizeof(LIN_NDX_STRU));
+			//查找最近点
+			if (GLinNdx != -1)
+			{
+				CLineParameterDlg dlg;						//线参数设置对话框
+				dlg.m_ColorButton.SetColor(tempLine.color);
+				dlg.m_Pattern = tempLine.pattern;
+				if (IDOK == dlg.DoModal())
+				{
+					COLORREF tempColor = dlg.m_ColorButton.GetColor();
+					memcpy_s(&tempLine.color, sizeof(COLORREF), &tempColor,
+						sizeof(COLORREF));
+					tempLine.pattern = dlg.m_Pattern;
+					GLinTmpNdxF->Seek(GLinNdx * sizeof(LIN_NDX_STRU), CFile::begin);
+					GLinTmpNdxF->Write(&tempLine, sizeof(LIN_NDX_STRU));//写入点数据
+				}
+				this->Invalidate();
+				GLinChanged = true;
+				GLinNdx = -1;
 			}
 			break;
 		default:
@@ -2150,6 +2267,20 @@ void CMapEditorView::OnUpdatePointShowDeleted(CCmdUI *pCmdUI)
 {
 	//若当前显示状态是显示删除状态且显示点，菜单标记选中；否则取消
 	if (GCurShowState == SHOWSTATE_DEL && GShowPnt == true)
+	{
+		pCmdUI->SetCheck(1);
+	}
+	else
+	{
+		pCmdUI->SetCheck(0);
+	}
+}
+
+
+void CMapEditorView::OnUpdateLineShowDeleted(CCmdUI *pCmdUI)
+{
+	//若当前显示状态是显示删除状态且显示线，菜单标记选中；否则取消
+	if (GCurShowState == SHOWSTATE_DEL && GShowLin == true)
 	{
 		pCmdUI->SetCheck(1);
 	}

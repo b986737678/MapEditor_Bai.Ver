@@ -51,6 +51,7 @@ REG_NDX_STRU FindReg(CFile *  RegTmpNdxF, CFile * RegTmpDatF, CPoint mousePoint,
 //查找最近删除点的函数声明
 PNT_STRU FindDeletePnt(CPoint mousePoint, int PntNum, CFile*PntTmpF, int &nPnt);
 
-
+//查找最近删除线的函数声明
+LIN_NDX_STRU FindDeleteLin(CFile*LinTmpNdxF, CFile*LinTmpDatF, CPoint mousePoint, int LinNum, int&nLinNdx);
 
 #endif // !CALCULATE_H

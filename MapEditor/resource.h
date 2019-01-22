@@ -31,12 +31,14 @@
 #define IDS_EDIT_MENU                   306
 #define IDD_CREATE_FILE                 310
 #define IDD_POINT_PARAMETER             312
+#define IDD_LINE_PARAMETER              315
 #define IDC_CREATE_FILE_STATIC          1000
 #define IDC_CREATE_FILE_ADDRESS         1001
 #define IDC_CREATE_FILE_CHANGE_ADDRESS_BTN 1002
 #define IDC_POINT_PATTERN               1003
-#define IDC_MFCCOLORBUTTON1             1004
 #define IDC_POINT_COLOR                 1004
+#define IDC_LINE_PATTERN                1007
+#define IDC_LINE_COLOR                  1008
 #define ID_32771                        32771
 #define ID_32772                        32772
 #define ID_32773                        32773
@@ -131,9 +133,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        315
+#define _APS_NEXT_RESOURCE_VALUE        318
 #define _APS_NEXT_COMMAND_VALUE         32863
-#define _APS_NEXT_CONTROL_VALUE         1005
+#define _APS_NEXT_CONTROL_VALUE         1009
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif
