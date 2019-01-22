@@ -92,6 +92,7 @@ public:
 	afx_msg void OnUpdateWindowShowRegion(CCmdUI *pCmdUI);
 	afx_msg void OnUpdatePointShowDeleted(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateLineShowDeleted(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateRegionShowDeleted(CCmdUI *pCmdUI);
 };
 
 #ifndef _DEBUG  // MapEditorView.cpp 中的调试版本

@@ -405,3 +405,38 @@ LIN_NDX_STRU FindDeleteLin(CFile * LinTmpNdxF, CFile * LinTmpDatF, CPoint mouseP
 	}
 	return tLine;
 }
+
+REG_NDX_STRU FindDeleteReg(CFile * RegTmpNdxF, CFile * RegTmpDatF, CPoint mousePoint, int RegNum, int & nRegNdx)
+{
+	REG_NDX_STRU RegNdx;
+	REG_NDX_STRU tRegNdx = { tRegNdx.isDel = 0,
+							 tRegNdx.color = RGB(0,0,0),
+							 tRegNdx.pattern = 0,
+							 tRegNdx.dotNum = 0,
+							 tRegNdx.datOff = 0 };
+	for (int i = 0; i < RegNum; i++)
+	{
+		ReadTempFileToRegNdx(RegTmpNdxF, i, RegNdx);	//从临时文件读区索引
+		if (RegNdx.isDel == 1)
+		{
+			D_DOT *pt = new D_DOT[RegNdx.dotNum];
+			for (int j = 0; j < RegNdx.dotNum; j++)
+			{
+				// 从临时文件中读取区的点数据
+				ReadTempFileToRegDat(RegTmpDatF, RegNdx.datOff, j, pt[j]);
+			}
+			if (PtInPolygon(mousePoint, pt, RegNdx.dotNum))// 点在区内
+			{
+				tRegNdx = RegNdx;
+				nRegNdx = i;
+				delete[] pt;
+				break;
+			}
+			else
+			{
+				delete[] pt;
+			}
+		}
+	}
+	return tRegNdx;
+}
