@@ -446,7 +446,7 @@ D_DOT FindPntOnLin(LIN_NDX_STRU Lin, CFile * LinTmpDatF, CPoint mousePoint, int 
 {
 	double min = INT_MAX;
 	D_DOT *pt = new D_DOT[Lin.dotNum];
-	D_DOT dot;
+	D_DOT dot = {dot.x = 0,dot.y = 0};
 	for (int i = 0; i < Lin.dotNum; i++)
 	{
 		ReadTempFileToLinDat(LinTmpDatF, Lin.datOff, i, pt[i]);
@@ -483,4 +483,32 @@ void DelPntOnLin(CFile*LinTmpNdxF, CFile * LinTmpDatF, LIN_NDX_STRU&Lin, int nPn
 	Lin.dotNum--;
 	WriteLinNdxToFile(LinTmpNdxF, nLin, Lin);
 }
+
+/*查找线上最近线段的函数*/
+void FindSegOnLin(LIN_NDX_STRU Lin, CFile * LinTmpDatF, CPoint mousePoint, int & nPntLinNdx1, int & nPntLinNdx2)
+{
+	FindPntOnLin(Lin, LinTmpDatF, mousePoint, nPntLinNdx1);
+	D_DOT *pt = new D_DOT[2];
+	D_DOT dot;
+	if (nPntLinNdx1 == 0)
+	{
+		ReadTempFileToLinDat(LinTmpDatF, Lin.datOff, nPntLinNdx1 + 1, pt[0]);
+		nPntLinNdx2 = nPntLinNdx1 + 1;
+		return;
+	}
+	if (nPntLinNdx2 == Lin.dotNum - 1)
+	{
+		ReadTempFileToLinDat(LinTmpDatF, Lin.datOff, nPntLinNdx1 - 1, pt[0]);
+		nPntLinNdx2 = nPntLinNdx1 - 1;
+		return;
+	}
+	ReadTempFileToLinDat(LinTmpDatF, Lin.datOff, nPntLinNdx1 - 1, pt[0]);
+	ReadTempFileToLinDat(LinTmpDatF, Lin.datOff, nPntLinNdx1 + 1, pt[1]);
+	nPntLinNdx2 = Distance(mousePoint.x, mousePoint.y, pt[0].x, pt[0].y) >
+		Distance(mousePoint.x, mousePoint.y, pt[1].x, pt[1].y) ? 
+		nPntLinNdx1 + 1 : nPntLinNdx1 - 1;
+
+	delete[]pt;
+}
+
 

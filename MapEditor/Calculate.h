@@ -63,4 +63,6 @@ D_DOT FindPntOnLin(LIN_NDX_STRU Lin,CFile*LinTmpDatF,CPoint mousePoint,int&nPntL
 //删除线上某点的函数声明
 void DelPntOnLin(CFile*LinTmpNdxF, CFile*LinTmpDatF, LIN_NDX_STRU&Lin, int nPntLinNdx,int nLin);
 
+//查找线上最近线段的函数声明
+void FindSegOnLin(LIN_NDX_STRU Lin, CFile*LinTmpDatF, CPoint mousePoint, int&nPntLinNdx1, int&nPntLinNdx2);
 #endif // !CALCULATE_H

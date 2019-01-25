@@ -56,6 +56,12 @@ void ReadTempFileToRegNdx(CFile * RegTmpNdxF, int i, REG_NDX_STRU &RegNdx);
 //从临时区数据文件中读取区的边界点数据的函数声明
 void ReadTempFileToRegDat(CFile * RegTempDatF, long datOff, int i, D_DOT &pnt);
 
+//将区的索引和点数据写入到永久文件的函数声明
+void WriteTempToRegPermanentFile(CFile * RegF, CFile * RegTmpDatF, CFile * RegTmpNdxF, VERSION RegVer, int nReg, int nLReg);
+
+//从永久文件读取区数据到临时文件的函数声明
+void ReadRegPaermanentFileToTemp(CFile * RegF, CFile * RegTmpDatF, CFile * RegTmpNdxF, VERSION &RegVer, int &nReg, int &nLReg, long &TmpFRegDatOffset);
+
 //临时索引文件更新区数据的函数声明
 void UpdateReg(CFile* RegTmpNdxF, int nReg, REG_NDX_STRU Region);
 

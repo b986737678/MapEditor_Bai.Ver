@@ -194,6 +194,67 @@ void ReadTempFileToRegDat(CFile * RegTempDatF, long datOff, int i, D_DOT & pnt)
 	RegTempDatF->Read(&pnt, sizeof(D_DOT));
 }
 
+/*将区的索引和点数据写入到永久文件*/
+void WriteTempToRegPermanentFile(CFile * RegF, CFile * RegTmpDatF, CFile * RegTmpNdxF, VERSION RegVer, int nReg, int nLReg)
+{
+	REG_NDX_STRU TempRegNdx;
+	D_DOT Pnt;
+	long RegNdxOffset = sizeof(VERSION) + sizeof(int) * 2;
+	long RegDatOffset = RegNdxOffset + sizeof(LIN_NDX_STRU) * nReg;
+	RegF->Write(&RegVer, sizeof(VERSION));	// 写入版本号
+	RegF->Write(&nReg, sizeof(int));		// 写入物理数
+	RegF->Write(&nLReg, sizeof(int));		// 写入逻辑数
+	for (int i = 0; i < nReg; i++)
+	{
+		// 从临时索引文件中读取区索引
+		ReadTempFileToRegNdx(RegTmpNdxF, i, TempRegNdx);
+		RegF->Seek(RegDatOffset, CFile::begin);
+		for (int j = 0; j < TempRegNdx.dotNum; j++)
+		{
+			// 从临时区数据文件中读取区的点数据
+			ReadTempFileToRegDat(RegTmpDatF, TempRegNdx.datOff, j, Pnt);
+			// 将区的点数据写入永久文件
+			RegF->Write(&Pnt, sizeof(D_DOT));
+		}
+		RegF->Seek(RegNdxOffset, CFile::begin);
+		TempRegNdx.datOff = RegDatOffset;
+		// 将区的索引写入永久文件
+		RegF->Write(&TempRegNdx, sizeof(REG_NDX_STRU));
+		RegNdxOffset += sizeof(LIN_NDX_STRU);
+		RegDatOffset += (sizeof(D_DOT) * TempRegNdx.dotNum);
+	}
+}
+
+/*从永久文件读取区数据到临时文件*/
+void ReadRegPaermanentFileToTemp(CFile * RegF, CFile * RegTmpDatF, CFile * RegTmpNdxF, VERSION & RegVer, int & nReg, int & nLReg, long & TmpFRegDatOffset)
+{
+	RegF->Seek(0, CFile::begin);
+	RegF->Read(&RegVer, sizeof(VERSION));
+	RegF->Read(&nReg, sizeof(int));
+	RegF->Read(&nLReg, sizeof(int));
+	long RegNdxOffset = sizeof(VERSION) + sizeof(int) * 2;
+	long RegDatOffset = RegNdxOffset + sizeof(REG_NDX_STRU) * nReg;
+	TmpFRegDatOffset = 0;
+	REG_NDX_STRU TempRegNdx;
+	D_DOT Pnt;
+	for (int i = 0; i < nReg; i++)
+	{
+		RegF->Seek(RegNdxOffset, CFile::begin);
+		RegF->Read(&TempRegNdx, sizeof(REG_NDX_STRU));
+		RegF->Seek(TempRegNdx.datOff, CFile::begin);
+		for (int j = 0; j < TempRegNdx.dotNum; j++)
+		{
+			RegF->Read(&Pnt, sizeof(D_DOT));
+			RegTmpDatF->Write(&Pnt, sizeof(D_DOT));
+		}
+		TempRegNdx.datOff = TmpFRegDatOffset;
+		RegTmpNdxF->Write(&TempRegNdx, sizeof(REG_NDX_STRU));
+		TmpFRegDatOffset += (sizeof(D_DOT) * TempRegNdx.dotNum);
+		RegDatOffset += (sizeof(D_DOT) * TempRegNdx.dotNum);
+		RegNdxOffset += sizeof(REG_NDX_STRU);
+	}
+}
+
 /*临时索引文件更新区数据*/
 void UpdateReg(CFile * RegTmpNdxF, int nReg, REG_NDX_STRU Region)
 {
