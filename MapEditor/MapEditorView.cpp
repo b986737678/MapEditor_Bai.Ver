@@ -426,6 +426,7 @@ void CMapEditorView::OnRButtonUp(UINT /* nFlags */, CPoint point)
 				GLinNum++;										//只有物理数增加，逻辑数不变
 				
 			}
+			GLinChanged = true;
 			this->Invalidate();
 			GLADMMPnt = CPoint(-1, -1);							//恢复不存在
 			GMoveNum = 0;

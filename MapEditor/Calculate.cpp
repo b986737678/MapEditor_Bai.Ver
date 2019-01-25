@@ -488,27 +488,23 @@ void DelPntOnLin(CFile*LinTmpNdxF, CFile * LinTmpDatF, LIN_NDX_STRU&Lin, int nPn
 void FindSegOnLin(LIN_NDX_STRU Lin, CFile * LinTmpDatF, CPoint mousePoint, int & nPntLinNdx1, int & nPntLinNdx2)
 {
 	FindPntOnLin(Lin, LinTmpDatF, mousePoint, nPntLinNdx1);
-	D_DOT *pt = new D_DOT[2];
-	D_DOT dot;
-	if (nPntLinNdx1 == 0)
+	D_DOT pt1, pt2, mpt;
+	CFile tempLinDatF;
+	double min = 10;
+	mpt.x = mousePoint.x;
+	mpt.y = mousePoint.y;
+	for (int i = 0; i < Lin.dotNum - 1; ++i)
 	{
-		ReadTempFileToLinDat(LinTmpDatF, Lin.datOff, nPntLinNdx1 + 1, pt[0]);
-		nPntLinNdx2 = nPntLinNdx1 + 1;
-		return;
+		ReadTempFileToLinDat(LinTmpDatF, Lin.datOff, i, pt1);
+		ReadTempFileToLinDat(LinTmpDatF, Lin.datOff, i + 1, pt2);
+		
+		if (isSmall(min, DisPntToSeg(pt1, pt2, mpt)))
+		{
+			nPntLinNdx1 = i;
+			nPntLinNdx2 = i + 1;
+			min = DisPntToSeg(pt1, pt2, mpt);
+		}
 	}
-	if (nPntLinNdx2 == Lin.dotNum - 1)
-	{
-		ReadTempFileToLinDat(LinTmpDatF, Lin.datOff, nPntLinNdx1 - 1, pt[0]);
-		nPntLinNdx2 = nPntLinNdx1 - 1;
-		return;
-	}
-	ReadTempFileToLinDat(LinTmpDatF, Lin.datOff, nPntLinNdx1 - 1, pt[0]);
-	ReadTempFileToLinDat(LinTmpDatF, Lin.datOff, nPntLinNdx1 + 1, pt[1]);
-	nPntLinNdx2 = Distance(mousePoint.x, mousePoint.y, pt[0].x, pt[0].y) >
-		Distance(mousePoint.x, mousePoint.y, pt[1].x, pt[1].y) ? 
-		nPntLinNdx1 + 1 : nPntLinNdx1 - 1;
-
-	delete[]pt;
 }
 
 
